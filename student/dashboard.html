@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Student Dashboard | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link rel="stylesheet" href="../css/dashboard.css" />
+
+    <link rel="stylesheet" href="../css/notifications.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <!-- Sidebar -->
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html"> FixMyCampus </a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link active">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="report.html" class="sidebar-link">
+            <span class="sidebar-icon">＋</span>
+            <span>File Complaint</span>
+          </a>
+
+          <a href="#complaints" class="sidebar-link">
+            <span class="sidebar-icon">▤</span>
+            <span>My Complaints</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">TS</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName"> Loading... </strong>
+
+              <span> Student </span>
+            </div>
+          </div>
+
+          <button id="logoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon"> ↪ </span>
+
+            <span> Logout </span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Dashboard content -->
+      <div class="dashboard-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon"> ⌕ </span>
+
+              <input
+                type="text"
+                id="complaintSearch"
+                placeholder="Search complaints..."
+                aria-label="Search complaints"
+              />
+            </div>
+
+            <div class="user-area">
+              <!-- Notifications -->
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                >
+                  <span class="notification-icon"> 🔔 </span>
+
+                  <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                    style="display: none"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <div
+                  id="notificationPanel"
+                  class="notification-panel"
+                  style="display: none"
+                >
+                  <div class="notification-header">
+                    <h3>Notifications</h3>
+
+                    <button
+                      id="markAllReadButton"
+                      class="mark-all-read"
+                      type="button"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+
+                  <div id="notificationList">
+                    <div class="notification-empty">
+                      Loading notifications...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Student profile -->
+              <div class="user-profile">
+                <div id="profileAvatar" class="profile-avatar">TS</div>
+
+                <span id="studentName" class="user-name"> Loading... </span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main dashboard -->
+        <main class="dashboard-main">
+          <div class="dashboard-container">
+            <!-- Welcome -->
+            <section class="dashboard-welcome">
+              <div>
+                <span class="welcome-label"> STUDENT PORTAL </span>
+
+                <h1>
+                  Welcome back,
+                  <span id="welcomeName"> Student! </span>
+                </h1>
+
+                <p>
+                  Report campus problems and track your submitted complaints.
+                </p>
+              </div>
+
+              <div class="welcome-decoration"></div>
+            </section>
+
+            <!-- Complaint overview -->
+            <section class="dashboard-section">
+              <div class="section-header">
+                <div>
+                  <span class="section-label"> OVERVIEW </span>
+
+                  <h2>Complaint Overview</h2>
+                </div>
+
+                <a href="report.html" class="btn btn-primary">
+                  + File a Complaint
+                </a>
+              </div>
+
+              <div class="stats-grid">
+                <!-- Total -->
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <h3>Total Complaints</h3>
+
+                    <div id="totalComplaints" class="stat-number">0</div>
+
+                    <span class="stat-description">
+                      All submitted complaints
+                    </span>
+                  </div>
+
+                  <div class="stat-icon">#</div>
+                </div>
+
+                <!-- Active -->
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <h3>Active Complaints</h3>
+
+                    <div id="activeComplaints" class="stat-number">0</div>
+
+                    <span class="stat-description">
+                      Currently being processed
+                    </span>
+                  </div>
+
+                  <div class="stat-icon">◷</div>
+                </div>
+
+                <!-- Resolved -->
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <h3>Resolved Complaints</h3>
+
+                    <div id="resolvedComplaints" class="stat-number">0</div>
+
+                    <span class="stat-description">
+                      Successfully resolved
+                    </span>
+                  </div>
+
+                  <div class="stat-icon">✓</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Complaint history -->
+            <section
+              id="complaints"
+              class="dashboard-section complaints-section"
+            >
+              <div class="section-header">
+                <div>
+                  <span class="section-label"> HISTORY </span>
+
+                  <h2>My Complaint History</h2>
+                </div>
+              </div>
+
+              <div class="complaint-table-wrapper">
+                <table class="complaint-table">
+                  <thead>
+                    <tr>
+                      <th>Complaint ID</th>
+
+                      <th>Title</th>
+
+                      <th>Category</th>
+
+                      <th>Status</th>
+
+                      <th>Submitted</th>
+
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="complaintsTableBody">
+                    <tr>
+                      <td colspan="6">
+                        <div class="empty-state">Loading complaints...</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/dashboard.js"></script>
+  </body>
+</html>

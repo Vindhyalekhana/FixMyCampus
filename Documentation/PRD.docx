@@ -1,0 +1,187 @@
+
+# 2. PRD — PRODUCT REQUIREMENTS DOCUMENT
+
+# FixMyCampus — Product Requirements Document
+
+**Version:** 1.0
+**Date:** 06 September 2026
+
+---
+
+# 1. Product Overview
+
+FixMyCampus is a campus issue reporting and resolution platform designed to provide a structured process for reporting infrastructure problems.
+
+The product transforms a student complaint into a traceable work item.
+
+The basic flow is:
+
+```text
+Student Reports Issue
+        ↓
+Administrator Reviews
+        ↓
+Administrator Assigns Staff
+        ↓
+Staff Processes Complaint
+        ↓
+Staff Resolves Issue
+        ↓
+Student Confirms Resolution
+        ↓
+Complaint Closed
+        ↓
+Student Provides Feedback
+```
+
+---
+
+# 2. Product Vision
+
+The vision of FixMyCampus is to create a transparent, accountable, and easy-to-use campus complaint management system where every infrastructure issue has:
+
+* An identifiable requester
+* A responsible staff member
+* A current status
+* A complete timeline
+* A resolution record
+* A closure confirmation
+* Optional feedback
+
+---
+
+# 3. Product Goals
+
+The product aims to:
+
+1. Centralize campus issue reporting.
+2. Improve complaint tracking.
+3. Establish staff accountability.
+4. Improve communication between students and staff.
+5. Reduce untracked infrastructure issues.
+6. Provide administrators with operational visibility.
+7. Maintain complaint history.
+8. Collect feedback after resolution.
+9. Provide secure role-based access.
+10. Demonstrate XML-based data validation.
+
+---
+
+# 4. Stakeholders
+
+| Stakeholder       | Requirement                                  |
+| ----------------- | -------------------------------------------- |
+| Students          | Report and track complaints                  |
+| Maintenance Staff | Process assigned complaints                  |
+| Administrators    | Review and assign complaints                 |
+| Institution       | Improve campus operations and accountability |
+
+---
+
+# 5. User Stories
+
+### Student
+
+As a student, I want to report an infrastructure problem so that the appropriate staff can resolve it.
+
+As a student, I want to see the current status of my complaint so that I know its progress.
+
+As a student, I want to communicate with assigned staff so that I can provide additional information.
+
+As a student, I want to confirm resolution so that the complaint can be closed.
+
+As a student, I want to submit feedback after closure.
+
+### Staff
+
+As staff, I want to see my assigned complaints so that I can focus on my work queue.
+
+As staff, I want to update complaint status so that students and administrators can track progress.
+
+As staff, I want to add remarks so that important work information is recorded.
+
+### Admin
+
+As an administrator, I want to view all complaints so that I can manage campus issues.
+
+As an administrator, I want to assign complaints to staff so that responsibility is established.
+
+---
+
+# 6. Functional Requirements
+
+| ID    | Requirement                                                    | Priority |
+| ----- | -------------------------------------------------------------- | -------- |
+| PR-01 | Users shall authenticate through login and session management. | High     |
+| PR-02 | Students shall create complaints.                              | High     |
+| PR-03 | Students shall view only their own complaints.                 | Critical |
+| PR-04 | Admins shall view all complaints.                              | High     |
+| PR-05 | Admins shall assign complaints to staff.                       | Critical |
+| PR-06 | Staff shall view only currently assigned complaints.           | Critical |
+| PR-07 | Staff shall update complaint status.                           | Critical |
+| PR-08 | Students shall close only their own Resolved complaints.       | Critical |
+| PR-09 | Status history shall be recorded.                              | High     |
+| PR-10 | Complaint-specific chat shall be supported.                    | High     |
+| PR-11 | Closed complaints shall prevent new messages.                  | Critical |
+| PR-12 | Notifications shall be generated.                              | Medium   |
+| PR-13 | Students shall provide feedback after closure.                 | Medium   |
+| PR-14 | Complaint information shall be exportable as XML.              | Medium   |
+| PR-15 | XML shall support XSD and DTD validation.                      | Medium   |
+
+---
+
+# 7. Non-Functional Requirements
+
+### Security
+
+Unauthorized users must not access protected information.
+
+### Usability
+
+The interface must clearly separate student, staff, and admin functionality.
+
+### Reliability
+
+Complaint history and timestamps must be maintained consistently.
+
+### Maintainability
+
+Frontend, backend, database, and XML resources should remain organized.
+
+### Compatibility
+
+The application should operate in modern web browsers in the target local environment.
+
+---
+
+# 8. Success Criteria
+
+The project is considered successful when:
+
+* Students can register and log in.
+* Students can report complaints.
+* Admins can assign complaints.
+* Staff can process assigned complaints.
+* Staff can mark complaints Resolved.
+* Students can close resolved complaints.
+* Students can submit feedback.
+* Notifications work.
+* Chat works securely.
+* Unauthorized access is blocked.
+* XML export works.
+* XSD validation succeeds.
+* DTD validation succeeds.
+
+---
+
+# 9. Out of Scope
+
+The following are outside the current product scope:
+
+* Native Android/iOS applications.
+* GPS-based technician tracking.
+* Automatic technician dispatch.
+* Predictive maintenance.
+* External enterprise identity-provider integration.
+
+---

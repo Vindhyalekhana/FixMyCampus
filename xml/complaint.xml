@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fixMyCampusComplaint SYSTEM "complaint.dtd">
+<fixMyCampusComplaint>
+  <complaint>
+    <complaintId>1</complaintId>
+    <complaintCode>FMC-20260829115101-906</complaintCode>
+    <title>Water pipe leakage</title>
+    <description>There is continuous water leakage from the pipe near the classroom entrance. The floor becomes wet and may become unsafe for students.</description>
+    <priority>High</priority>
+    <status>Submitted</status>
+    <createdAt>2026-08-29 15:21:01</createdAt>
+    <updatedAt>2026-08-29 15:21:01</updatedAt>
+    <resolvedAt/>
+    <closedAt/>
+    <student>
+      <studentId>1</studentId>
+      <name>Test Student</name>
+      <email>student@test.com</email>
+    </student>
+    <category>
+      <categoryId>2</categoryId>
+      <name>Plumbing</name>
+    </category>
+    <location>
+      <locationId>2</locationId>
+      <building>Main Block</building>
+      <floor>First Floor</floor>
+      <room>Room 201</room>
+      <description>Classroom area</description>
+    </location>
+  </complaint>
+</fixMyCampusComplaint>

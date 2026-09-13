@@ -1,0 +1,581 @@
+
+# 6. SRS — SOFTWARE REQUIREMENTS SPECIFICATION
+
+# FixMyCampus — Software Requirements Specification
+
+**Version:** 1.0
+**Date:** 06 September 2026
+
+---
+
+# 1. Introduction
+
+## 1.1 Purpose
+
+This Software Requirements Specification defines the functional and non-functional requirements of the FixMyCampus web application.
+
+It serves as a reference for:
+
+* Development
+* Testing
+* Demonstration
+* Academic evaluation
+* Maintenance
+
+---
+
+# 1.2 Scope
+
+The software provides:
+
+* User registration
+* Authentication
+* Role-based dashboards
+* Complaint creation
+* Complaint tracking
+* Admin assignment
+* Staff processing
+* Status updates
+* Complaint timeline
+* Notifications
+* Complaint-specific chat
+* Student closure
+* Feedback
+* XML export
+* XSD validation
+* DTD validation
+
+---
+
+# 2. Overall Description
+
+## 2.1 Product Perspective
+
+FixMyCampus is a standalone web application.
+
+Its architecture is:
+
+```text
+User Browser
+     ↓
+HTML / CSS / JavaScript
+     ↓
+PHP Backend
+     ↓
+MySQL Database
+```
+
+XML processing operates alongside the application backend.
+
+---
+
+# 2.2 Product Functions
+
+The major functions are:
+
+1. Registration
+2. Login
+3. Logout
+4. Complaint creation
+5. Complaint listing
+6. Complaint details
+7. Complaint assignment
+8. Staff processing
+9. Status updates
+10. Resolution
+11. Student closure
+12. Notifications
+13. Chat
+14. Feedback
+15. XML export
+16. XSD validation
+17. DTD validation
+
+---
+
+# 3. Functional Requirements
+
+## FR-01 — Authentication
+
+The system shall authenticate registered users and create a server-side session.
+
+---
+
+## FR-02 — Authorization
+
+The system shall enforce role-based permissions for:
+
+```text
+Student
+Staff
+Admin
+```
+
+---
+
+## FR-03 — Registration
+
+The system shall allow users to register using required account information.
+
+Passwords shall be stored securely using password hashing.
+
+---
+
+## FR-04 — Complaint Creation
+
+The system shall allow students to create complaints containing:
+
+* Category
+* Location
+* Title
+* Description
+* Priority
+
+The system shall generate a unique complaint code.
+
+---
+
+## FR-05 — Complaint Ownership
+
+The system shall ensure that students can retrieve only their own complaints.
+
+---
+
+## FR-06 — Admin Review
+
+The system shall allow administrators to view complaints across the system.
+
+---
+
+## FR-07 — Staff Assignment
+
+The system shall allow administrators to assign complaints to staff.
+
+---
+
+## FR-08 — Staff Queue
+
+The system shall show staff only complaints currently assigned to them.
+
+---
+
+## FR-09 — Status Update
+
+The system shall allow assigned staff to update complaint status and provide remarks.
+
+---
+
+## FR-10 — Resolution Timestamp
+
+When staff marks a complaint as:
+
+```text
+Resolved
+```
+
+the server shall record:
+
+```text
+resolved_at
+```
+
+---
+
+## FR-11 — Student Closure
+
+The system shall allow the complaint owner to close a complaint only when:
+
+```text
+status = Resolved
+```
+
+---
+
+## FR-12 — Closure Timestamp
+
+When the student successfully closes the complaint, the server shall record:
+
+```text
+closed_at
+```
+
+---
+
+## FR-13 — Complaint Timeline
+
+The system shall record status changes and remarks in:
+
+```text
+complaint_updates
+```
+
+---
+
+## FR-14 — Chat Authorization
+
+The system shall allow complaint chat only to:
+
+```text
+Complaint Owner
+```
+
+or
+
+```text
+Currently Assigned Staff
+```
+
+---
+
+## FR-15 — Closed Chat
+
+The system shall:
+
+* Allow historical messages to be viewed.
+* Reject new messages after complaint closure.
+
+The restriction must be enforced server-side.
+
+---
+
+## FR-16 — Notifications
+
+The system shall create notifications for relevant complaint events.
+
+Notifications shall support:
+
+* Read
+* Unread
+* Mark individual as read
+* Mark all as read
+
+---
+
+## FR-17 — Feedback
+
+The system shall allow students to submit feedback after complaint closure.
+
+The rating shall be between:
+
+```text
+1 and 5
+```
+
+A complaint can have one feedback record.
+
+---
+
+## FR-18 — XML Export
+
+The system shall generate complaint information in XML format.
+
+Authorized students can export their own complaints.
+
+Administrators can export authorized complaint information.
+
+---
+
+## FR-19 — XSD Validation
+
+The system shall validate complaint XML against:
+
+```text
+complaint.xsd
+```
+
+---
+
+## FR-20 — DTD Validation
+
+The system shall validate complaint XML against:
+
+```text
+complaint.dtd
+```
+
+---
+
+# 4. Data Requirements
+
+## User
+
+The user entity contains:
+
+* User ID
+* Name
+* Email
+* Phone
+* Password
+* Role
+* Status
+* Created timestamp
+
+---
+
+## Complaint
+
+The complaint entity contains:
+
+* Complaint ID
+* Complaint code
+* Student
+* Category
+* Location
+* Title
+* Description
+* Priority
+* Status
+* Created timestamp
+* Updated timestamp
+* Resolved timestamp
+* Closed timestamp
+
+---
+
+## Complaint Update
+
+Contains:
+
+* Update ID
+* Complaint
+* User
+* Old status
+* New status
+* Remarks
+* Updated timestamp
+
+---
+
+## Staff Assignment
+
+Contains:
+
+* Assignment ID
+* Complaint
+* Staff
+* Assigning admin
+* Assignment timestamp
+* Completion timestamp
+
+---
+
+## Message
+
+Contains:
+
+* Message ID
+* Complaint
+* Sender
+* Message
+* Created timestamp
+* Read status
+
+---
+
+## Notification
+
+Contains:
+
+* Notification ID
+* User
+* Complaint
+* Message
+* Read status
+* Created timestamp
+
+---
+
+## Feedback
+
+Contains:
+
+* Feedback ID
+* Complaint
+* Student
+* Rating
+* Comment
+* Created timestamp
+
+---
+
+# 5. Non-Functional Requirements
+
+## 5.1 Security
+
+The system shall enforce:
+
+* Authentication
+* Authorization
+* Ownership validation
+* Staff assignment validation
+* Chat authorization
+* Closure authorization
+
+---
+
+## 5.2 Performance
+
+Normal application operations should return promptly for the intended academic/demo dataset and local deployment environment.
+
+---
+
+## 5.3 Usability
+
+The system shall provide role-specific interfaces.
+
+Students should see student functions.
+
+Staff should see staff functions.
+
+Administrators should see administrative functions.
+
+---
+
+## 5.4 Maintainability
+
+The project shall maintain separation between:
+
+```text
+HTML
+CSS
+JavaScript
+PHP
+Database
+XML
+```
+
+---
+
+## 5.5 Reliability
+
+Database constraints and server-side validation should preserve complaint consistency.
+
+---
+
+## 5.6 Compatibility
+
+The system shall support modern desktop web browsers in the target local environment.
+
+---
+
+## 5.7 Auditability
+
+Complaint status changes shall be stored in the complaint update history.
+
+---
+
+# 6. Use Case Summary
+
+| Use Case          | Actor           | Result                     |
+| ----------------- | --------------- | -------------------------- |
+| Register          | User            | Account created            |
+| Login             | User            | Session established        |
+| Report Complaint  | Student         | Complaint created          |
+| View Complaint    | Student         | Own complaint displayed    |
+| Assign Complaint  | Admin           | Staff assigned             |
+| Process Complaint | Staff           | Status updated             |
+| Resolve Complaint | Staff           | Complaint becomes Resolved |
+| Close Complaint   | Student         | Complaint becomes Closed   |
+| Chat              | Student/Staff   | Complaint communication    |
+| Feedback          | Student         | Feedback stored            |
+| Export XML        | Student/Admin   | XML generated              |
+| Validate XML      | Authorized User | XSD/DTD results displayed  |
+
+---
+
+# 7. Requirement Traceability
+
+The documentation set works together as follows:
+
+```text
+PRD
+ ↓
+Defines product goals and user needs
+ ↓
+BBRD
+ ↓
+Defines business rules and business acceptance
+ ↓
+SRD
+ ↓
+Defines system-level requirements
+ ↓
+TRD
+ ↓
+Defines technical architecture and implementation
+ ↓
+SRS
+ ↓
+Defines detailed software requirements and verification
+```
+
+---
+
+# 8. Final Verification Checklist
+
+### Authentication
+
+* [ ] Registration works
+* [ ] Login works
+* [ ] Logout works
+* [ ] Invalid authentication is rejected
+
+### Student
+
+* [ ] Student can create complaint
+* [ ] Student sees own complaints
+* [ ] Student cannot access another student's complaint
+* [ ] Student can track timeline
+* [ ] Student can chat with assigned staff
+* [ ] Student can close only Resolved complaint
+* [ ] Student can submit feedback after closure
+
+### Staff
+
+* [ ] Staff sees assigned complaints
+* [ ] Staff cannot see another staff member's complaint
+* [ ] Staff can update status
+* [ ] Staff can add remarks
+* [ ] Staff can mark Resolved
+* [ ] Staff cannot close complaints
+* [ ] Staff can chat with complaint owner
+
+### Admin
+
+* [ ] Admin sees all complaints
+* [ ] Admin can see student phone
+* [ ] Admin can assign staff
+* [ ] Assignment changes complaint workflow correctly
+
+### Notifications
+
+* [ ] Notifications are generated
+* [ ] Notification badge works
+* [ ] Individual notification can be marked read
+* [ ] All notifications can be marked read
+
+### Chat
+
+* [ ] Authorized student can access chat
+* [ ] Assigned staff can access chat
+* [ ] Unauthorized staff cannot access chat
+* [ ] Unauthorized student cannot access chat
+* [ ] Closed chat history remains visible
+* [ ] New messages are blocked after closure
+
+### XML
+
+* [ ] XML export works
+* [ ] XSD validation succeeds
+* [ ] DTD validation succeeds
+
+### Database
+
+* [ ] Database imports successfully
+* [ ] Foreign keys work
+* [ ] Complaint status history is stored
+* [ ] Assignment history is stored
+* [ ] Feedback is stored
+* [ ] Timestamps are recorded correctly
+
+---

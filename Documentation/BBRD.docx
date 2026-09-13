@@ -1,0 +1,196 @@
+
+# 5. BBRD — BUSINESS & BUSINESS REQUIREMENTS DOCUMENT
+
+# FixMyCampus — Business & Business Requirements Document
+
+**Version:** 1.0
+**Date:** 06 September 2026
+
+---
+
+# 1. Business Problem
+
+Campus infrastructure problems may be reported through informal channels such as verbal communication or messages.
+
+Such methods can cause:
+
+* Lost complaints
+* Delayed responses
+* Lack of accountability
+* Poor visibility
+* Difficulty tracking resolution
+* Lack of historical records
+
+FixMyCampus addresses this problem by providing a centralized digital complaint-management process.
+
+---
+
+# 2. Business Objectives
+
+The system aims to:
+
+1. Centralize complaint reporting.
+2. Improve accountability.
+3. Improve complaint visibility.
+4. Establish clear staff responsibility.
+5. Maintain complaint history.
+6. Improve student communication.
+7. Capture feedback.
+8. Improve administrative monitoring.
+
+---
+
+# 3. Business Process
+
+The business process is:
+
+```text
+Student
+   ↓
+Reports Complaint
+   ↓
+Administrator
+   ↓
+Reviews Complaint
+   ↓
+Assigns Staff
+   ↓
+Staff
+   ↓
+Processes Complaint
+   ↓
+Resolves Issue
+   ↓
+Student
+   ↓
+Confirms Resolution
+   ↓
+Complaint Closed
+   ↓
+Feedback
+```
+
+---
+
+# 4. Business Rules
+
+### BR-01
+
+Every complaint belongs to a student.
+
+### BR-02
+
+An administrator assigns complaints to staff.
+
+### BR-03
+
+Staff can work only on complaints assigned to them.
+
+### BR-04
+
+Staff cannot close complaints.
+
+### BR-05
+
+Students can close only their own complaints.
+
+### BR-06
+
+A complaint must be Resolved before student closure.
+
+### BR-07
+
+Closed complaints cannot receive new chat messages.
+
+### BR-08
+
+A complaint can have one feedback record.
+
+### BR-09
+
+Complaint status changes must be recorded.
+
+### BR-10
+
+Access to personal information is role dependent.
+
+---
+
+# 5. Business Requirements
+
+| ID    | Business Requirement                    | Priority |
+| ----- | --------------------------------------- | -------- |
+| BR-01 | Centralized complaint registration      | High     |
+| BR-02 | Staff responsibility through assignment | High     |
+| BR-03 | Transparent complaint status            | High     |
+| BR-04 | Complaint timeline                      | High     |
+| BR-05 | Role-based information protection       | Critical |
+| BR-06 | Complaint communication                 | Medium   |
+| BR-07 | Student confirmation before closure     | High     |
+| BR-08 | Post-resolution feedback                | Medium   |
+
+---
+
+# 6. Key Performance Indicators
+
+Possible system KPIs include:
+
+### Complaint Volume
+
+Number of complaints submitted.
+
+### Assignment Rate
+
+Number of complaints that have been assigned.
+
+### Resolution Rate
+
+Number of complaints reaching Resolved.
+
+### Closure Rate
+
+Number of complaints reaching Closed.
+
+### Resolution Time
+
+Time between complaint creation and resolution.
+
+### Feedback Rating
+
+Average or distribution of student ratings.
+
+---
+
+# 7. Acceptance Criteria
+
+The system will satisfy business requirements when:
+
+1. A student can submit a complaint.
+2. The complaint receives a unique complaint code.
+3. Admin can assign it to staff.
+4. The assigned staff member can see it.
+5. Other staff members cannot access it.
+6. Staff can process it.
+7. Staff can mark it Resolved.
+8. Student can confirm the resolution.
+9. Complaint becomes Closed.
+10. Student can provide feedback.
+11. Unauthorized access is rejected.
+12. XML export works.
+13. XSD validation succeeds.
+14. DTD validation succeeds.
+
+---
+
+# 8. Business Risks
+
+| Risk                       | Mitigation                     |
+| -------------------------- | ------------------------------ |
+| Unauthorized access        | Server-side authorization      |
+| Unclear responsibility     | Staff assignment               |
+| Premature closure          | Closure restricted to Resolved |
+| Lost history               | Complaint update timeline      |
+| Uncontrolled communication | Complaint-specific chat        |
+| Post-closure messages      | Server-side message blocking   |
+
+---

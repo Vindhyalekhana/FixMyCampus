@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>File a Complaint | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link rel="stylesheet" href="../css/dashboard.css" />
+
+    <link rel="stylesheet" href="../css/notifications.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <!-- Sidebar -->
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html"> FixMyCampus </a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon"> ⌂ </span>
+
+            <span> Dashboard </span>
+          </a>
+
+          <a href="report.html" class="sidebar-link active">
+            <span class="sidebar-icon"> ＋ </span>
+
+            <span> File Complaint </span>
+          </a>
+
+          <a href="dashboard.html#complaints" class="sidebar-link">
+            <span class="sidebar-icon"> ▤ </span>
+
+            <span> My Complaints </span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">TS</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName"> Loading... </strong>
+
+              <span> Student </span>
+            </div>
+          </div>
+
+          <button id="logoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon"> ↪ </span>
+
+            <span> Logout </span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main application area -->
+      <div class="dashboard-content">
+        <!-- Top header -->
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon"> ⌕ </span>
+
+              <input
+                type="text"
+                placeholder="Search complaints..."
+                aria-label="Search complaints"
+              />
+            </div>
+
+            <div class="user-area">
+              <!-- Notifications -->
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                >
+                  <span class="notification-icon"> 🔔 </span>
+
+                  <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                    style="display: none"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <div
+                  id="notificationPanel"
+                  class="notification-panel"
+                  style="display: none"
+                >
+                  <div class="notification-header">
+                    <h3>Notifications</h3>
+
+                    <button
+                      id="markAllReadButton"
+                      class="mark-all-read"
+                      type="button"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+
+                  <div id="notificationList">
+                    <div class="notification-empty">
+                      Loading notifications...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Student profile -->
+              <div class="user-profile">
+                <div id="profileAvatar" class="profile-avatar">TS</div>
+
+                <span id="studentName" class="user-name"> Loading... </span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main content -->
+        <main class="dashboard-main">
+          <div class="dashboard-container">
+            <!-- Page introduction -->
+            <section class="dashboard-welcome">
+              <div>
+                <span class="welcome-label"> STUDENT PORTAL </span>
+
+                <h1>File a Complaint</h1>
+
+                <p>
+                  Report a campus infrastructure problem to the appropriate
+                  staff.
+                </p>
+              </div>
+
+              <div class="welcome-decoration"></div>
+            </section>
+
+            <!-- Complaint form -->
+            <section class="complaint-form-section">
+              <div class="card complaint-form-card">
+                <form id="complaintForm">
+                  <!-- Category -->
+                  <div class="form-group">
+                    <label for="category"> Category </label>
+
+                    <select
+                      id="category"
+                      name="category_id"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select a category</option>
+                    </select>
+                  </div>
+
+                  <!-- Location -->
+                  <div class="form-group">
+                    <label for="location"> Location </label>
+
+                    <select
+                      id="location"
+                      name="location_id"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select a location</option>
+                    </select>
+                  </div>
+
+                  <!-- Title -->
+                  <div class="form-group">
+                    <label for="title"> Complaint Title </label>
+
+                    <input
+                      type="text"
+                      id="title"
+                      name="title"
+                      class="form-control"
+                      maxlength="200"
+                      placeholder="Example: Broken classroom fan"
+                      required
+                    />
+                  </div>
+
+                  <!-- Description -->
+                  <div class="form-group">
+                    <label for="description"> Description </label>
+
+                    <textarea
+                      id="description"
+                      name="description"
+                      class="form-control"
+                      rows="6"
+                      placeholder="Describe the problem clearly..."
+                      required
+                    ></textarea>
+                  </div>
+
+                  <!-- Priority -->
+                  <div class="form-group">
+                    <label for="priority"> Priority </label>
+
+                    <select
+                      id="priority"
+                      name="priority"
+                      class="form-control"
+                      required
+                    >
+                      <option value="Low">Low</option>
+
+                      <option value="Medium" selected>Medium</option>
+
+                      <option value="High">High</option>
+                    </select>
+                  </div>
+
+                  <div id="complaintMessage"></div>
+
+                  <!-- Form actions -->
+                  <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                      Submit Complaint
+                    </button>
+
+                    <a href="dashboard.html" class="btn btn-secondary">
+                      Cancel
+                    </a>
+                  </div>
+                </form>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/report.js"></script>
+
+    <script src="../js/report-notifications.js"></script>
+  </body>
+</html>

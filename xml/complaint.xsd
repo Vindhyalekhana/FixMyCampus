@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="fixMyCampusComplaint">
+
+        <xs:complexType>
+            <xs:sequence>
+
+                <xs:element name="complaint">
+
+                    <xs:complexType>
+                        <xs:sequence>
+
+                            <xs:element name="complaintId" type="xs:positiveInteger"/>
+
+                            <xs:element name="complaintCode" type="xs:string"/>
+
+                            <xs:element name="title" type="xs:string"/>
+
+                            <xs:element name="description" type="xs:string"/>
+
+                            <xs:element name="priority">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="Low"/>
+                                        <xs:enumeration value="Medium"/>
+                                        <xs:enumeration value="High"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+
+                            <xs:element name="status">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="Submitted"/>
+                                        <xs:enumeration value="Under Review"/>
+                                        <xs:enumeration value="Assigned"/>
+                                        <xs:enumeration value="In Progress"/>
+                                        <xs:enumeration value="Resolved"/>
+                                        <xs:enumeration value="Closed"/>
+                                        <xs:enumeration value="Rejected"/>
+                                        <xs:enumeration value="Duplicate"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+
+                            <xs:element name="createdAt" type="xs:string"/>
+
+                            <xs:element name="updatedAt" type="xs:string"/>
+
+                            <xs:element name="resolvedAt" type="xs:string" nillable="true"/>
+
+                            <xs:element name="closedAt" type="xs:string" nillable="true"/>
+
+                            <xs:element name="student">
+
+                                <xs:complexType>
+                                    <xs:sequence>
+
+                                        <xs:element name="studentId" type="xs:positiveInteger"/>
+
+                                        <xs:element name="name" type="xs:string"/>
+
+                                        <xs:element name="email" type="xs:string"/>
+
+                                    </xs:sequence>
+                                </xs:complexType>
+
+                            </xs:element>
+
+                            <xs:element name="category">
+
+                                <xs:complexType>
+                                    <xs:sequence>
+
+                                        <xs:element name="categoryId" type="xs:positiveInteger"/>
+
+                                        <xs:element name="name" type="xs:string"/>
+
+                                    </xs:sequence>
+                                </xs:complexType>
+
+                            </xs:element>
+
+                            <xs:element name="location">
+
+                                <xs:complexType>
+                                    <xs:sequence>
+
+                                        <xs:element name="locationId" type="xs:positiveInteger"/>
+
+                                        <xs:element name="building" type="xs:string"/>
+
+                                        <xs:element name="floor" type="xs:string" minOccurs="0"/>
+
+                                        <xs:element name="room" type="xs:string" minOccurs="0"/>
+
+                                        <xs:element name="description" type="xs:string" minOccurs="0"/>
+
+                                    </xs:sequence>
+                                </xs:complexType>
+
+                            </xs:element>
+
+                        </xs:sequence>
+                    </xs:complexType>
+
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+
+    </xs:element>
+
+</xs:schema>

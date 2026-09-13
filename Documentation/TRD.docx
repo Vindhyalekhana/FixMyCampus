@@ -1,0 +1,367 @@
+
+# 3. TRD — TECHNICAL REQUIREMENTS DOCUMENT
+
+# FixMyCampus — Technical Requirements Document
+
+**Version:** 1.0
+**Date:** 06 September 2026
+
+---
+
+# 1. Technical Overview
+
+FixMyCampus is a browser-based web application consisting of:
+
+```text
+HTML/CSS/JavaScript
+        ↓
+PHP Backend
+        ↓
+MySQL Database
+```
+
+XML, XSD, and DTD are used for complaint data export and validation.
+
+---
+
+# 2. Technology Environment
+
+| Component           | Technology              |
+| ------------------- | ----------------------- |
+| OS                  | Windows                 |
+| Web Server          | Apache                  |
+| Server Package      | XAMPP                   |
+| Frontend            | HTML5, CSS3, JavaScript |
+| Backend             | PHP                     |
+| Database            | MySQL 9.7.1             |
+| Database Port       | 3306                    |
+| Data Format         | XML                     |
+| Schema              | XSD                     |
+| Document Definition | DTD                     |
+
+---
+
+# 3. Application Architecture
+
+The system follows a layered architecture.
+
+### Presentation Layer
+
+Contains:
+
+* HTML
+* CSS
+* JavaScript
+
+Responsible for:
+
+* User interface
+* Forms
+* Dashboards
+* Tables
+* Chat
+* Notifications
+
+### Application Layer
+
+Contains PHP endpoints.
+
+Responsible for:
+
+* Authentication
+* Authorization
+* Validation
+* Complaint processing
+* Assignment
+* Status changes
+* Chat
+* Notifications
+* Feedback
+
+### Persistence Layer
+
+MySQL stores:
+
+* Users
+* Complaints
+* Assignments
+* Updates
+* Messages
+* Notifications
+* Feedback
+
+### XML Layer
+
+Responsible for:
+
+* XML generation
+* XSD validation
+* DTD validation
+
+---
+
+# 4. Database Design
+
+| Table             | Purpose                                     |
+| ----------------- | ------------------------------------------- |
+| users             | Stores users and authentication information |
+| categories        | Stores complaint categories                 |
+| locations         | Stores campus locations                     |
+| complaints        | Stores complaints                           |
+| complaint_updates | Stores status history                       |
+| staff_assignments | Stores staff assignment information         |
+| messages          | Stores complaint chat                       |
+| notifications     | Stores notifications                        |
+| feedback          | Stores post-closure feedback                |
+
+---
+
+# 5. Database Relationships
+
+The main relationships are:
+
+```text
+users
+  │
+  ├── complaints
+  │
+  ├── complaint_updates
+  │
+  ├── staff_assignments
+  │
+  ├── messages
+  │
+  ├── notifications
+  │
+  └── feedback
+
+categories
+      │
+      └── complaints
+
+locations
+      │
+      └── complaints
+
+complaints
+      │
+      ├── complaint_updates
+      ├── staff_assignments
+      ├── messages
+      ├── notifications
+      └── feedback
+```
+
+---
+
+# 6. Backend Endpoints
+
+### Authentication
+
+```text
+login.php
+register.php
+auth.php
+logout.php
+```
+
+### Student
+
+```text
+create-complaint.php
+student-complaints.php
+complaint-details.php
+close-complaint.php
+```
+
+### Staff
+
+```text
+staff-complaints.php
+staff-complaint-details.php
+update-status.php
+```
+
+### Admin
+
+```text
+admin-complaints.php
+admin-complaint-details.php
+assign-staff.php
+staff-list.php
+```
+
+### Chat
+
+```text
+chat-messages.php
+send-message.php
+mark-message-read.php
+```
+
+### Notifications
+
+```text
+notifications.php
+mark-notification-read.php
+mark-all-notifications-read.php
+```
+
+### Feedback
+
+```text
+submit-feedback.php
+get-feedback.php
+```
+
+### Reference Data
+
+```text
+categories.php
+locations.php
+```
+
+### XML
+
+```text
+export-complaint-xml.php
+validate-complaint-xml.php
+```
+
+---
+
+# 7. Security Architecture
+
+Security is enforced server-side.
+
+The application implements:
+
+### Authentication
+
+PHP sessions identify authenticated users.
+
+### Authorization
+
+Every protected endpoint checks the user's role.
+
+### Student Ownership
+
+Students can access only complaints where:
+
+```text
+complaint.student_id = authenticated user
+```
+
+### Staff Assignment
+
+Staff can access only complaints currently assigned to them.
+
+### Chat Authorization
+
+Chat is allowed only when the user is:
+
+```text
+Complaint Owner
+OR
+Currently Assigned Staff
+```
+
+### Closed Chat
+
+Historical messages remain available, but new messages are rejected after closure.
+
+### Password Security
+
+Passwords are stored using:
+
+```php
+password_hash()
+```
+
+and verified using:
+
+```php
+password_verify()
+```
+
+---
+
+# 8. XML Validation Architecture
+
+The XML process is:
+
+```text
+MySQL
+  ↓
+PHP
+  ↓
+Generate Complaint XML
+  ↓
+XSD Validation
+  ↓
+DTD Validation
+  ↓
+Validation Result
+```
+
+The files are:
+
+```text
+xml/complaint.xml
+xml/complaint.xsd
+xml/complaint.dtd
+```
+
+---
+
+# 9. Deployment
+
+### Step 1
+
+Place the project in:
+
+```text
+C:\xampp\htdocs\FixMyCampus
+```
+
+### Step 2
+
+Start Apache.
+
+### Step 3
+
+Start MySQL.
+
+### Step 4
+
+Create the database:
+
+```text
+fixmycampus
+```
+
+### Step 5
+
+Import:
+
+```text
+database/fixmycampus.sql
+```
+
+### Step 6
+
+Verify:
+
+```text
+php/db.php
+```
+
+### Step 7
+
+Open:
+
+```text
+http://localhost/FixMyCampus/
+```
+
+---

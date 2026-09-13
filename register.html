@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Student Registration | FixMyCampus</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/auth.css" />
+  </head>
+
+  <body>
+    <main class="auth-page">
+      <div class="auth-container">
+        <!-- Left branding panel -->
+        <section class="auth-brand-panel">
+          <div class="auth-brand-content">
+            <a href="index.html" class="auth-brand-logo"> FixMyCampus </a>
+
+            <span class="auth-brand-label"> STUDENT REGISTRATION </span>
+
+            <h1>
+              Be the change<br />
+              on your campus.
+            </h1>
+
+            <p class="auth-brand-description">
+              Create your student account and start reporting infrastructure
+              issues around your campus.
+            </p>
+
+            <div class="auth-benefits">
+              <div class="auth-benefit">
+                <span class="auth-benefit-icon">✓</span>
+                <span>Report Issues</span>
+              </div>
+
+              <div class="auth-benefit">
+                <span class="auth-benefit-icon">✓</span>
+                <span>Track Progress</span>
+              </div>
+
+              <div class="auth-benefit">
+                <span class="auth-benefit-icon">✓</span>
+                <span>Make an Impact</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="auth-brand-footer">© 2026 FixMyCampus</div>
+        </section>
+
+        <!-- Registration form -->
+        <section class="auth-form-panel">
+          <div class="auth-form-wrapper">
+            <div class="auth-form-heading">
+              <div class="auth-form-icon">🎓</div>
+
+              <div>
+                <span class="auth-form-label"> GET STARTED </span>
+
+                <h2>Create Your Student Account</h2>
+
+                <p>Join FixMyCampus and make a difference</p>
+              </div>
+            </div>
+
+            <div class="auth-card">
+              <form id="registerForm">
+                <div class="form-group">
+                  <label for="name"> Full Name </label>
+
+                  <div class="auth-input-wrapper">
+                    <span class="auth-input-icon">👤</span>
+
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      class="form-control"
+                      placeholder="Enter your full name"
+                      autocomplete="name"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="email"> Email Address </label>
+
+                  <div class="auth-input-wrapper">
+                    <span class="auth-input-icon">✉</span>
+
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      class="form-control"
+                      placeholder="Enter your email address"
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="phone"> Phone Number </label>
+
+                  <div class="auth-input-wrapper">
+                    <span class="auth-input-icon">☎</span>
+
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      class="form-control"
+                      placeholder="Enter your phone number"
+                      autocomplete="tel"
+                      maxlength="15"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="password"> Password </label>
+
+                  <div class="auth-input-wrapper">
+                    <span class="auth-input-icon">🔒</span>
+
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="form-control"
+                      placeholder="Create a password"
+                      autocomplete="new-password"
+                      required
+                    />
+
+                    <button
+                      type="button"
+                      class="password-toggle"
+                      data-target="password"
+                      aria-label="Show password"
+                    >
+                      ◉
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="confirmPassword"> Confirm Password </label>
+
+                  <div class="auth-input-wrapper">
+                    <span class="auth-input-icon">🔒</span>
+
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      class="form-control"
+                      placeholder="Confirm your password"
+                      autocomplete="new-password"
+                      required
+                    />
+
+                    <button
+                      type="button"
+                      class="password-toggle"
+                      data-target="confirmPassword"
+                      aria-label="Show password"
+                    >
+                      ◉
+                    </button>
+                  </div>
+                </div>
+
+                <div id="registerMessage"></div>
+
+                <button
+                  type="submit"
+                  class="btn btn-primary auth-submit-button"
+                >
+                  <span>Create Student Account</span>
+                  <span class="auth-submit-arrow">→</span>
+                </button>
+              </form>
+
+              <div class="auth-footer">
+                <span> Already have an account? </span>
+
+                <a href="login.html"> Login to Your Account </a>
+              </div>
+            </div>
+
+            <a href="index.html" class="auth-back-link"> ← Back to Home </a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleButtons = document.querySelectorAll(".password-toggle");
+
+        toggleButtons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            const targetId = button.getAttribute("data-target");
+            const passwordInput = document.getElementById(targetId);
+
+            if (!passwordInput) {
+              return;
+            }
+
+            if (passwordInput.type === "password") {
+              passwordInput.type = "text";
+              button.textContent = "◎";
+              button.setAttribute("aria-label", "Hide password");
+            } else {
+              passwordInput.type = "password";
+              button.textContent = "◉";
+              button.setAttribute("aria-label", "Show password");
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin Dashboard | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html">FixMyCampus</a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link active">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="#complaintManagement" class="sidebar-link">
+            <span class="sidebar-icon">▤</span>
+            <span>Complaint Management</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">AD</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName">Loading...</strong>
+              <span>Admin</span>
+            </div>
+          </div>
+
+          <button id="sidebarLogoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="dashboard-content">
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon">⌕</span>
+
+              <input
+                id="complaintSearch"
+                type="search"
+                placeholder="Search complaints..."
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="user-area">
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                >
+                  <span class="notification-icon">🔔</span>
+
+                  <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                    style="display: none"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <div
+                  id="notificationPanel"
+                  class="notification-panel"
+                  style="display: none"
+                >
+                  <div class="notification-header">
+                    <h3>Notifications</h3>
+
+                    <button
+                      id="markAllReadButton"
+                      class="mark-all-read"
+                      type="button"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+
+                  <div id="notificationList">
+                    <div class="notification-empty">
+                      Loading notifications...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="user-profile">
+                <div id="profileAvatar" class="profile-avatar">AD</div>
+
+                <span id="adminName" class="user-name"> Loading... </span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="dashboard-main">
+          <div class="dashboard-container">
+            <section class="dashboard-welcome">
+              <div>
+                <span class="welcome-label">ADMIN PORTAL</span>
+
+                <h1 id="welcomeMessage">Welcome back!</h1>
+
+                <p>
+                  Manage campus complaints, staff assignments and infrastructure
+                  issues.
+                </p>
+              </div>
+
+              <div class="welcome-decoration"></div>
+            </section>
+
+            <section class="dashboard-section">
+              <div class="section-header">
+                <div>
+                  <span class="section-label">OVERVIEW</span>
+
+                  <h2>Complaint Overview</h2>
+                </div>
+              </div>
+
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <h3>Total Complaints</h3>
+
+                    <div id="totalComplaints" class="stat-number">0</div>
+
+                    <span class="stat-description">
+                      All campus complaints
+                    </span>
+                  </div>
+
+                  <div class="stat-icon">#</div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <h3>Pending Review</h3>
+
+                    <div id="pendingComplaints" class="stat-number">0</div>
+
+                    <span class="stat-description">
+                      Awaiting administrative action
+                    </span>
+                  </div>
+
+                  <div class="stat-icon">◷</div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <h3>In Progress</h3>
+
+                    <div id="progressComplaints" class="stat-number">0</div>
+
+                    <span class="stat-description">
+                      Currently being handled
+                    </span>
+                  </div>
+
+                  <div class="stat-icon">↻</div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <h3>Resolved</h3>
+
+                    <div id="resolvedComplaints" class="stat-number">0</div>
+
+                    <span class="stat-description">
+                      Resolved or closed complaints
+                    </span>
+                  </div>
+
+                  <div class="stat-icon">✓</div>
+                </div>
+              </div>
+            </section>
+
+            <section
+              id="complaintManagement"
+              class="dashboard-section complaints-section"
+            >
+              <div class="section-header">
+                <div>
+                  <span class="section-label">MANAGEMENT</span>
+
+                  <h2>Complaint Management</h2>
+                </div>
+              </div>
+
+              <div class="complaint-table-wrapper">
+                <table class="complaint-table">
+                  <thead>
+                    <tr>
+                      <th>Complaint</th>
+                      <th>Student</th>
+                      <th>Category</th>
+                      <th>Priority</th>
+                      <th>Status</th>
+                      <th>Submitted</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="complaintsTableBody">
+                    <tr>
+                      <td colspan="7">
+                        <div class="empty-state">Loading complaints...</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/admin-dashboard.js"></script>
+  </body>
+</html>

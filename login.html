@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="Login to FixMyCampus - Campus infrastructure issue reporting and resolution platform."
+    />
+
+    <title>Login | FixMyCampus</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/auth.css" />
+  </head>
+
+  <body>
+    <main class="auth-page">
+      <div class="auth-shell">
+        <!-- Left branding panel -->
+        <section class="auth-brand-panel">
+          <a href="index.html" class="brand-logo">
+            <span class="brand-mark">F</span>
+
+            <span class="brand-name"> FixMy<span>Campus</span> </span>
+          </a>
+
+          <div class="brand-content">
+            <span class="brand-eyebrow"> CAMPUS OPERATIONS PLATFORM </span>
+
+            <h1>
+              Welcome back to a
+              <span>better campus.</span>
+            </h1>
+
+            <p>
+              Report infrastructure problems, track their progress, and stay
+              connected with the staff working to resolve them.
+            </p>
+
+            <div class="brand-features">
+              <div class="brand-feature">
+                <div class="feature-icon">✓</div>
+
+                <div>
+                  <strong>Report Issues</strong>
+
+                  <span> Submit campus problems quickly and easily. </span>
+                </div>
+              </div>
+
+              <div class="brand-feature">
+                <div class="feature-icon">◷</div>
+
+                <div>
+                  <strong>Track Progress</strong>
+
+                  <span>
+                    Follow every complaint from submission to resolution.
+                  </span>
+                </div>
+              </div>
+
+              <div class="brand-feature">
+                <div class="feature-icon">💬</div>
+
+                <div>
+                  <strong>Stay Connected</strong>
+
+                  <span>
+                    Communicate directly with your assigned staff member.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="brand-footer">
+            <span> © 2026 FixMyCampus </span>
+
+            <span class="brand-footer-dot"> • </span>
+
+            <span> Making campuses better, together. </span>
+          </div>
+        </section>
+
+        <!-- Login panel -->
+        <section class="auth-form-panel">
+          <div class="auth-form-container">
+            <div class="mobile-brand">
+              <a href="index.html" class="brand-logo">
+                <span class="brand-mark"> F </span>
+
+                <span class="brand-name"> FixMy<span>Campus</span> </span>
+              </a>
+            </div>
+
+            <div class="auth-header">
+              <span class="auth-label"> SECURE ACCESS </span>
+
+              <h2>Welcome back</h2>
+
+              <p>Login to your FixMyCampus account</p>
+            </div>
+
+            <div class="auth-card">
+              <form id="loginForm">
+                <div class="form-group">
+                  <label for="email"> Email Address </label>
+
+                  <div class="input-wrapper">
+                    <span class="input-icon"> @ </span>
+
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      class="form-control"
+                      placeholder="Enter your email address"
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="password"> Password </label>
+
+                  <div class="input-wrapper password-input-wrapper">
+                    <span class="input-icon"> • </span>
+
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="form-control"
+                      placeholder="Enter your password"
+                      autocomplete="current-password"
+                      required
+                    />
+
+                    <button
+                      type="button"
+                      id="passwordToggle"
+                      class="password-toggle"
+                      aria-label="Show password"
+                    >
+                      Show
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  id="loginMessage"
+                  class="login-message"
+                  aria-live="polite"
+                ></div>
+
+                <button type="submit" class="btn btn-primary login-button">
+                  <span>Login to Account</span>
+
+                  <span class="button-arrow"> → </span>
+                </button>
+              </form>
+
+              <div class="auth-divider">
+                <span>New to FixMyCampus?</span>
+              </div>
+
+              <div class="auth-register">
+                <a href="register.html">
+                  Create a Student Account
+                  <span>→</span>
+                </a>
+              </div>
+            </div>
+
+            <a href="index.html" class="back-home">
+              <span>←</span>
+              Back to Home
+            </a>
+
+            <div class="security-note">
+              <span class="security-icon"> ✓ </span>
+
+              <span> Your account information is securely protected. </span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+
+    <script>
+      // Password visibility toggle
+      const passwordInput = document.getElementById("password");
+      const passwordToggle = document.getElementById("passwordToggle");
+
+      if (passwordInput && passwordToggle) {
+        passwordToggle.addEventListener("click", function () {
+          const isPassword = passwordInput.type === "password";
+
+          passwordInput.type = isPassword ? "text" : "password";
+
+          passwordToggle.textContent = isPassword ? "Hide" : "Show";
+
+          passwordToggle.setAttribute(
+            "aria-label",
+            isPassword ? "Hide password" : "Show password",
+          );
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Complaint Details | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
+    <link rel="stylesheet" href="../css/complaint-details.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html">FixMyCampus</a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="dashboard.html" class="sidebar-link active">
+            <span class="sidebar-icon">▤</span>
+            <span>Assigned Complaints</span>
+          </a>
+
+          <button
+            id="sidebarNotificationButton"
+            class="sidebar-link sidebar-button"
+            type="button"
+          >
+            <span class="sidebar-icon">♙</span>
+            <span>Notifications</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">MS</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName">Loading...</strong>
+              <span>Staff</span>
+            </div>
+          </div>
+
+          <button id="logoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="dashboard-content">
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon">⌕</span>
+
+              <input
+                type="text"
+                placeholder="Search assigned complaints..."
+                aria-label="Search assigned complaints"
+              />
+            </div>
+
+            <div class="user-area">
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                >
+                  <span class="notification-icon">🔔</span>
+
+                  <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                    style="display: none"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <div
+                  id="notificationPanel"
+                  class="notification-panel"
+                  style="display: none"
+                >
+                  <div class="notification-header">
+                    <h3>Notifications</h3>
+
+                    <button
+                      id="markAllReadButton"
+                      class="mark-all-read"
+                      type="button"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+
+                  <div id="notificationList">
+                    <div class="notification-empty">
+                      Loading notifications...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="user-profile">
+                <div id="profileAvatar" class="profile-avatar">MS</div>
+
+                <span id="staffName" class="user-name"> Loading... </span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="dashboard-main">
+          <div class="dashboard-container">
+            <section class="details-page-header">
+              <div>
+                <a href="dashboard.html" class="details-back-link">
+                  ← Back to Assigned Complaints
+                </a>
+
+                <span id="complaintCode" class="details-complaint-code">
+                  Loading...
+                </span>
+
+                <h1 id="complaintTitle">Loading complaint...</h1>
+              </div>
+
+              <div class="complaint-actions">
+                <a
+                  id="chatButton"
+                  href="#"
+                  class="btn btn-primary"
+                  style="display: none"
+                >
+                  Chat with Student
+                </a>
+              </div>
+            </section>
+
+            <div id="loadingMessage" class="details-message">
+              Loading complaint details...
+            </div>
+
+            <div
+              id="errorMessage"
+              class="error-message"
+              style="display: none"
+            ></div>
+
+            <div
+              id="updateMessageBox"
+              class="success-message"
+              style="display: none"
+            ></div>
+
+            <div
+              id="complaintContent"
+              class="complaint-details-content"
+              style="display: none"
+            >
+              <section class="details-card">
+                <div class="details-card-header">
+                  <div>
+                    <span class="section-label">OVERVIEW</span>
+
+                    <h2>Complaint Details</h2>
+                  </div>
+                </div>
+
+                <div class="complaint-details-grid">
+                  <div class="detail-item">
+                    <span class="detail-label"> Complaint Code </span>
+
+                    <p id="complaintCodeDisplay">-</p>
+                  </div>
+
+                  <div class="detail-item">
+                    <span class="detail-label"> Category </span>
+
+                    <p id="category">-</p>
+                  </div>
+
+                  <div class="detail-item">
+                    <span class="detail-label"> Priority </span>
+
+                    <p id="priority">-</p>
+                  </div>
+
+                  <div class="detail-item">
+                    <span class="detail-label"> Location </span>
+
+                    <p id="location">-</p>
+                  </div>
+
+                  <div class="detail-item">
+                    <span class="detail-label"> Submitted </span>
+
+                    <p id="createdAt">-</p>
+                  </div>
+
+                  <div class="detail-item">
+                    <span class="detail-label"> Last Updated </span>
+
+                    <p id="updatedAt">-</p>
+                  </div>
+
+                  <div class="detail-item">
+                    <span class="detail-label"> Repaired </span>
+
+                    <p id="resolvedAt">-</p>
+                  </div>
+
+                  <div class="detail-item">
+                    <span class="detail-label"> Closed </span>
+
+                    <p id="closedAt">-</p>
+                  </div>
+                </div>
+              </section>
+
+              <section class="details-card">
+                <div class="details-card-header">
+                  <div>
+                    <span class="section-label"> DESCRIPTION </span>
+
+                    <h2>Problem Description</h2>
+                  </div>
+                </div>
+
+                <div class="description-box">
+                  <p id="description">-</p>
+                </div>
+              </section>
+
+              <div class="details-two-column">
+                <section class="details-card">
+                  <div class="details-card-header">
+                    <div>
+                      <span class="section-label"> STUDENT </span>
+
+                      <h2>Student Information</h2>
+                    </div>
+                  </div>
+
+                  <div class="staff-information">
+                    <p>
+                      <strong>Name</strong>
+                      <span id="studentName">-</span>
+                    </p>
+
+                    <p>
+                      <strong>Email</strong>
+                      <span id="studentEmail">-</span>
+                    </p>
+                  </div>
+                </section>
+
+                <section class="details-card">
+                  <div class="details-card-header">
+                    <div>
+                      <span class="section-label"> STATUS </span>
+
+                      <h2>Complaint Status</h2>
+                    </div>
+                  </div>
+
+                  <div id="statusDisplay" class="status-display"></div>
+                </section>
+              </div>
+
+              <section id="updateCard" class="details-card">
+                <div class="details-card-header">
+                  <div>
+                    <span class="section-label"> WORKFLOW </span>
+
+                    <h2>Update Complaint</h2>
+                  </div>
+                </div>
+
+                <form id="statusForm">
+                  <div class="form-group">
+                    <label for="status"> Next Status </label>
+
+                    <select
+                      id="status"
+                      name="status"
+                      class="form-control"
+                      required
+                    ></select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="remarks"> Work / Progress Remarks </label>
+
+                    <textarea
+                      id="remarks"
+                      name="remarks"
+                      class="form-control"
+                      rows="5"
+                      maxlength="2000"
+                      placeholder="Enter details about the work or progress..."
+                      required
+                    ></textarea>
+                  </div>
+
+                  <button
+                    type="submit"
+                    id="updateButton"
+                    class="btn btn-primary"
+                  >
+                    Update Complaint
+                  </button>
+
+                  <p id="updateMessage" class="update-form-message"></p>
+                </form>
+              </section>
+
+              <section class="details-card">
+                <div class="details-card-header">
+                  <div>
+                    <span class="section-label"> HISTORY </span>
+
+                    <h2>Complaint Timeline</h2>
+                  </div>
+                </div>
+
+                <div id="timeline" class="complaint-timeline"></div>
+              </section>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/staff-complaint-details.js"></script>
+  </body>
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Chat with Student | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
+    <link rel="stylesheet" href="../css/chat.css" />
+  </head>
+
+  <body class="staff-chat-page">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html">FixMyCampus</a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a
+            href="dashboard.html#assignedComplaints"
+            class="sidebar-link active"
+          >
+            <span class="sidebar-icon">▤</span>
+            <span>Assigned Complaints</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">MS</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName">Loading...</strong>
+              <span>Staff</span>
+            </div>
+          </div>
+
+          <button id="sidebarLogoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="dashboard-content">
+        <header class="dashboard-header">
+          <div class="container dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon">⌕</span>
+
+              <input
+                type="search"
+                placeholder="Search assigned complaints..."
+                disabled
+              />
+            </div>
+
+            <div class="user-area">
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                >
+                  <span class="notification-icon">🔔</span>
+
+                  <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                    style="display: none"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <div
+                  id="notificationPanel"
+                  class="notification-panel"
+                  style="display: none"
+                >
+                  <div class="notification-header">
+                    <h3>Notifications</h3>
+
+                    <button
+                      id="markAllReadButton"
+                      class="mark-all-read"
+                      type="button"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+
+                  <div id="notificationList">
+                    <div class="notification-empty">
+                      Loading notifications...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="user-profile">
+                <div id="profileAvatar" class="profile-avatar">MS</div>
+
+                <span id="staffName" class="user-name">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="dashboard-main">
+          <div class="dashboard-container">
+            <div class="chat-page-heading">
+              <a id="backButton" href="dashboard.html" class="chat-back-link">
+                ← Back to Complaint
+              </a>
+
+              <span id="complaintInfo" class="chat-page-code">
+                Loading complaint...
+              </span>
+
+              <h1>Complaint Chat</h1>
+
+              <p>Communicate with the student regarding this complaint.</p>
+            </div>
+
+            <div id="loadingMessage" class="chat-loading">Loading chat...</div>
+
+            <div id="errorMessage" class="chat-error hidden"></div>
+
+            <section id="chatContent" class="chat-container hidden">
+              <div class="chat-card">
+                <div class="chat-card-header">
+                  <div class="chat-participant">
+                    <div id="studentAvatar" class="chat-avatar">ST</div>
+
+                    <div class="chat-participant-info">
+                      <span class="chat-section-label">STUDENT</span>
+
+                      <h2 id="studentName">Student</h2>
+
+                      <p>Complaint conversation</p>
+                    </div>
+                  </div>
+
+                  <div id="chatStatus" class="chat-status">Chat Open</div>
+                </div>
+
+                <div id="messagesContainer" class="messages-container"></div>
+
+                <div id="closedMessage" class="chat-closed-message hidden">
+                  This complaint is closed. Chat history is available, but new
+                  messages cannot be sent.
+                </div>
+
+                <form id="messageForm" class="message-form">
+                  <textarea
+                    id="messageInput"
+                    rows="3"
+                    placeholder="Type your message..."
+                    maxlength="2000"
+                    required
+                  ></textarea>
+
+                  <button id="sendButton" type="submit" class="btn btn-primary">
+                    Send Message
+                  </button>
+                </form>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/staff-chat.js"></script>
+  </body>
+</html>

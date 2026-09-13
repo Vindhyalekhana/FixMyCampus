@@ -1,0 +1,316 @@
+
+# 4. SRD — SYSTEM REQUIREMENTS DOCUMENT
+
+# FixMyCampus — System Requirements Document
+
+**Version:** 1.0
+**Date:** 06 September 2026
+
+---
+
+# 1. System Purpose
+
+FixMyCampus provides a centralized system for reporting and resolving campus infrastructure problems.
+
+The system ensures that complaints are:
+
+* Recorded
+* Assigned
+* Processed
+* Resolved
+* Confirmed
+* Closed
+* Evaluated
+
+---
+
+# 2. System Actors
+
+| Actor   | Main Permissions                      |
+| ------- | ------------------------------------- |
+| Student | Create and track own complaints       |
+| Staff   | Process assigned complaints           |
+| Admin   | Manage all complaints and assignments |
+
+---
+
+# 3. Authentication Requirements
+
+The system shall:
+
+1. Provide user registration.
+2. Provide login.
+3. Create authenticated sessions.
+4. Provide logout.
+5. Reject unauthenticated protected requests.
+
+---
+
+# 4. Student Requirements
+
+Students shall be able to:
+
+* Register.
+* Login.
+* Report complaints.
+* View own complaints.
+* View complaint details.
+* Track status.
+* View timeline.
+* Communicate with assigned staff.
+* Receive notifications.
+* Close resolved complaints.
+* Submit feedback.
+
+Students shall not be able to:
+
+* Access other students' complaints.
+* Access staff-only complaints.
+* Access admin functions.
+* Close unresolved complaints.
+
+---
+
+# 5. Staff Requirements
+
+Staff shall be able to:
+
+* Login.
+* View assigned complaints.
+* View complaint details.
+* Update status.
+* Add remarks.
+* Mark complaints Resolved.
+* Communicate with complaint owners.
+
+Staff shall not:
+
+* View another staff member's assigned complaints.
+* Close complaints.
+* Access admin functions.
+
+---
+
+# 6. Admin Requirements
+
+Admins shall be able to:
+
+* Login.
+* View all complaints.
+* View student information.
+* Assign staff.
+* View complaint details.
+* View complaint history.
+
+---
+
+# 7. Complaint Management
+
+Each complaint shall contain information such as:
+
+* Complaint ID
+* Complaint code
+* Student
+* Category
+* Location
+* Title
+* Description
+* Priority
+* Status
+* Creation time
+* Update time
+* Resolution time
+* Closure time
+
+---
+
+# 8. Assignment Requirements
+
+An administrator shall be able to assign a complaint to an eligible staff member.
+
+Assignment information shall contain:
+
+* Complaint
+* Staff
+* Admin who assigned it
+* Assignment timestamp
+* Completion timestamp where applicable
+
+---
+
+# 9. Status Requirements
+
+Supported statuses include:
+
+```text
+Submitted
+Under Review
+Assigned
+In Progress
+Resolved
+Closed
+Rejected
+Duplicate
+```
+
+Normal workflow:
+
+```text
+Submitted
+↓
+Under Review
+↓
+Assigned
+↓
+In Progress
+↓
+Resolved
+↓
+Closed
+```
+
+---
+
+# 10. Resolution Requirements
+
+When staff marks a complaint as:
+
+```text
+Resolved
+```
+
+the server shall record:
+
+```text
+resolved_at
+```
+
+The complaint remains available for student confirmation.
+
+---
+
+# 11. Closure Requirements
+
+Only the student who owns the complaint can close it.
+
+Closure is allowed only when:
+
+```text
+status = Resolved
+```
+
+When closure succeeds:
+
+```text
+status = Closed
+closed_at = current server time
+```
+
+Staff cannot close complaints.
+
+---
+
+# 12. Chat Requirements
+
+Chat shall be linked to a specific complaint.
+
+Only these users can participate:
+
+```text
+Complaint Student
++
+Currently Assigned Staff
+```
+
+The chat shall:
+
+* Display messages.
+* Store messages.
+* Track read status.
+* Support notifications.
+
+After closure:
+
+```text
+View history → Allowed
+Send new message → Not allowed
+```
+
+---
+
+# 13. Notification Requirements
+
+The system shall:
+
+* Store notifications.
+* Associate notifications with users.
+* Optionally associate notifications with complaints.
+* Maintain read/unread status.
+* Allow individual notification read operations.
+* Allow mark-all-as-read.
+
+---
+
+# 14. Feedback Requirements
+
+Feedback shall be available after closure.
+
+Each feedback record contains:
+
+* Complaint
+* Student
+* Rating
+* Comment
+* Created timestamp
+
+Rating range:
+
+```text
+1–5
+```
+
+Each complaint can have at most one feedback record.
+
+---
+
+# 15. XML Requirements
+
+The system shall:
+
+* Export complaint information as XML.
+* Restrict student exports to their own complaints.
+* Allow authorized administrators to export complaints.
+* Validate XML using XSD.
+* Validate XML using DTD.
+
+---
+
+# 16. External Interfaces
+
+### Browser Interface
+
+Users interact through HTML/CSS/JavaScript.
+
+### Backend Interface
+
+JavaScript communicates with PHP endpoints.
+
+### Database Interface
+
+PHP communicates with MySQL.
+
+### XML Interface
+
+PHP generates XML and validates it against XSD and DTD.
+
+---
+
+# 17. System Constraints
+
+* Apache is required for local hosting.
+* PHP is required for backend execution.
+* MySQL is required for persistence.
+* The project targets a local academic/development environment.
+* Authorization must remain server-side.
+
+---

@@ -1,0 +1,170 @@
+.details-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+/* Complaint Header */
+.complaint-heading {
+  margin-bottom: 25px;
+}
+
+.complaint-code {
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.complaint-heading h1 {
+  margin-bottom: 8px;
+}
+
+.complaint-meta {
+  color: #6b7280;
+}
+
+/* Information */
+.info-list {
+  display: grid;
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.info-value {
+  text-align: right;
+  font-weight: 600;
+}
+
+/* Description */
+.description-box {
+  white-space: pre-wrap;
+  color: #374151;
+  line-height: 1.7;
+}
+
+/* Complaint Timeline */
+.timeline {
+  position: relative;
+  margin-top: 25px;
+  padding-left: 60px;
+}
+
+/* One continuous timeline line */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 7px;
+  bottom: 7px;
+  width: 2px;
+  background: #8da1f5;
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0 0 34px;
+  border: none !important;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Prevent additional timeline lines */
+.timeline-item::before,
+.timeline-item::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Timeline marker */
+.timeline-dot {
+  position: absolute;
+  left: -53px;
+  top: 1px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #5268e8;
+  border: 3px solid #dfe5ff;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.timeline-status {
+  margin: 0 0 8px;
+  color: #18213d;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.timeline-date {
+  margin: 8px 0 0;
+  color: #7a879f;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.timeline-remarks {
+  margin: 0;
+  color: #43506a;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Contact Card */
+.contact-card {
+  margin-top: 25px;
+}
+
+.contact-placeholder {
+  color: #6b7280;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .info-value {
+    text-align: left;
+  }
+
+  .timeline {
+    padding-left: 48px;
+  }
+
+  .timeline::before {
+    left: 11px;
+  }
+
+  .timeline-dot {
+    left: -45px;
+  }
+}

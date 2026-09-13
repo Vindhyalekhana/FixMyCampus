@@ -1,0 +1,52 @@
+<!ELEMENT fixMyCampusComplaint (complaint)>
+
+<!ELEMENT complaint (
+    complaintId,
+    complaintCode,
+    title,
+    description,
+    priority,
+    status,
+    createdAt,
+    updatedAt,
+    resolvedAt,
+    closedAt,
+    student,
+    category,
+    location
+)>
+
+<!ELEMENT complaintId (#PCDATA)>
+<!ELEMENT complaintCode (#PCDATA)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT priority (#PCDATA)>
+<!ELEMENT status (#PCDATA)>
+<!ELEMENT createdAt (#PCDATA)>
+<!ELEMENT updatedAt (#PCDATA)>
+<!ELEMENT resolvedAt (#PCDATA)>
+<!ELEMENT closedAt (#PCDATA)>
+
+<!ELEMENT student (studentId, name, email)>
+
+<!ELEMENT studentId (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT email (#PCDATA)>
+
+<!ELEMENT category (categoryId, name)>
+
+<!ELEMENT categoryId (#PCDATA)>
+
+<!ELEMENT location (
+    locationId,
+    building,
+    floor,
+    room,
+    description
+)>
+
+<!ELEMENT locationId (#PCDATA)>
+<!ELEMENT building (#PCDATA)>
+<!ELEMENT floor (#PCDATA)>
+<!ELEMENT room (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
