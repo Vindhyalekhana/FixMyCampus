@@ -4,7 +4,7 @@
 
 **Version:** 1.0  
 **Date:** 06 October 2026  
-**Local URL:** `http://localhost/FixMyCampus/`
+**Local URL:** `http://projects.local/fixmycampus/v1/`
 
 ---
 
@@ -542,7 +542,7 @@ Place the project in the Apache web root or configure an Apache VirtualHost/Alia
 For a standard XAMPP installation, the project can be placed at:
 
 ```text
-C:\xampp\htdocs\FixMyCampus
+C:\Users\vindh\Desktop\projects\fixmycampus\v1
 ```
 
 ### Step 7 — Open the Application
@@ -550,7 +550,7 @@ C:\xampp\htdocs\FixMyCampus
 Open:
 
 ```text
-http://localhost/FixMyCampus/
+http://projects.local/fixmycampus/v1/
 ```
 
 ---
