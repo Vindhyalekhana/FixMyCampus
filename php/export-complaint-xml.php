@@ -2,23 +2,30 @@
 
 session_start();
 
-require_once "db.php";
+require_once __DIR__ . "/db.php";
 
-if (!isset($_SESSION["user_id"])) {
+if (!isset($_SESSION["user_id"], $_SESSION["role"])) {
     http_response_code(401);
     exit("Authentication required.");
 }
 
-$complaintId = filter_input(INPUT_GET, "complaint_id", FILTER_VALIDATE_INT);
+$complaintId = filter_input(
+    INPUT_GET,
+    "complaint_id",
+    FILTER_VALIDATE_INT
+);
 
 if (!$complaintId) {
     http_response_code(400);
     exit("Invalid complaint ID.");
 }
 
+$userId = (int) $_SESSION["user_id"];
+$role = $_SESSION["role"];
+
 try {
-    $stmt = $pdo->prepare(
-        "SELECT
+    $sql = "
+        SELECT
             c.complaint_id,
             c.complaint_code,
             c.student_id,
@@ -46,17 +53,53 @@ try {
             ON c.category_id = cat.category_id
         INNER JOIN locations l
             ON c.location_id = l.location_id
-        WHERE c.complaint_id = ?
-        LIMIT 1"
-    );
+    ";
 
-    $stmt->execute([$complaintId]);
+    $params = [$complaintId];
+
+    if ($role === "student") {
+        $sql .= "
+            WHERE c.complaint_id = ?
+              AND c.student_id = ?
+        ";
+
+        $params[] = $userId;
+    } elseif ($role === "staff") {
+        $sql .= "
+            WHERE c.complaint_id = ?
+              AND EXISTS (
+                  SELECT 1
+                  FROM staff_assignments sa
+                  WHERE sa.complaint_id = c.complaint_id
+                    AND sa.assignment_id = (
+                        SELECT MAX(sa2.assignment_id)
+                        FROM staff_assignments sa2
+                        WHERE sa2.complaint_id = c.complaint_id
+                    )
+                    AND sa.staff_id = ?
+              )
+        ";
+
+        $params[] = $userId;
+    } elseif ($role === "admin") {
+        $sql .= "
+            WHERE c.complaint_id = ?
+        ";
+    } else {
+        http_response_code(403);
+        exit("You are not authorized to export complaint XML.");
+    }
+
+    $sql .= " LIMIT 1";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
 
     $complaint = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$complaint) {
         http_response_code(404);
-        exit("Complaint not found.");
+        exit("Complaint not found or access denied.");
     }
 
     $xml = new DOMDocument("1.0", "UTF-8");
@@ -151,7 +194,8 @@ try {
 
     $xmlContent = $xml->saveXML();
 
-    $doctype = '<!DOCTYPE fixMyCampusComplaint SYSTEM "complaint.dtd">' . PHP_EOL;
+    $doctype = '<!DOCTYPE fixMyCampusComplaint SYSTEM "complaint.dtd">'
+        . PHP_EOL;
 
     $xmlContent = preg_replace(
         '/(<\?xml[^>]*\?>\s*)/',
@@ -171,6 +215,11 @@ try {
     echo $xmlContent;
 
 } catch (PDOException $e) {
+    error_log(
+        "Complaint XML export database error: "
+        . $e->getMessage()
+    );
+
     http_response_code(500);
     exit("Unable to export complaint XML.");
 }

@@ -1,28 +1,14 @@
 <?php
 
-session_start();
+require_once __DIR__ . "/security.php";
 
 header("Content-Type: application/json");
 
-require_once "db.php";
+require_once __DIR__ . "/db.php";
 
-if (!isset($_SESSION["user_id"])) {
-    http_response_code(401);
-    echo json_encode([
-        "success" => false,
-        "message" => "Authentication required."
-    ]);
-    exit;
-}
-
-if ($_SESSION["role"] !== "staff") {
-    http_response_code(403);
-    echo json_encode([
-        "success" => false,
-        "message" => "Staff access required."
-    ]);
-    exit;
-}
+requirePostRequest();
+requireRole(["staff"]);
+requireCsrfToken();
 
 $data = json_decode(
     file_get_contents("php://input"),
@@ -44,19 +30,23 @@ $allowedStatuses = [
 
 if (!$complaintId || !in_array($status, $allowedStatuses, true)) {
     http_response_code(400);
+
     echo json_encode([
         "success" => false,
         "message" => "Invalid complaint or status."
     ]);
+
     exit;
 }
 
 if ($remarks === "") {
     http_response_code(400);
+
     echo json_encode([
         "success" => false,
         "message" => "Remarks are required."
     ]);
+
     exit;
 }
 
@@ -67,7 +57,8 @@ try {
             c.complaint_id,
             c.complaint_code,
             c.status,
-            c.student_id
+            c.student_id,
+            sa.assignment_id
          FROM complaints c
          INNER JOIN staff_assignments sa
             ON c.complaint_id = sa.complaint_id
@@ -90,10 +81,12 @@ try {
 
     if (!$complaint) {
         http_response_code(404);
+
         echo json_encode([
             "success" => false,
             "message" => "Complaint not found."
         ]);
+
         exit;
     }
 
@@ -105,10 +98,12 @@ try {
 
     if (!$validTransition) {
         http_response_code(400);
+
         echo json_encode([
             "success" => false,
             "message" => "Invalid status transition."
         ]);
+
         exit;
     }
 
@@ -124,6 +119,17 @@ try {
         $stmt->execute([
             $status,
             $complaintId
+        ]);
+
+        // Mark the current staff assignment as completed.
+        $stmt = $pdo->prepare(
+            "UPDATE staff_assignments
+             SET completed_at = NOW()
+             WHERE assignment_id = ?"
+        );
+
+        $stmt->execute([
+            $complaint["assignment_id"]
         ]);
     } else {
         $stmt = $pdo->prepare(
@@ -194,6 +200,10 @@ try {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
+
+    error_log(
+        "FixMyCampus update-status error: " . $e->getMessage()
+    );
 
     http_response_code(500);
 

@@ -7,17 +7,527 @@
 
     <title>Complaint Details | FixMyCampus</title>
 
-    <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/dashboard.css" />
     <link rel="stylesheet" href="../css/notifications.css" />
+    <link rel="stylesheet" href="../css/feedback.css" />
+
+    <style>
+      /* Complaint details */
+
+      .details-page-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 25px;
+        margin-bottom: 28px;
+      }
+
+      .details-page-header h1 {
+        margin: 8px 0 0;
+        color: var(--text-dark);
+        font-size: 28px;
+        line-height: 1.2;
+        font-weight: 800;
+      }
+
+      .details-back-link {
+        display: inline-block;
+        margin-bottom: 6px;
+        color: #5267df;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .details-back-link:hover {
+        text-decoration: underline;
+      }
+
+      .details-complaint-code {
+        display: block;
+        margin-top: 4px;
+        color: #6b7280;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .complaint-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .details-message {
+        padding: 30px;
+        color: #6b7280;
+        text-align: center;
+      }
+
+      .complaint-details-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .details-card {
+        padding: 26px;
+        border: 1px solid #e8ebf3;
+        border-radius: 17px;
+        background: #ffffff;
+        box-shadow: 0 8px 25px rgba(31, 41, 55, 0.05);
+      }
+
+      .details-card-header {
+        margin-bottom: 22px;
+      }
+
+      .details-card-header h2 {
+        margin: 4px 0 0;
+        color: var(--text-dark);
+        font-size: 19px;
+        font-weight: 800;
+      }
+
+      .section-label {
+        display: block;
+        margin-bottom: 5px;
+        color: #7a88a2;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.1px;
+      }
+
+      .complaint-details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .detail-item {
+        padding: 15px;
+        border: 1px solid #edf0f6;
+        border-radius: 10px;
+        background: #f8f9fd;
+      }
+
+      .detail-label {
+        display: block;
+        margin-bottom: 7px;
+        color: #7a849d;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .detail-item p {
+        margin: 0;
+        color: #202943;
+        font-size: 14px;
+        font-weight: 650;
+      }
+
+      .description-box {
+        padding: 18px;
+        border: 1px solid #edf0f6;
+        border-radius: 10px;
+        background: #f8f9fd;
+      }
+
+      .description-box p {
+        margin: 0;
+        color: #4b5563;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .details-two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .assigned-staff {
+        min-height: 55px;
+      }
+
+      .assigned-staff p {
+        margin: 0 0 10px;
+        color: #34415c;
+        font-size: 13px;
+      }
+
+      .assigned-staff p:last-child {
+        margin-bottom: 0;
+      }
+
+      .status-display {
+        display: flex;
+        align-items: center;
+        min-height: 55px;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 85px;
+        padding: 7px 13px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .status-submitted {
+        background: #eaf3ff;
+        color: #1764d6;
+      }
+
+      .status-review {
+        background: #f1ebff;
+        color: #7042c8;
+      }
+
+      .status-assigned {
+        background: #fff0df;
+        color: #c46a14;
+      }
+
+      .status-progress {
+        background: #e9f0ff;
+        color: #315fd2;
+      }
+
+      .status-resolved {
+        background: #e5f9ed;
+        color: #19864b;
+      }
+
+      .status-closed {
+        background: #eef0f4;
+        color: #505a6b;
+      }
+
+      .status-rejected {
+        background: #ffe9e9;
+        color: #c43636;
+      }
+
+      .status-duplicate {
+        background: #f0f1f4;
+        color: #666d7a;
+      }
+
+      /* Timeline */
+
+      .complaint-timeline {
+        position: relative;
+        padding-left: 40px;
+      }
+
+      .complaint-timeline::before {
+        content: "";
+        position: absolute;
+        left: 12px;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background: #dfe4f0;
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-bottom: 32px;
+      }
+
+      .timeline-item:last-child {
+        padding-bottom: 0;
+      }
+
+      .timeline-item > div:first-child {
+        margin-bottom: 7px;
+      }
+
+      .timeline-item strong {
+        color: #17203a;
+        font-size: 15px;
+        font-weight: 800;
+      }
+
+      .timeline-item p {
+        margin: 0 0 7px;
+        color: #4b5872;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .timeline-item small {
+        color: #71809a;
+        font-size: 11px;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -35px;
+        top: 4px;
+        width: 14px;
+        height: 14px;
+        border: 3px solid #e8ecff;
+        border-radius: 50%;
+        background: #5b6ee1;
+        box-sizing: border-box;
+        z-index: 2;
+      }
+
+      /* Feedback */
+
+      .feedback-card {
+        margin-bottom: 20px;
+      }
+
+      #feedbackContent {
+        max-width: 760px;
+      }
+
+      .feedback-intro {
+        margin: 0 0 22px;
+        color: #4d5a73;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .rating-title {
+        display: block;
+        margin-bottom: 12px;
+        color: #27334d;
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      .rating-options {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 4px 0 8px;
+      }
+
+      .rating-button {
+        width: 46px;
+        height: 46px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 1px solid #e0e5ef;
+        border-radius: 12px;
+        background: #ffffff;
+        color: #c5ccda;
+        font-size: 23px;
+        line-height: 1;
+        cursor: pointer;
+        transition:
+          transform 0.18s ease,
+          border-color 0.18s ease,
+          background 0.18s ease,
+          color 0.18s ease,
+          box-shadow 0.18s ease;
+      }
+
+      .rating-button::before {
+        content: "★";
+      }
+
+      .rating-button {
+        font-size: 0;
+      }
+
+      .rating-button:hover {
+        border-color: #cbd4ea;
+        background: #f7f9ff;
+        color: #f3b83f;
+        transform: translateY(-2px);
+      }
+
+      .rating-button.selected {
+        border-color: #f2c45c;
+        background: #fff8e8;
+        color: #f2b632;
+        box-shadow: 0 5px 15px rgba(242, 182, 50, 0.16);
+      }
+
+      .selected-rating {
+        min-height: 20px;
+        margin: 7px 0 20px;
+        color: #7b879c;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .feedback-textarea {
+        width: 100%;
+        min-height: 115px;
+        display: block;
+        box-sizing: border-box;
+        margin-bottom: 15px;
+        padding: 13px 14px;
+        border: 1px solid #dce2ec;
+        border-radius: 11px;
+        outline: none;
+        background: #fbfcfe;
+        color: #26334d;
+        font-family: inherit;
+        font-size: 13px;
+        line-height: 1.55;
+        resize: vertical;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .feedback-textarea::placeholder {
+        color: #9aa5b7;
+      }
+
+      .feedback-textarea:hover {
+        border-color: #c7d0df;
+      }
+
+      .feedback-textarea:focus {
+        border-color: #4568e8;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(69, 104, 232, 0.1);
+      }
+
+      #submitFeedbackButton {
+        min-height: 43px;
+        padding: 0 19px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4c70ed, #3d60dc);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 7px 17px rgba(69, 104, 232, 0.2);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      #submitFeedbackButton:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(69, 104, 232, 0.25);
+      }
+
+      #submitFeedbackButton:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      #feedbackFormMessage {
+        min-height: 20px;
+        margin-top: 12px;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .feedback-success {
+        color: #19864b;
+      }
+
+      .feedback-error {
+        color: #c43636;
+      }
+
+      .submitted-feedback {
+        padding: 18px;
+        border: 1px solid #e7ebf3;
+        border-radius: 13px;
+        background: #f8f9fd;
+      }
+
+      .feedback-stars {
+        margin-bottom: 12px;
+        color: #f2b632;
+        font-size: 25px;
+        letter-spacing: 4px;
+      }
+
+      .submitted-feedback p {
+        margin: 8px 0;
+        color: #4d5a73;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .submitted-feedback p strong {
+        color: #27334d;
+      }
+
+      .submitted-feedback small {
+        display: block;
+        margin-top: 12px;
+        color: #8994a8;
+        font-size: 11px;
+      }
+
+      /* Responsive */
+
+      @media (max-width: 768px) {
+        .details-page-header {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .complaint-actions {
+          width: 100%;
+        }
+
+        .complaint-actions .btn {
+          flex: 1;
+        }
+
+        .complaint-details-grid,
+        .details-two-column {
+          grid-template-columns: 1fr;
+        }
+
+        #feedbackContent {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .details-card {
+          padding: 20px;
+        }
+
+        .rating-options {
+          gap: 6px;
+        }
+
+        .rating-button {
+          width: 42px;
+          height: 42px;
+        }
+
+        #submitFeedbackButton {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
 
   <body>
     <div class="dashboard-layout">
-      <!-- Sidebar -->
       <aside class="dashboard-sidebar">
         <div class="sidebar-brand">
-          <a href="dashboard.html"> FixMyCampus </a>
+          <a href="dashboard.html">FixMyCampus</a>
         </div>
 
         <nav class="sidebar-nav">
@@ -36,24 +546,29 @@
             <span>My Complaints</span>
           </a>
 
-          <button
-            type="button"
-            id="sidebarNotificationButton"
-            class="sidebar-link sidebar-button"
-          >
+          <a href="notifications.html" class="sidebar-link">
             <span class="sidebar-icon">♧</span>
             <span>Notifications</span>
-          </button>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
         </nav>
 
         <div class="sidebar-bottom">
           <div class="sidebar-user">
-            <div id="sidebarAvatar" class="profile-avatar">TS</div>
+            <div id="sidebarAvatar" class="profile-avatar">ST</div>
 
             <div class="sidebar-user-info">
-              <strong id="sidebarUserName"> Loading... </strong>
-
-              <span> Student </span>
+              <strong id="sidebarUserName">Loading...</strong>
+              <span>Student</span>
             </div>
           </div>
 
@@ -64,13 +579,11 @@
         </div>
       </aside>
 
-      <!-- Main application -->
       <div class="dashboard-content">
-        <!-- Header -->
         <header class="dashboard-header">
           <div class="dashboard-header-content">
             <div class="dashboard-search">
-              <span class="search-icon"> ⌕ </span>
+              <span class="search-icon">⌕</span>
 
               <input
                 type="text"
@@ -80,7 +593,6 @@
             </div>
 
             <div class="user-area">
-              <!-- Notifications -->
               <div class="notification-wrapper">
                 <button
                   id="notificationButton"
@@ -88,7 +600,7 @@
                   type="button"
                   aria-label="Notifications"
                 >
-                  <span class="notification-icon"> 🔔 </span>
+                  <span class="notification-icon">🔔</span>
 
                   <span
                     id="notificationBadge"
@@ -124,20 +636,21 @@
                 </div>
               </div>
 
-              <!-- Student profile -->
-              <div class="user-profile">
-                <div id="profileAvatar" class="profile-avatar">TS</div>
+              <a
+                href="profile.html"
+                class="user-profile"
+                aria-label="Open profile"
+              >
+                <div id="profileAvatar" class="profile-avatar">ST</div>
 
                 <span id="studentName" class="user-name"> Loading... </span>
-              </div>
+              </a>
             </div>
           </div>
         </header>
 
-        <!-- Main content -->
         <main class="dashboard-main">
           <div class="dashboard-container">
-            <!-- Page header -->
             <section class="details-page-header">
               <div>
                 <a href="dashboard.html#complaints" class="details-back-link">
@@ -172,86 +685,72 @@
               </div>
             </section>
 
-            <!-- Loading -->
             <div id="loadingMessage" class="details-message">
               Loading complaint details...
             </div>
 
-            <!-- Error -->
             <div
               id="errorMessage"
               class="error-message"
               style="display: none"
             ></div>
 
-            <!-- Success -->
             <div
               id="closeMessage"
               class="success-message"
               style="display: none"
             ></div>
 
-            <!-- Complaint content -->
             <div
               id="complaintContent"
               class="complaint-details-content"
               style="display: none"
             >
-              <!-- Overview -->
               <section class="details-card">
                 <div class="details-card-header">
                   <div>
-                    <span class="section-label"> OVERVIEW </span>
-
+                    <span class="section-label">OVERVIEW</span>
                     <h2>Complaint Details</h2>
                   </div>
                 </div>
 
                 <div class="complaint-details-grid">
                   <div class="detail-item">
-                    <span class="detail-label"> Complaint Code </span>
-
+                    <span class="detail-label">Complaint Code</span>
                     <p id="complaintCodeDisplay">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Category </span>
-
+                    <span class="detail-label">Category</span>
                     <p id="categoryName">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Priority </span>
-
+                    <span class="detail-label">Priority</span>
                     <p id="priority">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Location </span>
-
+                    <span class="detail-label">Location</span>
                     <p id="location">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Created At </span>
-
+                    <span class="detail-label">Created At</span>
                     <p id="createdAt">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Last Updated </span>
-
+                    <span class="detail-label">Last Updated</span>
                     <p id="updatedAt">-</p>
                   </div>
                 </div>
               </section>
 
-              <!-- Description -->
               <section class="details-card">
                 <div class="details-card-header">
                   <div>
-                    <span class="section-label"> DESCRIPTION </span>
-
+                    <span class="section-label">DESCRIPTION</span>
                     <h2>Problem Description</h2>
                   </div>
                 </div>
@@ -261,13 +760,11 @@
                 </div>
               </section>
 
-              <!-- Assigned Staff and Status -->
               <div class="details-two-column">
                 <section class="details-card">
                   <div class="details-card-header">
                     <div>
-                      <span class="section-label"> ASSIGNMENT </span>
-
+                      <span class="section-label">ASSIGNMENT</span>
                       <h2>Assigned Staff</h2>
                     </div>
                   </div>
@@ -278,8 +775,7 @@
                 <section class="details-card">
                   <div class="details-card-header">
                     <div>
-                      <span class="section-label"> STATUS </span>
-
+                      <span class="section-label">STATUS</span>
                       <h2>Complaint Status</h2>
                     </div>
                   </div>
@@ -288,12 +784,10 @@
                 </section>
               </div>
 
-              <!-- Timeline -->
               <section class="details-card">
                 <div class="details-card-header">
                   <div>
-                    <span class="section-label"> HISTORY </span>
-
+                    <span class="section-label">HISTORY</span>
                     <h2>Complaint Timeline</h2>
                   </div>
                 </div>
@@ -301,7 +795,6 @@
                 <div id="timeline" class="complaint-timeline"></div>
               </section>
 
-              <!-- Feedback -->
               <section
                 id="feedbackSection"
                 class="details-card feedback-card"
@@ -309,8 +802,7 @@
               >
                 <div class="details-card-header">
                   <div>
-                    <span class="section-label"> FEEDBACK </span>
-
+                    <span class="section-label">FEEDBACK</span>
                     <h2>Your Feedback</h2>
                   </div>
                 </div>

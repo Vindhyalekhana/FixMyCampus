@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Manage Complaint | FixMyCampus</title>
+    <title>Complaint Details | FixMyCampus</title>
 
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/dashboard.css" />
@@ -25,12 +25,37 @@
             <span>Dashboard</span>
           </a>
 
+          <a href="staff.html" class="sidebar-link">
+            <span class="sidebar-icon">♙</span>
+            <span>Staff Monitoring</span>
+          </a>
+
+          <a href="reports.html" class="sidebar-link">
+            <span class="sidebar-icon">▥</span>
+            <span>Reports &amp; Analytics</span>
+          </a>
+
           <a
             href="dashboard.html#complaintManagement"
             class="sidebar-link active"
           >
             <span class="sidebar-icon">▤</span>
             <span>Complaint Management</span>
+          </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
           </a>
         </nav>
 
@@ -111,7 +136,7 @@
               <div class="user-profile">
                 <div id="profileAvatar" class="profile-avatar">AD</div>
 
-                <span id="adminName" class="user-name"> Loading... </span>
+                <span id="adminName" class="user-name">Loading...</span>
               </div>
             </div>
           </div>
@@ -143,12 +168,6 @@
             <div
               id="errorMessage"
               class="error-message"
-              style="display: none"
-            ></div>
-
-            <div
-              id="assignmentMessage"
-              class="success-message"
               style="display: none"
             ></div>
 
@@ -239,24 +258,8 @@
                   </div>
                 </div>
 
-                <div class="assignment-panel">
-                  <div class="form-group">
-                    <label for="staff"> Assign Staff Member </label>
-
-                    <select id="staff" class="form-control">
-                      <option value="">Select staff member</option>
-                    </select>
-                  </div>
-
-                  <button
-                    id="assignButton"
-                    type="button"
-                    class="btn btn-primary"
-                  >
-                    Assign Complaint
-                  </button>
-
-                  <div id="currentAssignment" class="assignment-current"></div>
+                <div id="currentAssignment" class="assignment-current">
+                  Loading assignment information...
                 </div>
               </section>
 

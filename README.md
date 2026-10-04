@@ -1,15 +1,10 @@
-Absolutely. Below is the **complete text content** of all six FixMyCampus documents, so you can copy them directly into Word/VS Code.
-
----
-
-# 1. README DOCUMENT
-
+````markdown
 # FixMyCampus
 
 **Campus Issue Reporting & Resolution Platform**
 
-**Version:** 1.0
-**Date:** 06 September 2026
+**Version:** 1.0  
+**Date:** 06 October 2026  
 **Local URL:** `http://localhost/FixMyCampus/`
 
 ---
@@ -24,7 +19,7 @@ The system connects three primary roles:
 - Maintenance Staff
 - Administrators
 
-Students can report infrastructure problems and track their complaints. Administrators review complaints and assign them to appropriate staff members. Staff members process assigned complaints and update their status. Once a complaint is marked **Resolved**, the student can confirm the resolution and close the complaint.
+Students can report infrastructure problems and track their complaints. Administrators review complaints and manage staff assignments. Staff members process assigned complaints and update their status. Once a complaint is marked **Resolved**, the student can confirm the resolution and close the complaint.
 
 The system also provides:
 
@@ -37,6 +32,9 @@ The system also provides:
 - DTD validation
 - Role-based access control
 - Server-side authorization
+- CSRF protection
+- Secure session handling
+- Password hashing
 
 ---
 
@@ -45,7 +43,8 @@ The system also provides:
 The main objectives of FixMyCampus are:
 
 - Provide students with a simple method to report campus infrastructure problems.
-- Allow administrators to review and assign complaints.
+- Allow administrators to review and manage complaints.
+- Allow administrators to assign complaints to appropriate staff members.
 - Allow maintenance staff to manage assigned complaints.
 - Allow students to track complaint progress.
 - Maintain a complete complaint status history.
@@ -53,6 +52,7 @@ The main objectives of FixMyCampus are:
 - Notify users about important complaint events.
 - Collect feedback after complaint resolution.
 - Demonstrate XML, XSD, and DTD technologies.
+- Implement server-side authentication and authorization.
 
 ---
 
@@ -73,6 +73,8 @@ Students can:
 - Confirm resolution.
 - Close resolved complaints.
 - Submit feedback after closure.
+- Manage their profile.
+- Change their password.
 
 Students cannot:
 
@@ -81,6 +83,7 @@ Students cannot:
 - Access staff-only complaints.
 - Access administrator functionality.
 - Close complaints before they are resolved.
+- Access another user's complaint-specific chat.
 
 ---
 
@@ -95,13 +98,16 @@ Staff members can:
 - Add remarks.
 - Mark complaints as Resolved.
 - Communicate with the complaint owner.
+- Manage their profile.
+- Change their password.
 
 Staff cannot:
 
 - View complaints assigned to other staff members.
 - Close complaints.
 - Access administrator functionality.
-- View student phone numbers through staff complaint views.
+- Access unauthorized complaint chats.
+- View restricted student information through staff complaint views.
 
 ---
 
@@ -112,11 +118,18 @@ Administrators can:
 - Log in.
 - View all complaints.
 - View complaint details.
-- View student contact information.
+- View relevant student information.
 - Assign complaints to staff.
 - Monitor complaint progress.
 - View complaint timelines.
-- Manage operational assignment.
+- Manage staff accounts.
+- Create staff accounts.
+- Edit staff information.
+- Enable or disable staff accounts.
+- Reset staff passwords.
+- Change administrator password.
+- Manage staff categories.
+- View administrative reports.
 
 ---
 
@@ -136,7 +149,7 @@ In Progress
 Resolved
      ↓
 Closed
-```
+````
 
 Additional database-supported statuses include:
 
@@ -164,37 +177,41 @@ Student → Closed
 
 ### Frontend
 
-- HTML5
-- CSS3
-- JavaScript
+* HTML5
+* CSS3
+* JavaScript
 
 ### Backend
 
-- PHP
+* PHP
 
 ### Database
 
-- MySQL 9.7.1
+* MySQL
 
 ### Web Server
 
-- Apache through XAMPP
+* Apache through XAMPP
 
 ### Data Technologies
 
-- XML
-- XSD
-- DTD
+* XML
+* XSD
+* DTD
 
-### Authentication
+### Authentication and Security
 
-- PHP Sessions
-- `password_hash()`
-- `password_verify()`
+* PHP Sessions
+* `password_hash()`
+* `password_verify()`
+* CSRF protection
+* Role-based authorization
+* PDO prepared statements
+* Secure session cookie configuration
 
 ### Operating Environment
 
-- Windows
+* Windows
 
 ---
 
@@ -213,7 +230,8 @@ FixMyCampus/
 │   ├── dashboard.css
 │   ├── complaint-details.css
 │   ├── chat.css
-│   └── notifications.css
+│   ├── notifications.css
+│   └── admin-fixes.css
 │
 ├── database/
 │   └── fixmycampus.sql
@@ -237,27 +255,46 @@ FixMyCampus/
 │   ├── logout.php
 │   ├── register.php
 │   ├── db.php
+│   ├── security.php
+│   ├── csrf-token.php
+│   │
 │   ├── create-complaint.php
 │   ├── student-complaints.php
 │   ├── complaint-details.php
 │   ├── close-complaint.php
+│   │
 │   ├── staff-complaints.php
 │   ├── staff-complaint-details.php
+│   ├── staff-list.php
 │   ├── update-status.php
+│   │
 │   ├── admin-complaints.php
 │   ├── admin-complaint-details.php
-│   ├── assign-staff.php
-│   ├── staff-list.php
+│   ├── admin-staff.php
+│   ├── admin-create-staff.php
+│   ├── admin-edit-staff.php
+│   ├── admin-toggle-staff.php
+│   ├── admin-reset-staff-password.php
+│   ├── admin-change-password.php
+│   ├── admin-staff-categories.php
+│   └── admin-reports.php
+│
+│   ├── change-password.php
+│   ├── profile.php
+│   ├── update-profile.php
+│   ├── upload-profile-picture.php
+│   │
 │   ├── chat-messages.php
 │   ├── send-message.php
-│   ├── mark-message-read.php
 │   ├── notifications.php
 │   ├── mark-notification-read.php
 │   ├── mark-all-notifications-read.php
+│   │
 │   ├── submit-feedback.php
 │   ├── get-feedback.php
 │   ├── categories.php
 │   ├── locations.php
+│   │
 │   ├── export-complaint-xml.php
 │   └── validate-complaint-xml.php
 │
@@ -270,20 +307,33 @@ FixMyCampus/
 │   ├── complaint.xsd
 │   └── complaint.dtd
 │
+├── .env
+├── .gitignore
 ├── index.html
 ├── login.html
-└── register.html
+├── register.html
+└── README.md
 ```
+
+> The `.env` file contains local database configuration and must not be committed to the public repository.
 
 ---
 
-# 7. Database Tables
+# 7. Database
 
-The system contains the following major tables:
+The application uses the `fixmycampus` MySQL database.
+
+The database schema is provided in:
+
+```text
+database/fixmycampus.sql
+```
+
+Major tables include:
 
 ### users
 
-Stores authentication and user information.
+Stores authentication, role, and user information.
 
 ### categories
 
@@ -317,6 +367,8 @@ Stores user notifications.
 
 Stores student feedback after complaint closure.
 
+The database uses relationships and foreign-key constraints to maintain data integrity.
+
 ---
 
 # 8. Security
@@ -325,24 +377,50 @@ FixMyCampus implements server-side security controls.
 
 These include:
 
-- Session-based authentication.
-- Role-based authorization.
-- Complaint ownership validation.
-- Staff assignment validation.
-- Complaint-specific chat authorization.
-- Server-side closure validation.
-- Closed-chat message blocking.
-- Password hashing.
-- Parameterized database operations.
-- Foreign-key constraints.
+* Session-based authentication.
+* Role-based authorization.
+* CSRF protection.
+* Secure session cookie configuration.
+* Complaint ownership validation.
+* Staff assignment validation.
+* Complaint-specific chat authorization.
+* Server-side closure validation.
+* Closed-chat message blocking.
+* Password hashing.
+* Password verification.
+* PDO prepared statements.
+* Parameterized database operations.
+* Foreign-key constraints.
+* Input validation.
+* Authentication checks on protected endpoints.
 
-Security is not dependent only on frontend buttons or hidden pages.
+Security is not dependent only on frontend buttons, hidden pages, or JavaScript checks.
+
+The centralized security functionality is implemented in:
+
+```text
+php/security.php
+```
+
+Database configuration is loaded from:
+
+```text
+.env
+```
+
+The `.env` file is excluded from version control through:
+
+```text
+.gitignore
+```
 
 ---
 
 # 9. XML, XSD and DTD
 
-The system supports complaint XML export.
+The system supports complaint XML export and validation.
+
+### XML Export
 
 Example endpoint:
 
@@ -350,65 +428,125 @@ Example endpoint:
 php/export-complaint-xml.php?complaint_id=<id>
 ```
 
-XML validation uses:
+### XML Validation Files
 
 ```text
 xml/complaint.xsd
 xml/complaint.dtd
 ```
 
-The system validates complaint XML against both:
+The project demonstrates validation using both:
 
-- XSD
-- DTD
+* XSD
+* DTD
+
+The validation endpoint is:
+
+```text
+php/validate-complaint-xml.php
+```
 
 ---
 
-# 10. Local Setup
+# 10. Environment Configuration
 
-### Step 1
+Database credentials are stored in the `.env` file.
 
-Install XAMPP.
-
-### Step 2
-
-Start Apache from XAMPP.
-
-### Step 3
-
-Start MySQL 9.7.1.
-
-### Step 4
-
-Create/import the database:
+Example structure:
 
 ```text
-fixmycampus
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=fixmycampus
+DB_USER=root
+DB_PASSWORD=your_database_password
 ```
 
-using:
+Do not commit real database credentials to GitHub.
+
+The `.env` file is excluded through:
 
 ```text
-database/fixmycampus.sql
+.gitignore
 ```
 
-### Step 5
-
-Verify the database configuration in:
+Database connections are handled by:
 
 ```text
 php/db.php
 ```
 
-### Step 6
+---
 
-Place the project in:
+# 11. Local Setup
+
+### Step 1 — Install XAMPP
+
+Install XAMPP with Apache and MySQL.
+
+### Step 2 — Start Apache
+
+Open the XAMPP Control Panel and start:
+
+```text
+Apache
+```
+
+### Step 3 — Start MySQL
+
+Start:
+
+```text
+MySQL
+```
+
+### Step 4 — Create the Database
+
+Create a database named:
+
+```text
+fixmycampus
+```
+
+Import:
+
+```text
+database/fixmycampus.sql
+```
+
+using phpMyAdmin or the MySQL command line.
+
+### Step 5 — Configure Environment Variables
+
+Create the local `.env` file in the project root:
+
+```text
+.env
+```
+
+Configure:
+
+```text
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=fixmycampus
+DB_USER=root
+DB_PASSWORD=your_database_password
+```
+
+Use the actual local MySQL password for your environment.
+
+### Step 6 — Configure Apache
+
+Place the project in the Apache web root or configure an Apache VirtualHost/Alias pointing to the project directory.
+
+For a standard XAMPP installation, the project can be placed at:
 
 ```text
 C:\xampp\htdocs\FixMyCampus
 ```
 
-### Step 7
+### Step 7 — Open the Application
 
 Open:
 
@@ -418,50 +556,140 @@ http://localhost/FixMyCampus/
 
 ---
 
-# 11. Testing
+# 12. Testing
 
-The following should be tested:
+The following functionality should be tested:
 
-- Registration
-- Login
-- Logout
-- Complaint creation
-- Complaint visibility
-- Admin assignment
-- Staff complaint access
-- Staff status updates
-- Resolution
-- Student closure
-- Feedback
-- Notifications
-- Student–Staff chat
-- Closed-chat restriction
-- XML export
-- XSD validation
-- DTD validation
-- Unauthorized access attempts
+### Authentication
+
+* Registration
+* Login
+* Logout
+* Password verification
+* Authentication of protected endpoints
+* Unauthorized access attempts
+
+### Student Features
+
+* Complaint creation
+* Complaint visibility
+* Complaint details
+* Complaint timeline
+* Assigned staff information
+* Resolution confirmation
+* Complaint closure
+* Feedback submission
+* Profile management
+* Password change
+
+### Staff Features
+
+* Staff login
+* Assigned complaint access
+* Complaint details
+* Status updates
+* Remarks
+* Resolution
+* Student–Staff chat
+* Profile management
+* Password change
+
+### Admin Features
+
+* View all complaints
+* Complaint details
+* Staff management
+* Create staff
+* Edit staff
+* Enable/disable staff
+* Reset staff password
+* Staff category management
+* Administrative reports
+* Complaint assignment
+
+### Communication
+
+* Notifications
+* Notification read status
+* Student–Staff chat
+* Complaint-specific chat authorization
+* Closed-chat restrictions
+
+### XML
+
+* Complaint XML export
+* XML validation
+* XSD validation
+* DTD validation
+
+### Security
+
+* Role-based authorization
+* CSRF protection
+* Complaint ownership checks
+* Staff assignment checks
+* Protected endpoint access
+* Session security
 
 ---
 
-# 12. Academic Scope
+# 13. Academic Scope
 
 The project demonstrates:
 
-- HTML
-- CSS
-- JavaScript
-- PHP
-- MySQL
-- XML
-- XSD
-- DTD
-- Authentication
-- Authorization
-- CRUD operations
-- Database relationships
-- Form validation
-- Notifications
-- Chat functionality
-- Role-based workflows
+* HTML
+* CSS
+* JavaScript
+* PHP
+* MySQL
+* XML
+* XSD
+* DTD
+* Authentication
+* Authorization
+* Role-Based Access Control
+* CRUD operations
+* Database relationships
+* Form validation
+* Session management
+* CSRF protection
+* Password hashing
+* Notifications
+* Chat functionality
+* Complaint workflows
+* Server-side security
+* XML validation
 
 ---
+
+# 14. Future Enhancements
+
+Possible future enhancements include:
+
+* Email notifications.
+* Mobile application.
+* Advanced analytics dashboards.
+* Real-time chat using WebSockets.
+* Cloud deployment.
+* File and image attachments for complaints.
+* Advanced complaint search and filtering.
+* Automated SLA monitoring.
+* Additional reporting and analytics.
+
+---
+
+# 15. Project Status
+
+FixMyCampus is developed as an academic web application demonstrating a complete campus complaint management workflow with:
+
+* Student complaint reporting
+* Administrative complaint management
+* Staff assignment and resolution
+* Complaint-specific communication
+* Notifications
+* Feedback
+* XML processing
+* Role-based access control
+* Server-side security
+
+```

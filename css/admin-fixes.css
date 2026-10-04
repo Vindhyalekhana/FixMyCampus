@@ -1,0 +1,267 @@
+/* Admin layout consistency */
+
+.admin-complaint-table {
+  table-layout: fixed;
+}
+
+.admin-complaint-table th:nth-child(1),
+.admin-complaint-table td:nth-child(1) {
+  width: 16%;
+}
+
+.admin-complaint-table th:nth-child(2),
+.admin-complaint-table td:nth-child(2) {
+  width: 12%;
+}
+
+.admin-complaint-table th:nth-child(3),
+.admin-complaint-table td:nth-child(3) {
+  width: 10%;
+}
+
+.admin-complaint-table th:nth-child(4),
+.admin-complaint-table td:nth-child(4) {
+  width: 8%;
+}
+
+.admin-complaint-table th:nth-child(5),
+.admin-complaint-table td:nth-child(5) {
+  width: 10%;
+}
+
+.admin-complaint-table th:nth-child(6),
+.admin-complaint-table td:nth-child(6) {
+  width: 13%;
+}
+
+.admin-complaint-table th:nth-child(7),
+.admin-complaint-table td:nth-child(7) {
+  width: 10%;
+}
+
+.admin-complaint-table th:nth-child(8),
+.admin-complaint-table td:nth-child(8) {
+  width: 10%;
+}
+
+.admin-complaint-table th:nth-child(9),
+.admin-complaint-table td:nth-child(9) {
+  width: 7%;
+}
+
+.admin-complaint-table th,
+.admin-complaint-table td {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.admin-complaint-table th:nth-child(6),
+.admin-complaint-table td:nth-child(6),
+.admin-complaint-table th:nth-child(7),
+.admin-complaint-table td:nth-child(7) {
+  white-space: nowrap;
+}
+
+.admin-complaint-table td:nth-child(6) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-complaint-table td:nth-child(7) {
+  text-align: left;
+}
+
+/* Keep the complete Admin sidebar visible */
+
+.dashboard-sidebar {
+  height: 100vh;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dashboard-sidebar .sidebar-nav {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.dashboard-sidebar .sidebar-link {
+  flex-shrink: 0;
+}
+
+.dashboard-sidebar .sidebar-bottom {
+  flex-shrink: 0;
+}
+
+/* Admin header name */
+
+.dashboard-layout .user-name span {
+  display: none;
+}
+
+.dashboard-layout #adminName,
+.dashboard-layout #headerUserName {
+  color: var(--text-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Keep Admin header compact */
+
+.dashboard-layout .user-profile {
+  white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+  .admin-complaint-table {
+    min-width: 1000px;
+  }
+}
+
+@media (max-width: 800px) {
+  .dashboard-sidebar {
+    height: auto;
+    min-height: auto;
+  }
+}
+
+/* Encoding-safe Admin icons */
+
+.dashboard-layout .sidebar-icon {
+  font-size: 0;
+  width: 18px;
+  min-width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-layout .sidebar-icon::before {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.dashboard-layout
+  .sidebar-nav
+  .sidebar-link:nth-child(1)
+  .sidebar-icon::before {
+  content: "\2302";
+}
+
+.dashboard-layout
+  .sidebar-nav
+  .sidebar-link:nth-child(2)
+  .sidebar-icon::before {
+  content: "\2659";
+}
+
+.dashboard-layout
+  .sidebar-nav
+  .sidebar-link:nth-child(3)
+  .sidebar-icon::before {
+  content: "\25A4";
+}
+
+.dashboard-layout
+  .sidebar-nav
+  .sidebar-link:nth-child(4)
+  .sidebar-icon::before {
+  content: "\25A4";
+}
+
+.dashboard-layout
+  .sidebar-nav
+  .sidebar-link:nth-child(5)
+  .sidebar-icon::before {
+  content: "\2667";
+}
+
+.dashboard-layout
+  .sidebar-nav
+  .sidebar-link:nth-child(6)
+  .sidebar-icon::before {
+  content: "\25C9";
+}
+
+.dashboard-layout
+  .sidebar-nav
+  .sidebar-link:nth-child(7)
+  .sidebar-icon::before {
+  content: "\2699";
+}
+
+.dashboard-layout .sidebar-bottom .sidebar-icon::before {
+  content: "\21AA";
+}
+
+/* Header notification bell */
+
+.dashboard-layout .notification-icon {
+  font-size: 0;
+}
+
+.dashboard-layout .notification-icon::before {
+  content: "\1F514";
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Search icon */
+
+.dashboard-layout .search-icon {
+  font-size: 0;
+}
+
+.dashboard-layout .search-icon::before {
+  content: "\2315";
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Dashboard statistic icons */
+
+.admin-stats-grid .stat-icon {
+  font-size: 0;
+}
+
+.admin-stats-grid .stat-card:nth-child(1) .stat-icon::before {
+  content: "\0023";
+  font-size: 16px;
+}
+
+.admin-stats-grid .stat-card:nth-child(2) .stat-icon::before {
+  content: "\23F1";
+  font-size: 16px;
+}
+
+.admin-stats-grid .stat-card:nth-child(3) .stat-icon::before {
+  content: "\2192";
+  font-size: 16px;
+}
+
+.admin-stats-grid .stat-card:nth-child(4) .stat-icon::before {
+  content: "\21C6";
+  font-size: 16px;
+}
+
+.admin-stats-grid .stat-card:nth-child(5) .stat-icon::before {
+  content: "\2713";
+  font-size: 16px;
+}
+
+.admin-stats-grid .stat-card:nth-child(6) .stat-icon::before {
+  content: "\25CF";
+  font-size: 16px;
+}
+
+/* Keep icons visually centered */
+
+.admin-stats-grid .stat-icon::before {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}

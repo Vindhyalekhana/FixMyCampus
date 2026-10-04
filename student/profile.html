@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>My Profile | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
+    <link rel="stylesheet" href="../css/profile.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html">FixMyCampus</a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="report.html" class="sidebar-link">
+            <span class="sidebar-icon">＋</span>
+            <span>File Complaint</span>
+          </a>
+
+          <a href="dashboard.html#complaints" class="sidebar-link">
+            <span class="sidebar-icon">▤</span>
+            <span>My Complaints</span>
+          </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link active">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">ST</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName">Loading...</strong>
+              <span>Student</span>
+            </div>
+          </div>
+
+          <button id="logoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="dashboard-content">
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon">⌕</span>
+
+              <input type="text" placeholder="Search..." aria-label="Search" />
+            </div>
+
+            <div class="user-area">
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                >
+                  <span class="notification-icon">🔔</span>
+
+                  <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                    style="display: none"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <div
+                  id="notificationPanel"
+                  class="notification-panel"
+                  style="display: none"
+                >
+                  <div class="notification-header">
+                    <h3>Notifications</h3>
+
+                    <button
+                      id="markAllReadButton"
+                      class="mark-all-read"
+                      type="button"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+
+                  <div id="notificationList">
+                    <div class="notification-empty">
+                      Loading notifications...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a href="profile.html" class="user-profile profile-link">
+                <div id="profileAvatar" class="profile-avatar">ST</div>
+
+                <span id="studentName" class="user-name">Loading...</span>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        <main class="dashboard-main">
+          <div class="dashboard-container profile-container">
+            <section class="profile-page-header">
+              <div>
+                <span class="profile-eyebrow">ACCOUNT</span>
+
+                <h1>My Profile</h1>
+
+                <p>Manage your personal information and profile picture.</p>
+              </div>
+            </section>
+
+            <div
+              id="profileMessage"
+              class="profile-message"
+              style="display: none"
+            ></div>
+
+            <section class="profile-grid">
+              <div class="profile-card profile-photo-card">
+                <div class="card-heading">
+                  <div>
+                    <span class="section-label">PROFILE PICTURE</span>
+                    <h2>Your Photo</h2>
+                  </div>
+                </div>
+
+                <div class="profile-photo-section">
+                  <div id="largeProfileAvatar" class="large-profile-avatar">
+                    ST
+                  </div>
+
+                  <div class="photo-details">
+                    <h3 id="photoName">Loading...</h3>
+
+                    <p>
+                      JPG, PNG or WEBP<br />
+                      Maximum size: 5 MB
+                    </p>
+
+                    <label
+                      for="profilePictureInput"
+                      class="profile-upload-button"
+                    >
+                      Change Photo
+                    </label>
+
+                    <input
+                      type="file"
+                      id="profilePictureInput"
+                      accept="image/jpeg,image/png,image/webp"
+                      hidden
+                    />
+                  </div>
+                </div>
+
+                <div
+                  id="uploadProgress"
+                  class="upload-progress"
+                  style="display: none"
+                >
+                  Uploading photo...
+                </div>
+              </div>
+
+              <div class="profile-card">
+                <div class="card-heading">
+                  <div>
+                    <span class="section-label"> PERSONAL INFORMATION </span>
+                    <h2>Profile Details</h2>
+                  </div>
+                </div>
+
+                <form id="profileForm" novalidate>
+                  <div class="profile-form-grid">
+                    <div class="profile-field">
+                      <label for="name">Full Name</label>
+
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        maxlength="100"
+                        required
+                      />
+
+                      <small class="field-error" id="nameError"></small>
+                    </div>
+
+                    <div class="profile-field">
+                      <label for="email">Email Address</label>
+
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        maxlength="150"
+                        required
+                      />
+
+                      <small class="field-error" id="emailError"></small>
+                    </div>
+
+                    <div class="profile-field">
+                      <label for="phone">Phone Number</label>
+
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        maxlength="15"
+                        required
+                      />
+
+                      <small class="field-error" id="phoneError"></small>
+                    </div>
+
+                    <div class="profile-field">
+                      <label for="role">Role</label>
+
+                      <input type="text" id="role" value="Student" readonly />
+                    </div>
+                  </div>
+
+                  <div class="profile-form-actions">
+                    <button
+                      type="submit"
+                      id="saveProfileButton"
+                      class="profile-save-button"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="profile-card account-information-card">
+                <div class="card-heading">
+                  <div>
+                    <span class="section-label">ACCOUNT</span>
+                    <h2>Account Information</h2>
+                  </div>
+                </div>
+
+                <div class="account-information-grid">
+                  <div class="account-info-item">
+                    <span>Account Status</span>
+                    <strong id="accountStatus">Loading...</strong>
+                  </div>
+
+                  <div class="account-info-item">
+                    <span>Account Created</span>
+                    <strong id="accountCreated">Loading...</strong>
+                  </div>
+
+                  <div class="account-info-item">
+                    <span>User ID</span>
+                    <strong id="userId">Loading...</strong>
+                  </div>
+
+                  <div class="account-info-item">
+                    <span>Account Role</span>
+                    <strong id="accountRole">Student</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="profile-card settings-shortcut-card">
+                <div>
+                  <span class="section-label">ACCOUNT SETTINGS</span>
+
+                  <h2>Need more options?</h2>
+
+                  <p>
+                    Manage your password, notifications and account security
+                    from Settings.
+                  </p>
+                </div>
+
+                <a href="settings.html" class="settings-button">
+                  Open Settings
+                </a>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/notifications.js"></script>
+    <script src="../js/profile.js"></script>
+  </body>
+</html>

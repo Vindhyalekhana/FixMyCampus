@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications | FixMyCampus</title>
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <!-- Sidebar -->
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html">FixMyCampus</a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="report.html" class="sidebar-link">
+            <span class="sidebar-icon">＋</span>
+            <span>File Complaint</span>
+          </a>
+
+          <a href="dashboard.html#complaints" class="sidebar-link">
+            <span class="sidebar-icon">▤</span>
+            <span>My Complaints</span>
+          </a>
+
+          <a href="notifications.html" class="sidebar-link active">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">ST</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName">Loading...</strong>
+              <span>Student</span>
+            </div>
+          </div>
+
+          <button id="logoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Dashboard content -->
+      <div class="dashboard-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon">⌕</span>
+              <input type="text" placeholder="Search..." aria-label="Search" />
+            </div>
+
+            <div class="user-area">
+              <a href="profile.html" class="user-profile dashboard-profile-link" style="margin-left: auto;">
+                <div id="profileAvatar" class="profile-avatar">ST</div>
+                <span id="studentName" class="user-name">Loading...</span>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main dashboard -->
+        <main class="dashboard-main">
+          <div class="dashboard-container">
+            <section class="dashboard-welcome">
+              <div>
+                <span class="welcome-label">UPDATES</span>
+                <h1>Your Notifications</h1>
+                <p>Stay updated on your complaints and messages.</p>
+              </div>
+              <div class="welcome-decoration"></div>
+            </section>
+
+            <section class="dashboard-section">
+              <div class="section-header">
+                <div>
+                  <span class="section-label">RECENT</span>
+                  <h2>All Notifications</h2>
+                </div>
+                <button id="markAllReadPageBtn" class="btn btn-secondary">
+                  Mark All as Read
+                </button>
+              </div>
+
+              <div class="complaint-table-wrapper" style="background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 20px;">
+                <div id="notificationsPageList" style="display: flex; flex-direction: column; gap: 10px;">
+                  <div class="empty-state">Loading notifications...</div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/notifications.js"></script>
+  </body>
+</html>

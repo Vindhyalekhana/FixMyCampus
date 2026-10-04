@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin Settings | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link rel="stylesheet" href="../css/dashboard.css" />
+
+    <link rel="stylesheet" href="../css/notifications.css" />
+
+    <link rel="stylesheet" href="../css/admin-settings.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html"> FixMyCampus </a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="staff.html" class="sidebar-link">
+            <span class="sidebar-icon">♟</span>
+            <span>Staff Monitoring</span>
+          </a>
+
+          <a href="reports.html" class="sidebar-link">
+            <span class="sidebar-icon">▥</span>
+            <span>Reports &amp; Analytics</span>
+          </a>
+
+          <a href="dashboard.html#complaintManagement" class="sidebar-link">
+            <span class="sidebar-icon">▤</span>
+            <span>Complaint Management</span>
+          </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link active">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">AD</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName"> Loading... </strong>
+
+              <span>Admin</span>
+            </div>
+          </div>
+
+          <button id="sidebarLogoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="dashboard-content">
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon">⌕</span>
+
+              <input type="text" placeholder="Search..." aria-label="Search" />
+            </div>
+
+            <div class="user-area">
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                >
+                  <span class="notification-icon"> 🔔 </span>
+
+                  <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                    style="display: none"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <div
+                  id="notificationPanel"
+                  class="notification-panel"
+                  style="display: none"
+                >
+                  <div class="notification-header">
+                    <h3>Notifications</h3>
+
+                    <button
+                      id="headerMarkAllRead"
+                      type="button"
+                      class="mark-all-read"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+
+                  <div id="headerNotificationList" class="notification-list">
+                    <div class="notification-empty">
+                      Loading notifications...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="profile.html"
+                class="user-profile dashboard-profile-link"
+                aria-label="Open admin profile"
+              >
+                <div id="profileAvatar" class="profile-avatar">AD</div>
+
+                <span id="adminName" class="user-name"> Loading... </span>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        <main class="dashboard-main">
+          <div class="admin-settings-container">
+            <section class="settings-page-header">
+              <div>
+                <span class="settings-eyebrow"> ACCOUNT </span>
+
+                <h1>Settings</h1>
+
+                <p>
+                  Manage your administrator account, password and security
+                  preferences.
+                </p>
+              </div>
+            </section>
+
+            <div
+              id="settingsMessage"
+              class="settings-message"
+              style="display: none"
+            ></div>
+
+            <div class="settings-grid">
+              <section class="settings-card password-card">
+                <div class="settings-card-header">
+                  <div class="settings-card-icon">🔐</div>
+
+                  <div>
+                    <span class="settings-section-label"> SECURITY </span>
+
+                    <h2>Change Password</h2>
+                  </div>
+                </div>
+
+                <p class="settings-description">
+                  Update your administrator password. Use a strong password that
+                  you do not reuse on other accounts.
+                </p>
+
+                <form id="passwordForm" class="password-form">
+                  <div class="settings-form-group">
+                    <label for="currentPassword"> Current Password </label>
+
+                    <div class="password-input-wrapper">
+                      <input
+                        id="currentPassword"
+                        name="current_password"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                      />
+
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        data-target="currentPassword"
+                        aria-label="Show current password"
+                      >
+                        Show
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="settings-form-group">
+                    <label for="newPassword"> New Password </label>
+
+                    <div class="password-input-wrapper">
+                      <input
+                        id="newPassword"
+                        name="new_password"
+                        type="password"
+                        autocomplete="new-password"
+                        required
+                      />
+
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        data-target="newPassword"
+                        aria-label="Show new password"
+                      >
+                        Show
+                      </button>
+                    </div>
+
+                    <div class="password-requirements">
+                      <span> At least 8 characters </span>
+
+                      <span> Do not reuse your old password </span>
+                    </div>
+                  </div>
+
+                  <div class="settings-form-group">
+                    <label for="confirmPassword"> Confirm New Password </label>
+
+                    <div class="password-input-wrapper">
+                      <input
+                        id="confirmPassword"
+                        name="confirm_password"
+                        type="password"
+                        autocomplete="new-password"
+                        required
+                      />
+
+                      <button
+                        type="button"
+                        class="password-toggle"
+                        data-target="confirmPassword"
+                        aria-label="Show confirm password"
+                      >
+                        Show
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    id="passwordFormError"
+                    class="form-error"
+                    style="display: none"
+                  ></div>
+
+                  <div class="settings-form-actions">
+                    <button
+                      id="changePasswordButton"
+                      type="submit"
+                      class="primary-settings-button"
+                    >
+                      Change Password
+                    </button>
+                  </div>
+                </form>
+              </section>
+
+              <section class="settings-card">
+                <div class="settings-card-header">
+                  <div class="settings-card-icon">🔔</div>
+
+                  <div>
+                    <span class="settings-section-label"> NOTIFICATIONS </span>
+
+                    <h2>Notification Center</h2>
+                  </div>
+                </div>
+
+                <p class="settings-description">
+                  FixMyCampus notifications keep you informed about complaints
+                  that require administrative attention.
+                </p>
+
+                <div class="notification-info-list">
+                  <div class="notification-info-item">
+                    <span class="status-dot active"> </span>
+
+                    <div>
+                      <strong> Complaint Alerts </strong>
+
+                      <p>
+                        Receive system notifications for complaints requiring
+                        attention.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="notification-info-item">
+                    <span class="status-dot active"> </span>
+
+                    <div>
+                      <strong> Staff Assignment Alerts </strong>
+
+                      <p>
+                        Receive alerts when automatic routing cannot find
+                        eligible staff.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <a href="notifications.html" class="secondary-settings-button">
+                  Open Notifications
+                </a>
+              </section>
+            </div>
+
+            <section class="settings-card security-information-card">
+              <div class="settings-card-header">
+                <div class="settings-card-icon">🛡</div>
+
+                <div>
+                  <span class="settings-section-label"> ACCOUNT SECURITY </span>
+
+                  <h2>Security Information</h2>
+                </div>
+              </div>
+
+              <div class="security-information-grid">
+                <div class="security-info-item">
+                  <span> Login Method </span>
+
+                  <strong> Email &amp; Password </strong>
+                </div>
+
+                <div class="security-info-item">
+                  <span> Account Role </span>
+
+                  <strong> Administrator </strong>
+                </div>
+
+                <div class="security-info-item">
+                  <span> Account Access </span>
+
+                  <strong class="security-active"> Active </strong>
+                </div>
+
+                <div class="security-info-item">
+                  <span> Session </span>
+
+                  <strong> Authenticated Session </strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-card profile-shortcut-card">
+              <div>
+                <span class="settings-section-label"> PROFILE </span>
+
+                <h2>Update Personal Information</h2>
+
+                <p>
+                  Change your administrator name, email address, phone number or
+                  profile picture from your Profile page.
+                </p>
+              </div>
+
+              <a href="profile.html" class="secondary-settings-button">
+                Open Profile
+              </a>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/admin-notifications.js"></script>
+    <script src="../js/admin-settings.js"></script>
+  </body>
+</html>

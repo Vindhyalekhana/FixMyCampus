@@ -1,0 +1,540 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Reports & Analytics | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link rel="stylesheet" href="../css/dashboard.css" />
+
+    <link rel="stylesheet" href="../css/notifications.css" />
+
+    <style>
+      .reports-page {
+        padding-bottom: 40px;
+      }
+
+      .reports-header {
+        margin-bottom: 22px;
+      }
+
+      .reports-header h1 {
+        margin: 0 0 7px;
+        color: var(--text-dark);
+        font-size: 25px;
+      }
+
+      .reports-header p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+
+      .report-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+
+      .report-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .report-summary-card {
+        padding: 18px;
+      }
+
+      .report-summary-label {
+        color: var(--text-muted);
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+
+      .report-summary-value {
+        color: var(--text-dark);
+        font-size: 25px;
+        font-weight: 700;
+      }
+
+      .report-summary-note {
+        margin-top: 5px;
+        color: var(--text-muted);
+        font-size: 11px;
+      }
+
+      .reports-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .report-section {
+        padding: 20px;
+      }
+
+      .report-section-header {
+        margin-bottom: 18px;
+      }
+
+      .report-section-header h2 {
+        margin: 0 0 5px;
+        color: var(--text-dark);
+        font-size: 16px;
+      }
+
+      .report-section-header p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 11px;
+      }
+
+      .report-bars {
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+      }
+
+      .report-bar-row {
+        display: grid;
+        grid-template-columns: 145px 1fr 40px;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .report-bar-label {
+        color: var(--text);
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .report-bar-track {
+        height: 9px;
+        background: #edf0f6;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .report-bar-fill {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 20px;
+        transition: width 0.4s ease;
+      }
+
+      .report-bar-value {
+        color: var(--text-dark);
+        font-size: 12px;
+        font-weight: 700;
+        text-align: right;
+      }
+
+      .report-table-wrapper {
+        overflow-x: auto;
+      }
+
+      .report-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .report-table th {
+        padding: 11px 10px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: 10px;
+        font-weight: 700;
+        text-align: left;
+        text-transform: uppercase;
+      }
+
+      .report-table td {
+        padding: 12px 10px;
+        border-bottom: 1px solid #eef0f5;
+        color: var(--text);
+        font-size: 12px;
+      }
+
+      .report-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .report-status {
+        display: inline-flex;
+        padding: 4px 8px;
+        border-radius: 20px;
+        background: var(--primary-soft);
+        color: var(--primary);
+        font-size: 10px;
+        font-weight: 700;
+      }
+
+      .report-status.active {
+        background: #eef9f2;
+        color: #18864b;
+      }
+
+      .report-status.inactive {
+        background: #f4f4f5;
+        color: #737784;
+      }
+
+      .report-empty {
+        padding: 30px;
+        color: var(--text-muted);
+        font-size: 12px;
+        text-align: center;
+      }
+
+      .report-loading {
+        padding: 35px;
+        color: var(--text-muted);
+        font-size: 12px;
+        text-align: center;
+      }
+
+      .report-error {
+        display: none;
+        margin-bottom: 18px;
+        padding: 12px 15px;
+        border-radius: 9px;
+        background: #fff1f1;
+        color: #b33a3a;
+        font-size: 12px;
+      }
+
+      .resolution-highlight {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 18px;
+        margin-bottom: 18px;
+        border-radius: 11px;
+        background: var(--primary-soft);
+      }
+
+      .resolution-highlight-label {
+        color: var(--text-muted);
+        font-size: 11px;
+      }
+
+      .resolution-highlight-value {
+        margin-top: 4px;
+        color: var(--primary);
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      .report-month-row {
+        display: grid;
+        grid-template-columns: 90px 1fr 40px;
+        gap: 10px;
+        align-items: center;
+      }
+
+      @media (max-width: 1100px) {
+        .report-summary-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 800px) {
+        .reports-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .report-bar-row {
+          grid-template-columns: 110px 1fr 35px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .report-summary-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .report-section {
+          padding: 15px;
+        }
+      }
+    </style>
+      <link rel="stylesheet" href="../css/admin-fixes.css" />`r`n  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html"> FixMyCampus </a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon">âŒ‚</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="staff.html" class="sidebar-link">
+            <span class="sidebar-icon">â™™</span>
+            <span>Staff Monitoring</span>
+          </a>
+
+          <a href="reports.html" class="sidebar-link active">
+            <span class="sidebar-icon">â–¥</span>
+            <span>Reports & Analytics</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">AD</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName"> Loading... </strong>
+
+              <span>Admin</span>
+            </div>
+          </div>
+
+          <button id="logoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">â†ª</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="dashboard-content">
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon">âŒ•</span>
+
+              <input type="text" placeholder="Reports & analytics" readonly />
+            </div>
+
+            <div class="user-area">
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                >
+                  <span class="notification-icon"> ðŸ”” </span>
+
+                  <span id="notificationBadge" class="notification-badge">
+                  </span>
+                </button>
+
+                <div id="notificationPanel" class="notification-panel"></div>
+              </div>
+
+              <div class="user-profile">
+                <div id="profileAvatar" class="profile-avatar">AD</div>
+
+                <span id="headerUserName"> Loading... </span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="dashboard-main reports-page">
+          <section class="reports-header">
+            <h1>Reports & Analytics</h1>
+
+            <p>
+              Monitor complaint trends, resolution performance, category
+              distribution and staff workload.
+            </p>
+          </section>
+
+          <div id="reportError" class="report-error"></div>
+
+          <section id="reportLoading" class="report-card report-loading">
+            Loading reports...
+          </section>
+
+          <div id="reportContent" style="display: none">
+            <section class="report-summary-grid">
+              <div class="report-card report-summary-card">
+                <div class="report-summary-label">Total Complaints</div>
+
+                <div id="totalComplaints" class="report-summary-value">0</div>
+
+                <div class="report-summary-note">All complaints</div>
+              </div>
+
+              <div class="report-card report-summary-card">
+                <div class="report-summary-label">Pending</div>
+
+                <div id="pendingComplaints" class="report-summary-value">0</div>
+
+                <div class="report-summary-note">Submitted + Under Review</div>
+              </div>
+
+              <div class="report-card report-summary-card">
+                <div class="report-summary-label">In Progress</div>
+
+                <div id="inProgressComplaints" class="report-summary-value">
+                  0
+                </div>
+
+                <div class="report-summary-note">Currently being handled</div>
+              </div>
+
+              <div class="report-card report-summary-card">
+                <div class="report-summary-label">Closed</div>
+
+                <div id="closedComplaints" class="report-summary-value">0</div>
+
+                <div class="report-summary-note">
+                  Student-confirmed closures
+                </div>
+              </div>
+            </section>
+
+            <section class="reports-grid">
+              <div class="report-card report-section">
+                <div class="report-section-header">
+                  <h2>Complaint Status</h2>
+
+                  <p>Distribution by current complaint status.</p>
+                </div>
+
+                <div id="statusBars" class="report-bars"></div>
+              </div>
+
+              <div class="report-card report-section">
+                <div class="report-section-header">
+                  <h2>Complaint Priority</h2>
+
+                  <p>Distribution by priority level.</p>
+                </div>
+
+                <div id="priorityBars" class="report-bars"></div>
+              </div>
+            </section>
+
+            <section class="reports-grid">
+              <div class="report-card report-section">
+                <div class="report-section-header">
+                  <h2>Complaints by Category</h2>
+
+                  <p>Identify categories generating the most complaints.</p>
+                </div>
+
+                <div id="categoryBars" class="report-bars"></div>
+              </div>
+
+              <div class="report-card report-section">
+                <div class="report-section-header">
+                  <h2>Resolution Performance</h2>
+
+                  <p>Average time from complaint creation to resolution.</p>
+                </div>
+
+                <div class="resolution-highlight">
+                  <div>
+                    <div class="resolution-highlight-label">
+                      Average Resolution Time
+                    </div>
+
+                    <div
+                      id="averageResolution"
+                      class="resolution-highlight-value"
+                    >
+                      0 hours
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="resolution-highlight-label">
+                      Resolved Complaints
+                    </div>
+
+                    <div id="resolvedTotal" class="resolution-highlight-value">
+                      0
+                    </div>
+                  </div>
+                </div>
+
+                <div class="report-section-header">
+                  <h2>Monthly Trend</h2>
+
+                  <p>Complaints submitted over time.</p>
+                </div>
+
+                <div id="monthlyBars" class="report-bars"></div>
+              </div>
+            </section>
+
+            <section class="report-card report-section">
+              <div class="report-section-header">
+                <h2>Staff Workload</h2>
+
+                <p>Current active workload and completed complaint counts.</p>
+              </div>
+
+              <div class="report-table-wrapper">
+                <table class="report-table">
+                  <thead>
+                    <tr>
+                      <th>Staff</th>
+                      <th>Status</th>
+                      <th>Active Workload</th>
+                      <th>Resolved</th>
+                      <th>Closed</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="staffReportBody"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <br />
+
+            <section class="report-card report-section">
+              <div class="report-section-header">
+                <h2>Recent Complaints</h2>
+
+                <p>Latest complaints recorded in the system.</p>
+              </div>
+
+              <div class="report-table-wrapper">
+                <table class="report-table">
+                  <thead>
+                    <tr>
+                      <th>Complaint</th>
+                      <th>Student</th>
+                      <th>Category</th>
+                      <th>Priority</th>
+                      <th>Status</th>
+                      <th>Submitted</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="recentReportBody"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/admin-reports.js"></script>
+      <script src="../js/admin-ui.js"></script>`r`n  </body>
+</html>
+
+

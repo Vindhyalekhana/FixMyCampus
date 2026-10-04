@@ -4,23 +4,30 @@ session_start();
 
 header("Content-Type: text/html; charset=UTF-8");
 
-require_once "db.php";
+require_once __DIR__ . "/db.php";
 
-if (!isset($_SESSION["user_id"])) {
+if (!isset($_SESSION["user_id"], $_SESSION["role"])) {
     http_response_code(401);
     exit("Authentication required.");
 }
 
-$complaintId = filter_input(INPUT_GET, "complaint_id", FILTER_VALIDATE_INT);
+$complaintId = filter_input(
+    INPUT_GET,
+    "complaint_id",
+    FILTER_VALIDATE_INT
+);
 
 if (!$complaintId) {
     http_response_code(400);
     exit("Invalid complaint ID.");
 }
 
+$userId = (int) $_SESSION["user_id"];
+$role = $_SESSION["role"];
+
 try {
-    $stmt = $pdo->prepare(
-        "SELECT
+    $sql = "
+        SELECT
             c.complaint_id,
             c.complaint_code,
             c.student_id,
@@ -48,17 +55,53 @@ try {
             ON c.category_id = cat.category_id
         INNER JOIN locations l
             ON c.location_id = l.location_id
-        WHERE c.complaint_id = ?
-        LIMIT 1"
-    );
+    ";
 
-    $stmt->execute([$complaintId]);
+    $params = [$complaintId];
+
+    if ($role === "student") {
+        $sql .= "
+            WHERE c.complaint_id = ?
+              AND c.student_id = ?
+        ";
+
+        $params[] = $userId;
+    } elseif ($role === "staff") {
+        $sql .= "
+            WHERE c.complaint_id = ?
+              AND EXISTS (
+                  SELECT 1
+                  FROM staff_assignments sa
+                  WHERE sa.complaint_id = c.complaint_id
+                    AND sa.assignment_id = (
+                        SELECT MAX(sa2.assignment_id)
+                        FROM staff_assignments sa2
+                        WHERE sa2.complaint_id = c.complaint_id
+                    )
+                    AND sa.staff_id = ?
+              )
+        ";
+
+        $params[] = $userId;
+    } elseif ($role === "admin") {
+        $sql .= "
+            WHERE c.complaint_id = ?
+        ";
+    } else {
+        http_response_code(403);
+        exit("You are not authorized to validate complaint XML.");
+    }
+
+    $sql .= " LIMIT 1";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
 
     $complaint = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$complaint) {
         http_response_code(404);
-        exit("Complaint not found.");
+        exit("Complaint not found or access denied.");
     }
 
     $xml = new DOMDocument("1.0", "UTF-8");
@@ -106,9 +149,11 @@ try {
 
     foreach ($studentFields as $name => $value) {
         $element = $xml->createElement($name);
+
         $element->appendChild(
             $xml->createTextNode($value)
         );
+
         $student->appendChild($element);
     }
 
@@ -122,9 +167,11 @@ try {
 
     foreach ($categoryFields as $name => $value) {
         $element = $xml->createElement($name);
+
         $element->appendChild(
             $xml->createTextNode($value)
         );
+
         $category->appendChild($element);
     }
 
@@ -151,7 +198,8 @@ try {
         $location->appendChild($element);
     }
 
-    $dtdPath = __DIR__ . DIRECTORY_SEPARATOR . ".."
+    $dtdPath = __DIR__
+        . DIRECTORY_SEPARATOR . ".."
         . DIRECTORY_SEPARATOR . "xml"
         . DIRECTORY_SEPARATOR . "complaint.dtd";
 
@@ -169,9 +217,12 @@ try {
 
     $xmlContent = $xml->saveXML();
 
-    $doctype = '<!DOCTYPE fixMyCampusComplaint [' . PHP_EOL
+    $doctype = '<!DOCTYPE fixMyCampusComplaint ['
+        . PHP_EOL
         . $dtdContent
-        . PHP_EOL . ']>' . PHP_EOL;
+        . PHP_EOL
+        . ']>'
+        . PHP_EOL;
 
     $xmlContent = preg_replace(
         '/(<\?xml[^>]*\?>\s*)/',
@@ -180,17 +231,36 @@ try {
         1
     );
 
-    $tempXmlPath = sys_get_temp_dir()
-        . DIRECTORY_SEPARATOR
-        . "fixmycampus_complaint_"
-        . $complaintId
-        . ".xml";
+    $tempXmlPath = tempnam(
+        sys_get_temp_dir(),
+        "fixmycampus_"
+    );
 
-    file_put_contents($tempXmlPath, $xmlContent);
+    if ($tempXmlPath === false) {
+        http_response_code(500);
+        exit("Unable to create temporary XML file.");
+    }
 
-    $xsdPath = __DIR__ . DIRECTORY_SEPARATOR . ".."
+    if (file_put_contents($tempXmlPath, $xmlContent) === false) {
+        if (file_exists($tempXmlPath)) {
+            unlink($tempXmlPath);
+        }
+
+        http_response_code(500);
+        exit("Unable to create temporary XML document.");
+    }
+
+    $xsdPath = __DIR__
+        . DIRECTORY_SEPARATOR . ".."
         . DIRECTORY_SEPARATOR . "xml"
         . DIRECTORY_SEPARATOR . "complaint.xsd";
+
+    if (!file_exists($xsdPath)) {
+        unlink($tempXmlPath);
+
+        http_response_code(500);
+        exit("XSD file not found.");
+    }
 
     libxml_use_internal_errors(true);
 
@@ -266,10 +336,21 @@ try {
 
     echo "<div class='complaint'>";
     echo "<strong>Complaint Code:</strong> "
-        . htmlspecialchars($complaint["complaint_code"]);
+        . htmlspecialchars(
+            $complaint["complaint_code"],
+            ENT_QUOTES,
+            "UTF-8"
+        );
+
     echo "<br>";
+
     echo "<strong>Title:</strong> "
-        . htmlspecialchars($complaint["title"]);
+        . htmlspecialchars(
+            $complaint["title"],
+            ENT_QUOTES,
+            "UTF-8"
+        );
+
     echo "</div>";
 
     if ($xsdValid) {
@@ -282,11 +363,17 @@ try {
     } else {
         echo "<div class='result error'>";
         echo "<div class='icon'>✗ XSD Validation Failed</div>";
+        echo "<div class='errors'>";
 
         foreach ($xsdErrors as $error) {
-            echo htmlspecialchars($error) . "<br>";
+            echo htmlspecialchars(
+                $error,
+                ENT_QUOTES,
+                "UTF-8"
+            ) . "<br>";
         }
 
+        echo "</div>";
         echo "</div>";
     }
 
@@ -300,21 +387,43 @@ try {
     } else {
         echo "<div class='result error'>";
         echo "<div class='icon'>✗ DTD Validation Failed</div>";
+        echo "<div class='errors'>";
 
         foreach ($dtdErrors as $error) {
-            echo htmlspecialchars($error) . "<br>";
+            echo htmlspecialchars(
+                $error,
+                ENT_QUOTES,
+                "UTF-8"
+            ) . "<br>";
         }
 
         echo "</div>";
+        echo "</div>";
     }
 
-    echo "<a class='button' href='../student/dashboard.html'>Back to Dashboard</a>";
+    echo "<a class='button' href='../student/dashboard.html'>";
+    echo "Back to Dashboard";
+    echo "</a>";
 
     echo "</div>";
     echo "</body>";
     echo "</html>";
 
 } catch (PDOException $e) {
+    error_log(
+        "Complaint XML validation database error: "
+        . $e->getMessage()
+    );
+
+    http_response_code(500);
+    exit("Unable to validate complaint XML.");
+
+} catch (Throwable $e) {
+    error_log(
+        "Complaint XML validation error: "
+        . $e->getMessage()
+    );
+
     http_response_code(500);
     exit("Unable to validate complaint XML.");
 }

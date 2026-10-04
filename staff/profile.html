@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Staff Profile | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
+    <link rel="stylesheet" href="../css/profile.css" />
+    <link rel="stylesheet" href="../css/staff-account.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html"> FixMyCampus </a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="dashboard.html#assignedComplaints" class="sidebar-link">
+            <span class="sidebar-icon">▤</span>
+            <span>Assigned Complaints</span>
+          </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link active">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">ST</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName"> Loading... </strong>
+
+              <span> Staff </span>
+            </div>
+          </div>
+
+          <button id="logoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="dashboard-content">
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon"> ⌕ </span>
+
+              <input
+                type="search"
+                placeholder="Search..."
+                aria-label="Search"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="user-area">
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                  aria-expanded="false"
+                >
+                  <span class="notification-icon"> 🔔 </span>
+
+                  <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                    style="display: none"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <div
+                  id="notificationPanel"
+                  class="notification-panel"
+                  style="display: none"
+                >
+                  <div class="notification-header">
+                    <h3>Notifications</h3>
+
+                    <button
+                      id="markAllReadButton"
+                      class="mark-all-read"
+                      type="button"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+
+                  <div id="notificationList">
+                    <div class="notification-empty">
+                      Loading notifications...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="profile.html"
+                class="user-profile staff-user-profile"
+                aria-label="Open staff profile"
+              >
+                <div id="profileAvatar" class="profile-avatar">ST</div>
+
+                <span id="staffName" class="user-name"> Loading... </span>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        <main class="dashboard-main">
+          <div class="dashboard-container staff-account-container">
+            <section class="staff-page-header">
+              <div>
+                <span class="staff-page-eyebrow"> STAFF PORTAL </span>
+
+                <h1>My Profile</h1>
+
+                <p>
+                  Manage your staff account information and profile picture.
+                </p>
+              </div>
+            </section>
+
+            <div
+              id="profileMessage"
+              class="profile-message"
+              style="display: none"
+            ></div>
+
+            <section class="staff-profile-grid">
+              <!-- Personal Information -->
+              <section class="staff-account-card personal-information-card">
+                <div class="staff-card-heading">
+                  <div>
+                    <span class="staff-section-label"> PROFILE </span>
+
+                    <h2>Personal Information</h2>
+                  </div>
+                </div>
+
+                <div class="staff-profile-photo-row">
+                  <div
+                    id="largeProfileAvatar"
+                    class="staff-large-profile-avatar"
+                  >
+                    ST
+                  </div>
+
+                  <div class="staff-photo-details">
+                    <h3 id="photoName">Loading...</h3>
+
+                    <p>
+                      JPG, PNG or WEBP<br />
+                      Maximum size: 5 MB
+                    </p>
+
+                    <label
+                      for="profilePictureInput"
+                      class="staff-upload-button"
+                    >
+                      Change Photo
+                    </label>
+
+                    <input
+                      type="file"
+                      id="profilePictureInput"
+                      accept="image/jpeg,image/png,image/webp"
+                      hidden
+                    />
+                  </div>
+                </div>
+
+                <div
+                  id="uploadProgress"
+                  class="staff-upload-progress"
+                  style="display: none"
+                >
+                  Uploading photo...
+                </div>
+
+                <div class="staff-card-divider"></div>
+
+                <form id="profileForm" novalidate>
+                  <div class="staff-form-grid">
+                    <div class="staff-form-field">
+                      <label for="name"> Full Name </label>
+
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        maxlength="100"
+                        autocomplete="name"
+                        required
+                      />
+
+                      <small id="nameError" class="staff-field-error"></small>
+                    </div>
+
+                    <div class="staff-form-field">
+                      <label for="email"> Email Address </label>
+
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        maxlength="150"
+                        autocomplete="email"
+                        required
+                      />
+
+                      <small id="emailError" class="staff-field-error"></small>
+                    </div>
+
+                    <div class="staff-form-field">
+                      <label for="phone"> Phone Number </label>
+
+                      <input
+                        type="text"
+                        id="phone"
+                        name="phone"
+                        maxlength="15"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                      />
+
+                      <small id="phoneError" class="staff-field-error"></small>
+                    </div>
+
+                    <div class="staff-form-field">
+                      <label for="role"> Account Role </label>
+
+                      <input
+                        type="text"
+                        id="role"
+                        name="role"
+                        value="Staff"
+                        readonly
+                        disabled
+                      />
+                    </div>
+                  </div>
+
+                  <div class="staff-form-actions">
+                    <button
+                      type="submit"
+                      id="saveProfileButton"
+                      class="staff-primary-button"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+                </form>
+              </section>
+
+              <!-- Account Information -->
+              <section class="staff-account-card account-information-card">
+                <div class="staff-card-heading">
+                  <div>
+                    <span class="staff-section-label"> ACCOUNT </span>
+
+                    <h2>Account Information</h2>
+                  </div>
+                </div>
+
+                <div class="staff-account-information-grid">
+                  <div class="staff-account-info-item">
+                    <span> Account Status </span>
+
+                    <strong id="accountStatus"> Loading... </strong>
+                  </div>
+
+                  <div class="staff-account-info-item">
+                    <span> Account Created </span>
+
+                    <strong id="accountCreated"> Loading... </strong>
+                  </div>
+
+                  <div class="staff-account-info-item">
+                    <span> User ID </span>
+
+                    <strong id="userId"> Loading... </strong>
+                  </div>
+
+                  <div class="staff-account-info-item">
+                    <span> Account Role </span>
+
+                    <strong id="accountRole"> Staff </strong>
+                  </div>
+                </div>
+
+                <div class="staff-card-divider"></div>
+
+                <div class="staff-security-block">
+                  <span class="staff-section-label"> ACCOUNT SECURITY </span>
+
+                  <h3>Keep your account secure</h3>
+
+                  <p>
+                    Change your password regularly to keep your FixMyCampus
+                    staff account protected.
+                  </p>
+
+                  <a href="settings.html" class="staff-secondary-button">
+                    Manage Security
+                  </a>
+                </div>
+              </section>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/notifications.js"></script>
+    <script src="../js/staff-profile.js"></script>
+    <script src="../js/staff-profile-loader.js"></script>
+  </body>
+</html>

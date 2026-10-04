@@ -1,0 +1,127 @@
+/* Staff complaint workflow */
+
+#statusForm {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#statusForm .form-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+#statusForm label {
+  display: block;
+  margin: 0;
+  color: #34415c;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#statusForm .form-control {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid #dfe4ee;
+  border-radius: 11px;
+  background: #f9faff;
+  color: #25304a;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+#statusForm select.form-control {
+  appearance: auto;
+  cursor: pointer;
+}
+
+#statusForm textarea.form-control {
+  min-height: 145px;
+  resize: vertical;
+}
+
+#statusForm .form-control:hover {
+  border-color: #c9d2e5;
+  background: #ffffff;
+}
+
+#statusForm .form-control:focus {
+  border-color: #4568e8;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(69, 104, 232, 0.12);
+}
+
+#statusForm .form-control::placeholder {
+  color: #9aa5b8;
+}
+
+#updateButton {
+  width: fit-content;
+  min-width: 155px;
+  min-height: 42px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4c70ed, #3d60dc);
+  color: #ffffff;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  box-shadow: 0 7px 18px rgba(69, 104, 232, 0.2);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+#updateButton:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #4267e4, #3456d0);
+  box-shadow: 0 10px 22px rgba(69, 104, 232, 0.25);
+}
+
+#updateButton:active {
+  transform: translateY(0);
+}
+
+#updateButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.update-form-message {
+  min-height: 18px;
+  margin: -7px 0 0;
+  color: #64718b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.update-form-message:empty {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  #statusForm {
+    max-width: 100%;
+  }
+
+  #updateButton {
+    width: 100%;
+  }
+}

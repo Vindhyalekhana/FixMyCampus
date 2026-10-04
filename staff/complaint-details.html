@@ -7,10 +7,10 @@
 
     <title>Complaint Details | FixMyCampus</title>
 
-    <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/dashboard.css" />
     <link rel="stylesheet" href="../css/notifications.css" />
     <link rel="stylesheet" href="../css/complaint-details.css" />
+    <link rel="stylesheet" href="../css/staff-workflow.css" />
   </head>
 
   <body>
@@ -26,19 +26,28 @@
             <span>Dashboard</span>
           </a>
 
-          <a href="dashboard.html" class="sidebar-link active">
+          <a
+            href="dashboard.html#assignedComplaints"
+            class="sidebar-link active"
+          >
             <span class="sidebar-icon">▤</span>
             <span>Assigned Complaints</span>
           </a>
 
-          <button
-            id="sidebarNotificationButton"
-            class="sidebar-link sidebar-button"
-            type="button"
-          >
+          <a href="notifications.html" class="sidebar-link">
             <span class="sidebar-icon">♙</span>
             <span>Notifications</span>
-          </button>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
         </nav>
 
         <div class="sidebar-bottom">
@@ -115,11 +124,15 @@
                 </div>
               </div>
 
-              <div class="user-profile">
+              <a
+                href="profile.html"
+                class="user-profile staff-user-profile"
+                aria-label="Open staff profile"
+              >
                 <div id="profileAvatar" class="profile-avatar">MS</div>
 
-                <span id="staffName" class="user-name"> Loading... </span>
-              </div>
+                <span id="staffName" class="user-name">Loading...</span>
+              </a>
             </div>
           </div>
         </header>
@@ -144,6 +157,7 @@
                   id="chatButton"
                   href="#"
                   class="btn btn-primary"
+                  aria-label="Chat with Student"
                   style="display: none"
                 >
                   Chat with Student
@@ -176,57 +190,48 @@
                 <div class="details-card-header">
                   <div>
                     <span class="section-label">OVERVIEW</span>
-
                     <h2>Complaint Details</h2>
                   </div>
                 </div>
 
                 <div class="complaint-details-grid">
                   <div class="detail-item">
-                    <span class="detail-label"> Complaint Code </span>
-
+                    <span class="detail-label">Complaint Code</span>
                     <p id="complaintCodeDisplay">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Category </span>
-
+                    <span class="detail-label">Category</span>
                     <p id="category">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Priority </span>
-
+                    <span class="detail-label">Priority</span>
                     <p id="priority">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Location </span>
-
+                    <span class="detail-label">Location</span>
                     <p id="location">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Submitted </span>
-
+                    <span class="detail-label">Submitted</span>
                     <p id="createdAt">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Last Updated </span>
-
+                    <span class="detail-label">Last Updated</span>
                     <p id="updatedAt">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Repaired </span>
-
+                    <span class="detail-label">Repaired</span>
                     <p id="resolvedAt">-</p>
                   </div>
 
                   <div class="detail-item">
-                    <span class="detail-label"> Closed </span>
-
+                    <span class="detail-label">Closed</span>
                     <p id="closedAt">-</p>
                   </div>
                 </div>
@@ -235,8 +240,7 @@
               <section class="details-card">
                 <div class="details-card-header">
                   <div>
-                    <span class="section-label"> DESCRIPTION </span>
-
+                    <span class="section-label">DESCRIPTION</span>
                     <h2>Problem Description</h2>
                   </div>
                 </div>
@@ -250,8 +254,7 @@
                 <section class="details-card">
                   <div class="details-card-header">
                     <div>
-                      <span class="section-label"> STUDENT </span>
-
+                      <span class="section-label">STUDENT</span>
                       <h2>Student Information</h2>
                     </div>
                   </div>
@@ -272,8 +275,7 @@
                 <section class="details-card">
                   <div class="details-card-header">
                     <div>
-                      <span class="section-label"> STATUS </span>
-
+                      <span class="section-label">STATUS</span>
                       <h2>Complaint Status</h2>
                     </div>
                   </div>
@@ -285,15 +287,14 @@
               <section id="updateCard" class="details-card">
                 <div class="details-card-header">
                   <div>
-                    <span class="section-label"> WORKFLOW </span>
-
+                    <span class="section-label">WORKFLOW</span>
                     <h2>Update Complaint</h2>
                   </div>
                 </div>
 
                 <form id="statusForm">
                   <div class="form-group">
-                    <label for="status"> Next Status </label>
+                    <label for="status">Next Status</label>
 
                     <select
                       id="status"
@@ -304,7 +305,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="remarks"> Work / Progress Remarks </label>
+                    <label for="remarks">Work / Progress Remarks</label>
 
                     <textarea
                       id="remarks"
@@ -332,8 +333,7 @@
               <section class="details-card">
                 <div class="details-card-header">
                   <div>
-                    <span class="section-label"> HISTORY </span>
-
+                    <span class="section-label">HISTORY</span>
                     <h2>Complaint Timeline</h2>
                   </div>
                 </div>
@@ -347,5 +347,6 @@
     </div>
 
     <script src="../js/staff-complaint-details.js"></script>
+    <script src="../js/staff-profile-loader.js"></script>
   </body>
 </html>

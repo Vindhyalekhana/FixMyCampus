@@ -20,12 +20,7 @@ async function initializeChat() {
 
     const authData = await authResponse.json();
 
-    if (!authData.authenticated) {
-      window.location.href = "../login.html";
-      return;
-    }
-
-    if (authData.role !== "staff") {
+    if (!authData.authenticated || authData.role !== "staff") {
       window.location.href = "../login.html";
       return;
     }
@@ -38,8 +33,8 @@ async function initializeChat() {
 
     complaintId = params.get("complaint_id");
 
-    if (!complaintId) {
-      showError("No complaint was specified.");
+    if (!complaintId || !/^\d+$/.test(complaintId)) {
+      showError("Invalid complaint ID.");
       return;
     }
 
@@ -56,7 +51,6 @@ function updateStaffProfile(name) {
   const staffName = name || "Staff";
 
   const staffNameElement = document.getElementById("staffName");
-
   const sidebarUserName = document.getElementById("sidebarUserName");
 
   if (staffNameElement) {
@@ -67,24 +61,13 @@ function updateStaffProfile(name) {
     sidebarUserName.textContent = staffName;
   }
 
-  updateProfileAvatars(staffName);
+  updateStaffAvatars(staffName);
 }
 
-function updateProfileAvatars(name) {
-  const parts = String(name).trim().split(/\s+/).filter(Boolean);
-
-  let initials = "ST";
-
-  if (parts.length === 1) {
-    initials = parts[0].substring(0, 2);
-  } else if (parts.length > 1) {
-    initials = parts[0].charAt(0) + parts[parts.length - 1].charAt(0);
-  }
-
-  initials = initials.toUpperCase();
+function updateStaffAvatars(name) {
+  const initials = getInitials(name || "Staff");
 
   const profileAvatar = document.getElementById("profileAvatar");
-
   const sidebarAvatar = document.getElementById("sidebarAvatar");
 
   if (profileAvatar) {
@@ -116,7 +99,6 @@ async function loadChat() {
     renderChat(data);
 
     const loadingMessage = document.getElementById("loadingMessage");
-
     const chatContent = document.getElementById("chatContent");
 
     if (loadingMessage) {
@@ -125,7 +107,7 @@ async function loadChat() {
 
     if (chatContent) {
       chatContent.classList.remove("hidden");
-      chatContent.style.display = "block";
+      chatContent.style.display = "flex";
     }
   } catch (error) {
     console.error("Chat loading error:", error);
@@ -139,27 +121,20 @@ function renderChat(data) {
 
   chatClosed = Boolean(data.chat_closed);
 
-  const complaintInfo = document.getElementById("complaintInfo");
-
   const studentName = document.getElementById("studentName");
-
   const studentAvatar = document.getElementById("studentAvatar");
-
   const chatStatus = document.getElementById("chatStatus");
-
-  if (complaintInfo) {
-    complaintInfo.textContent = getComplaintCode(complaint);
-  }
+  const backButton = document.getElementById("backButton");
 
   if (studentName) {
     studentName.textContent = complaint.student_name || "Student";
   }
 
-  if (studentAvatar) {
-    studentAvatar.textContent = getInitials(
-      complaint.student_name || "Student",
-    );
-  }
+  renderStudentAvatar(
+    studentAvatar,
+    complaint.student_name || "Student",
+    complaint.student_profile_picture || "",
+  );
 
   if (chatStatus) {
     chatStatus.textContent = chatClosed ? "Chat Closed" : "Chat Open";
@@ -167,17 +142,40 @@ function renderChat(data) {
     chatStatus.classList.toggle("chat-status-closed", chatClosed);
   }
 
-  const backButton = document.getElementById("backButton");
-
   if (backButton) {
     backButton.href =
-      "complaint-details.html?complaint_id=" +
-      encodeURIComponent(complaint.complaint_id);
+      "complaint-details.html?id=" + encodeURIComponent(complaint.complaint_id);
   }
 
   renderMessages(data.messages || []);
 
   updateChatControls();
+}
+
+function renderStudentAvatar(element, name, profilePicture) {
+  if (!element) {
+    return;
+  }
+
+  element.innerHTML = "";
+
+  const initials = getInitials(name);
+
+  if (profilePicture) {
+    const image = document.createElement("img");
+
+    image.src = "../" + profilePicture + "?v=" + Date.now();
+    image.alt = name + " profile picture";
+
+    image.onerror = function () {
+      element.textContent = initials;
+    };
+
+    element.appendChild(image);
+    return;
+  }
+
+  element.textContent = initials;
 }
 
 function renderMessages(messages) {
@@ -215,19 +213,16 @@ function renderMessages(messages) {
     const sender = document.createElement("div");
 
     sender.className = "message-sender";
-
     sender.textContent = message.sender_name || "User";
 
     const text = document.createElement("p");
 
     text.className = "message-text";
-
     text.textContent = message.message || "";
 
     const time = document.createElement("div");
 
     time.className = "message-time";
-
     time.textContent = formatDate(message.created_at);
 
     bubble.appendChild(sender);
@@ -244,11 +239,8 @@ function renderMessages(messages) {
 
 function updateChatControls() {
   const messageForm = document.getElementById("messageForm");
-
   const messageInput = document.getElementById("messageInput");
-
   const sendButton = document.getElementById("sendButton");
-
   const closedMessage = document.getElementById("closedMessage");
 
   if (!messageForm || !messageInput || !sendButton || !closedMessage) {
@@ -257,23 +249,15 @@ function updateChatControls() {
 
   if (chatClosed) {
     messageInput.disabled = true;
-
     sendButton.disabled = true;
-
     messageForm.style.display = "none";
-
     closedMessage.classList.remove("hidden");
-
-    closedMessage.style.display = "block";
+    closedMessage.style.display = "flex";
   } else {
     messageInput.disabled = false;
-
     sendButton.disabled = false;
-
     messageForm.style.display = "flex";
-
     closedMessage.classList.add("hidden");
-
     closedMessage.style.display = "none";
   }
 }
@@ -292,7 +276,6 @@ async function sendMessage(event) {
   }
 
   const input = document.getElementById("messageInput");
-
   const sendButton = document.getElementById("sendButton");
 
   if (!input || !sendButton) {
@@ -306,7 +289,6 @@ async function sendMessage(event) {
   }
 
   sendButton.disabled = true;
-
   sendButton.textContent = "Sending...";
 
   try {
@@ -337,7 +319,6 @@ async function sendMessage(event) {
   } finally {
     if (!chatClosed) {
       sendButton.disabled = false;
-
       sendButton.textContent = "Send Message";
     }
   }
@@ -345,9 +326,7 @@ async function sendMessage(event) {
 
 function setupNotifications() {
   const notificationButton = document.getElementById("notificationButton");
-
   const markAllReadButton = document.getElementById("markAllReadButton");
-
   const notificationPanel = document.getElementById("notificationPanel");
 
   if (notificationButton && notificationPanel) {
@@ -406,7 +385,6 @@ function updateNotificationBadge(unreadCount) {
 
   if (count > 0) {
     badge.textContent = count > 99 ? "99+" : count;
-
     badge.style.display = "flex";
   } else {
     badge.style.display = "none";
@@ -421,11 +399,8 @@ function renderNotifications(notifications) {
   }
 
   if (!notifications || notifications.length === 0) {
-    notificationList.innerHTML = `
-      <div class="notification-empty">
-        No notifications.
-      </div>
-    `;
+    notificationList.innerHTML =
+      '<div class="notification-empty">No notifications.</div>';
 
     return;
   }
@@ -457,15 +432,13 @@ function renderNotifications(notifications) {
   document.querySelectorAll(".notification-item").forEach(function (item) {
     item.addEventListener("click", async function () {
       const notificationId = item.dataset.notificationId;
-
-      const complaintIdFromNotification = item.dataset.complaintId;
+      const relatedComplaintId = item.dataset.complaintId;
 
       await markNotificationRead(notificationId);
 
-      if (complaintIdFromNotification) {
+      if (relatedComplaintId) {
         window.location.href =
-          "complaint-details.html?complaint_id=" +
-          encodeURIComponent(complaintIdFromNotification);
+          "complaint-details.html?id=" + encodeURIComponent(relatedComplaintId);
       }
     });
   });
@@ -509,16 +482,18 @@ async function markAllNotificationsRead() {
 
     await loadNotifications();
   } catch (error) {
-    console.error("Mark all notifications read error:", error);
+    console.error("Mark all notifications error:", error);
   }
 }
 
 function setupLogout() {
-  const sidebarLogoutButton = document.getElementById("sidebarLogoutButton");
+  const logoutButton = document.getElementById("sidebarLogoutButton");
 
-  if (sidebarLogoutButton) {
-    sidebarLogoutButton.addEventListener("click", logout);
+  if (!logoutButton) {
+    return;
   }
+
+  logoutButton.addEventListener("click", logout);
 }
 
 async function logout() {
@@ -529,14 +504,6 @@ async function logout() {
   } finally {
     window.location.href = "../login.html";
   }
-}
-
-function getComplaintCode(complaint) {
-  if (complaint && complaint.complaint_code) {
-    return complaint.complaint_code;
-  }
-
-  return "FMC-" + String(complaint.complaint_id).padStart(6, "0");
 }
 
 function getInitials(name) {
@@ -589,7 +556,6 @@ function formatNotificationDate(dateString) {
 
 function showError(message) {
   const loadingMessage = document.getElementById("loadingMessage");
-
   const errorMessage = document.getElementById("errorMessage");
 
   if (loadingMessage) {
@@ -598,9 +564,6 @@ function showError(message) {
 
   if (errorMessage) {
     errorMessage.textContent = message;
-
-    errorMessage.classList.remove("hidden");
-
     errorMessage.style.display = "block";
   }
 }

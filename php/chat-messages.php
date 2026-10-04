@@ -8,10 +8,12 @@ require_once "db.php";
 
 if (!isset($_SESSION["user_id"])) {
     http_response_code(401);
+
     echo json_encode([
         "success" => false,
         "message" => "Authentication required."
     ]);
+
     exit;
 }
 
@@ -23,15 +25,17 @@ $complaintId = filter_input(
 
 if (!$complaintId) {
     http_response_code(400);
+
     echo json_encode([
         "success" => false,
         "message" => "Invalid complaint ID."
     ]);
+
     exit;
 }
 
 try {
-    $userId = $_SESSION["user_id"];
+    $userId = (int) $_SESSION["user_id"];
     $role = $_SESSION["role"];
 
     if ($role === "student") {
@@ -42,7 +46,8 @@ try {
                 c.student_id,
                 sa.staff_id,
                 staff.name AS staff_name,
-                staff.phone AS staff_phone
+                staff.phone AS staff_phone,
+                staff.profile_picture AS staff_profile_picture
              FROM complaints c
              INNER JOIN staff_assignments sa
                 ON c.complaint_id = sa.complaint_id
@@ -70,7 +75,8 @@ try {
                 c.status,
                 c.student_id,
                 sa.staff_id,
-                student.name AS student_name
+                student.name AS student_name,
+                student.profile_picture AS student_profile_picture
              FROM complaints c
              INNER JOIN staff_assignments sa
                 ON c.complaint_id = sa.complaint_id
@@ -93,21 +99,25 @@ try {
 
     } else {
         http_response_code(403);
+
         echo json_encode([
             "success" => false,
             "message" => "Chat access is not available for this account."
         ]);
+
         exit;
     }
 
-    $complaint = $stmt->fetch();
+    $complaint = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$complaint) {
         http_response_code(404);
+
         echo json_encode([
             "success" => false,
             "message" => "Chat not found."
         ]);
+
         exit;
     }
 
@@ -131,7 +141,7 @@ try {
         $complaintId
     ]);
 
-    $messages = $stmt->fetchAll();
+    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode([
         "success" => true,
@@ -141,6 +151,8 @@ try {
     ]);
 
 } catch (PDOException $e) {
+    error_log("Chat messages error: " . $e->getMessage());
+
     http_response_code(500);
 
     echo json_encode([

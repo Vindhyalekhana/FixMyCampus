@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin Profile | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <link rel="stylesheet" href="../css/dashboard.css" />
+
+    <link rel="stylesheet" href="../css/notifications.css" />
+
+    <link rel="stylesheet" href="../css/profile.css" />
+
+    <link rel="stylesheet" href="../css/admin-profile.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html"> FixMyCampus </a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="staff.html" class="sidebar-link">
+            <span class="sidebar-icon">♟</span>
+            <span>Staff Monitoring</span>
+          </a>
+
+          <a href="reports.html" class="sidebar-link">
+            <span class="sidebar-icon">▥</span>
+            <span>Reports &amp; Analytics</span>
+          </a>
+
+          <a href="dashboard.html#complaintManagement" class="sidebar-link">
+            <span class="sidebar-icon">▤</span>
+            <span>Complaint Management</span>
+          </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link active">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">AD</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName"> Loading... </strong>
+
+              <span>Admin</span>
+            </div>
+          </div>
+
+          <button id="sidebarLogoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="dashboard-content">
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon">⌕</span>
+
+              <input type="text" placeholder="Search..." aria-label="Search" />
+            </div>
+
+            <div class="user-area">
+              <div class="notification-wrapper">
+                <button
+                  id="notificationButton"
+                  class="notification-button"
+                  type="button"
+                  aria-label="Notifications"
+                >
+                  <span class="notification-icon"> 🔔 </span>
+
+                  <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                    style="display: none"
+                  >
+                    0
+                  </span>
+                </button>
+
+                <div
+                  id="notificationPanel"
+                  class="notification-panel"
+                  style="display: none"
+                >
+                  <div class="notification-header">
+                    <h3>Notifications</h3>
+
+                    <button
+                      id="headerMarkAllRead"
+                      type="button"
+                      class="mark-all-read"
+                    >
+                      Mark all read
+                    </button>
+                  </div>
+
+                  <div id="headerNotificationList" class="notification-list">
+                    <div class="notification-empty">
+                      Loading notifications...
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="profile.html"
+                class="user-profile dashboard-profile-link"
+                aria-label="Open admin profile"
+              >
+                <div id="profileAvatar" class="profile-avatar">AD</div>
+
+                <span id="adminName" class="user-name"> Loading... </span>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        <main class="dashboard-main">
+          <div class="profile-container">
+            <section class="profile-page-header">
+              <div>
+                <span class="profile-eyebrow"> ACCOUNT </span>
+
+                <h1>Admin Profile</h1>
+
+                <p>
+                  Manage your administrator account information and profile
+                  picture.
+                </p>
+              </div>
+            </section>
+
+            <div
+              id="profileMessage"
+              class="profile-message"
+              style="display: none"
+            ></div>
+
+            <section class="profile-card">
+              <div class="card-heading">
+                <div>
+                  <span class="section-label"> PERSONAL INFORMATION </span>
+
+                  <h2>Profile Details</h2>
+                </div>
+              </div>
+
+              <div class="profile-picture-section">
+                <div id="profilePageAvatar" class="profile-page-avatar">AD</div>
+
+                <div class="profile-picture-content">
+                  <h3>Profile Picture</h3>
+
+                  <p>Upload a JPG, PNG or WEBP image. Maximum size is 5 MB.</p>
+
+                  <label for="profilePictureInput" class="settings-button">
+                    Change Picture
+                  </label>
+
+                  <input
+                    id="profilePictureInput"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    hidden
+                  />
+
+                  <div
+                    id="uploadProgress"
+                    class="upload-progress"
+                    style="display: none"
+                  >
+                    Uploading photo...
+                  </div>
+                </div>
+              </div>
+
+              <form id="profileForm" class="profile-form">
+                <div class="profile-form-grid">
+                  <div class="form-group">
+                    <label for="name"> Full Name </label>
+
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      maxlength="100"
+                      autocomplete="name"
+                      required
+                    />
+
+                    <small id="nameError" class="field-error"></small>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="email"> Email Address </label>
+
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      maxlength="150"
+                      autocomplete="email"
+                      required
+                    />
+
+                    <small id="emailError" class="field-error"></small>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="phone"> Phone Number </label>
+
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      maxlength="15"
+                      autocomplete="tel"
+                      required
+                    />
+
+                    <small id="phoneError" class="field-error"></small>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="role"> Role </label>
+
+                    <input
+                      id="role"
+                      type="text"
+                      value="Administrator"
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                <div class="profile-form-actions">
+                  <button
+                    id="saveProfileButton"
+                    type="submit"
+                    class="profile-save-button"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            <section class="profile-card account-information-card">
+              <div class="card-heading">
+                <div>
+                  <span class="section-label"> ACCOUNT </span>
+
+                  <h2>Account Information</h2>
+                </div>
+              </div>
+
+              <div class="account-information-grid">
+                <div class="account-info-item">
+                  <span> Account Status </span>
+
+                  <strong id="accountStatus"> Loading... </strong>
+                </div>
+
+                <div class="account-info-item">
+                  <span> Account Created </span>
+
+                  <strong id="accountCreated"> Loading... </strong>
+                </div>
+
+                <div class="account-info-item">
+                  <span> User ID </span>
+
+                  <strong id="userId"> Loading... </strong>
+                </div>
+
+                <div class="account-info-item">
+                  <span> Account Role </span>
+
+                  <strong id="accountRole"> Administrator </strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="profile-card settings-shortcut-card">
+              <div>
+                <span class="section-label"> SECURITY </span>
+
+                <h2>Manage Account Security</h2>
+
+                <p>
+                  Change your password and manage administrator account
+                  preferences from Settings.
+                </p>
+              </div>
+
+              <a href="settings.html" class="settings-button">
+                Open Settings
+              </a>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/admin-notifications.js"></script>
+    <script src="../js/admin-profile.js"></script>
+  </body>
+</html>

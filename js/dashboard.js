@@ -1,3 +1,5 @@
+let csrfToken = "";
+
 document.addEventListener("DOMContentLoaded", function () {
   initializeDashboard();
   setupNotifications();
@@ -24,6 +26,7 @@ async function initializeDashboard() {
 
     updateStudentProfile(authData.name);
 
+    await loadCsrfToken();
     await loadStudentComplaints();
     await loadNotifications();
   } catch (error) {
@@ -33,6 +36,20 @@ async function initializeDashboard() {
       "Unable to load the dashboard. Please refresh the page.",
     );
   }
+}
+
+async function loadCsrfToken() {
+  const response = await fetch("../php/csrf-token.php", {
+    cache: "no-store",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success || !data.csrf_token) {
+    throw new Error(data.message || "Unable to initialize security token.");
+  }
+
+  csrfToken = data.csrf_token;
 }
 
 function updateStudentProfile(name) {
@@ -169,41 +186,41 @@ function renderComplaints(complaints) {
   tableBody.innerHTML = complaints
     .map(function (complaint) {
       return `
-          <tr>
-            <td>
-              ${escapeHtml(complaint.complaint_code)}
-            </td>
+        <tr>
+          <td>
+            ${escapeHtml(complaint.complaint_code)}
+          </td>
 
-            <td>
-              ${escapeHtml(complaint.title)}
-            </td>
+          <td>
+            ${escapeHtml(complaint.title)}
+          </td>
 
-            <td>
-              ${escapeHtml(complaint.category_name)}
-            </td>
+          <td>
+            ${escapeHtml(complaint.category_name)}
+          </td>
 
-            <td>
-              <span class="status ${getStatusClass(complaint.status)}">
-                ${escapeHtml(complaint.status)}
-              </span>
-            </td>
+          <td>
+            <span class="status ${getStatusClass(complaint.status)}">
+              ${escapeHtml(complaint.status)}
+            </span>
+          </td>
 
-            <td>
-              ${escapeHtml(complaint.created_at)}
-            </td>
+          <td>
+            ${escapeHtml(complaint.created_at)}
+          </td>
 
-            <td>
-              <a
-                href="complaint-details.html?complaint_id=${encodeURIComponent(
-                  complaint.complaint_id,
-                )}"
-                class="btn btn-secondary"
-              >
-                View
-              </a>
-            </td>
-          </tr>
-        `;
+          <td>
+            <a
+              href="complaint-details.html?complaint_id=${encodeURIComponent(
+                complaint.complaint_id,
+              )}"
+              class="btn btn-secondary"
+            >
+              View
+            </a>
+          </td>
+        </tr>
+      `;
     })
     .join("");
 }
@@ -353,21 +370,21 @@ function renderNotifications(notifications) {
         Number(notification.is_read) === 0 ? "notification-unread" : "";
 
       return `
-          <button
-            type="button"
-            class="notification-item ${unreadClass}"
-            data-notification-id="${notification.notification_id}"
-            data-complaint-id="${notification.complaint_id || ""}"
-          >
-            <div class="notification-message">
-              ${escapeHtml(notification.message)}
-            </div>
+        <button
+          type="button"
+          class="notification-item ${unreadClass}"
+          data-notification-id="${notification.notification_id}"
+          data-complaint-id="${notification.complaint_id || ""}"
+        >
+          <div class="notification-message">
+            ${escapeHtml(notification.message)}
+          </div>
 
-            <div class="notification-time">
-              ${formatNotificationDate(notification.created_at)}
-            </div>
-          </button>
-        `;
+          <div class="notification-time">
+            ${formatNotificationDate(notification.created_at)}
+          </div>
+        </button>
+      `;
     })
     .join("");
 
@@ -390,10 +407,15 @@ function renderNotifications(notifications) {
 
 async function markNotificationRead(notificationId) {
   try {
+    if (!csrfToken) {
+      throw new Error("Security token is not available.");
+    }
+
     const response = await fetch("../php/mark-notification-read.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken,
       },
       body: JSON.stringify({
         notification_id: Number(notificationId),
@@ -414,8 +436,15 @@ async function markNotificationRead(notificationId) {
 
 async function markAllNotificationsRead() {
   try {
+    if (!csrfToken) {
+      throw new Error("Security token is not available.");
+    }
+
     const response = await fetch("../php/mark-all-notifications-read.php", {
       method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": csrfToken,
+      },
     });
 
     const data = await response.json();

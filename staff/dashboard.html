@@ -2,20 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Staff Dashboard | FixMyCampus</title>
 
-    <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/dashboard.css" />
+
     <link rel="stylesheet" href="../css/notifications.css" />
   </head>
 
   <body class="staff-dashboard-page">
     <div class="dashboard-layout">
+      <!-- Sidebar -->
       <aside class="dashboard-sidebar">
         <div class="sidebar-brand">
-          <a href="dashboard.html">FixMyCampus</a>
+          <a href="dashboard.html"> FixMyCampus </a>
         </div>
 
         <nav class="sidebar-nav">
@@ -28,6 +30,21 @@
             <span class="sidebar-icon">▤</span>
             <span>Assigned Complaints</span>
           </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
         </nav>
 
         <div class="sidebar-bottom">
@@ -35,8 +52,9 @@
             <div id="sidebarAvatar" class="profile-avatar">MS</div>
 
             <div class="sidebar-user-info">
-              <strong id="sidebarUserName">Loading...</strong>
-              <span>Staff</span>
+              <strong id="sidebarUserName"> Loading... </strong>
+
+              <span> Staff </span>
             </div>
           </div>
 
@@ -47,29 +65,34 @@
         </div>
       </aside>
 
+      <!-- Main Dashboard Content -->
       <div class="dashboard-content">
+        <!-- Header -->
         <header class="dashboard-header">
           <div class="container dashboard-header-content">
             <div class="dashboard-search">
-              <span class="search-icon">⌕</span>
+              <span class="search-icon"> ⌕ </span>
 
               <input
                 id="complaintSearch"
                 type="search"
                 placeholder="Search assigned complaints..."
                 autocomplete="off"
+                aria-label="Search assigned complaints"
               />
             </div>
 
             <div class="user-area">
+              <!-- Header Notifications -->
               <div class="notification-wrapper">
                 <button
                   id="notificationButton"
                   class="notification-button"
                   type="button"
                   aria-label="Notifications"
+                  aria-expanded="false"
                 >
-                  <span class="notification-icon">🔔</span>
+                  <span class="notification-icon"> 🔔 </span>
 
                   <span
                     id="notificationBadge"
@@ -105,20 +128,27 @@
                 </div>
               </div>
 
-              <div class="user-profile">
+              <!-- Staff Profile -->
+              <a
+                href="profile.html"
+                class="user-profile staff-user-profile"
+                aria-label="Open staff profile"
+              >
                 <div id="profileAvatar" class="profile-avatar">MS</div>
 
-                <span id="staffName" class="user-name">Loading...</span>
-              </div>
+                <span id="staffName" class="user-name"> Loading... </span>
+              </a>
             </div>
           </div>
         </header>
 
+        <!-- Dashboard Main -->
         <main class="dashboard-main">
           <div class="dashboard-container">
+            <!-- Welcome Section -->
             <section class="dashboard-welcome">
               <div>
-                <span class="welcome-label">STAFF PORTAL</span>
+                <span class="welcome-label"> STAFF PORTAL </span>
 
                 <h1 id="welcomeMessage">Welcome back!</h1>
 
@@ -128,16 +158,18 @@
               <div class="welcome-decoration"></div>
             </section>
 
+            <!-- Complaint Overview -->
             <section class="dashboard-section">
               <div class="section-header">
                 <div>
-                  <span class="section-label">OVERVIEW</span>
+                  <span class="section-label"> OVERVIEW </span>
 
                   <h2>Complaint Overview</h2>
                 </div>
               </div>
 
               <div class="stats-grid">
+                <!-- Total Assigned -->
                 <div class="stat-card">
                   <div class="stat-card-content">
                     <h3>Total Assigned</h3>
@@ -152,6 +184,7 @@
                   <div class="stat-icon">#</div>
                 </div>
 
+                <!-- Active Complaints -->
                 <div class="stat-card">
                   <div class="stat-card-content">
                     <h3>Active Complaints</h3>
@@ -166,6 +199,7 @@
                   <div class="stat-icon">◷</div>
                 </div>
 
+                <!-- Resolved Complaints -->
                 <div class="stat-card">
                   <div class="stat-card-content">
                     <h3>Resolved Complaints</h3>
@@ -180,13 +214,14 @@
               </div>
             </section>
 
+            <!-- Assigned Complaints -->
             <section
               id="assignedComplaints"
               class="dashboard-section complaints-section"
             >
               <div class="section-header">
                 <div>
-                  <span class="section-label">WORK QUEUE</span>
+                  <span class="section-label"> WORK QUEUE </span>
 
                   <h2>Assigned Complaints</h2>
                 </div>
@@ -197,10 +232,15 @@
                   <thead>
                     <tr>
                       <th>Complaint ID</th>
+
                       <th>Title</th>
+
                       <th>Category</th>
+
                       <th>Status</th>
+
                       <th>Submitted</th>
+
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -221,5 +261,6 @@
     </div>
 
     <script src="../js/staff-dashboard.js"></script>
+    <script src="../js/staff-profile-loader.js"></script>
   </body>
 </html>

@@ -1,9 +1,11 @@
 let allComplaints = [];
+let csrfToken = "";
 
 document.addEventListener("DOMContentLoaded", function () {
   initializeAdminDashboard();
   setupNotifications();
   setupComplaintSearch();
+  setupStatusFilter();
 });
 
 async function initializeAdminDashboard() {
@@ -22,6 +24,7 @@ async function initializeAdminDashboard() {
     }
 
     updateAdminProfile(data.name);
+    await loadCsrfToken();
 
     const logoutButton = document.getElementById("sidebarLogoutButton");
 
@@ -38,6 +41,20 @@ async function initializeAdminDashboard() {
       "Unable to load the dashboard. Please refresh the page.",
     );
   }
+}
+
+async function loadCsrfToken() {
+  const response = await fetch("../php/csrf-token.php", {
+    cache: "no-store",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success || !data.csrf_token) {
+    throw new Error(data.message || "Unable to initialize security token.");
+  }
+
+  csrfToken = data.csrf_token;
 }
 
 function updateAdminProfile(name) {
@@ -104,7 +121,8 @@ async function loadAdminComplaints() {
     allComplaints = data.complaints || [];
 
     updateStatistics(allComplaints);
-    renderComplaints(allComplaints);
+    updateAssignmentSummary(allComplaints);
+    applyComplaintFilters();
   } catch (error) {
     console.error("Complaint loading error:", error);
 
@@ -119,21 +137,99 @@ function updateStatistics(complaints) {
     return ["Submitted", "Under Review"].includes(complaint.status);
   }).length;
 
+  const assigned = complaints.filter(function (complaint) {
+    return complaint.status === "Assigned";
+  }).length;
+
   const progress = complaints.filter(function (complaint) {
     return complaint.status === "In Progress";
   }).length;
 
   const resolved = complaints.filter(function (complaint) {
-    return ["Resolved", "Closed"].includes(complaint.status);
+    return complaint.status === "Resolved";
   }).length;
 
-  document.getElementById("totalComplaints").textContent = total;
+  const closed = complaints.filter(function (complaint) {
+    return complaint.status === "Closed";
+  }).length;
 
-  document.getElementById("pendingComplaints").textContent = pending;
+  setElementText("totalComplaints", total);
+  setElementText("pendingComplaints", pending);
+  setElementText("assignedComplaints", assigned);
+  setElementText("progressComplaints", progress);
+  setElementText("resolvedComplaints", resolved);
+  setElementText("closedComplaints", closed);
+}
 
-  document.getElementById("progressComplaints").textContent = progress;
+function updateAssignmentSummary(complaints) {
+  const automatic = complaints.filter(function (complaint) {
+    return complaint.assignment_type === "automatic";
+  }).length;
 
-  document.getElementById("resolvedComplaints").textContent = resolved;
+  const unassigned = complaints.filter(function (complaint) {
+    return !complaint.staff_id;
+  }).length;
+
+  setElementText("automaticAssignmentCount", automatic);
+  setElementText("unassignedComplaintCount", unassigned);
+}
+
+function setupComplaintSearch() {
+  const searchInput = document.getElementById("complaintSearch");
+
+  if (!searchInput) {
+    return;
+  }
+
+  searchInput.addEventListener("input", function () {
+    applyComplaintFilters();
+  });
+}
+
+function setupStatusFilter() {
+  const statusFilter = document.getElementById("statusFilter");
+
+  if (!statusFilter) {
+    return;
+  }
+
+  statusFilter.addEventListener("change", function () {
+    applyComplaintFilters();
+  });
+}
+
+function applyComplaintFilters() {
+  const searchInput = document.getElementById("complaintSearch");
+  const statusFilter = document.getElementById("statusFilter");
+
+  const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : "";
+
+  const selectedStatus = statusFilter ? statusFilter.value : "all";
+
+  const filteredComplaints = allComplaints.filter(function (complaint) {
+    const searchableText = [
+      complaint.complaint_code,
+      complaint.title,
+      complaint.student_name,
+      complaint.category_name,
+      complaint.priority,
+      complaint.status,
+      complaint.staff_name,
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    const matchesSearch = !searchTerm || searchableText.includes(searchTerm);
+
+    const matchesStatus =
+      selectedStatus === "all" || complaint.status === selectedStatus;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  renderComplaints(filteredComplaints);
+
+  setElementText("visibleComplaintCount", filteredComplaints.length);
 }
 
 function renderComplaints(complaints) {
@@ -146,9 +242,9 @@ function renderComplaints(complaints) {
   if (complaints.length === 0) {
     tableBody.innerHTML = `
       <tr>
-        <td colspan="7">
+        <td colspan="9">
           <div class="empty-state">
-            No complaints found.
+            No complaints match the current filters.
           </div>
         </td>
       </tr>
@@ -162,15 +258,21 @@ function renderComplaints(complaints) {
       return `
         <tr>
           <td>
-            <strong>
-              ${escapeHtml(complaint.complaint_code)}
-            </strong>
-            <br>
-            ${escapeHtml(complaint.title)}
+            <div class="complaint-primary">
+              <strong>
+                ${escapeHtml(complaint.complaint_code)}
+              </strong>
+
+              <span>
+                ${escapeHtml(complaint.title)}
+              </span>
+            </div>
           </td>
 
           <td>
-            ${escapeHtml(complaint.student_name)}
+            <span class="table-primary-text">
+              ${escapeHtml(complaint.student_name)}
+            </span>
           </td>
 
           <td>
@@ -178,7 +280,11 @@ function renderComplaints(complaints) {
           </td>
 
           <td>
-            ${escapeHtml(complaint.priority)}
+            <span class="priority-badge ${getPriorityClass(
+              complaint.priority,
+            )}">
+              ${escapeHtml(complaint.priority)}
+            </span>
           </td>
 
           <td>
@@ -188,7 +294,17 @@ function renderComplaints(complaints) {
           </td>
 
           <td>
-            ${escapeHtml(complaint.created_at)}
+            ${renderStaffCell(complaint)}
+          </td>
+
+          <td>
+            ${renderAssignmentCell(complaint)}
+          </td>
+
+          <td>
+            <span class="table-date">
+              ${formatDate(complaint.created_at)}
+            </span>
           </td>
 
           <td>
@@ -196,7 +312,7 @@ function renderComplaints(complaints) {
               href="complaint-details.html?id=${encodeURIComponent(
                 complaint.complaint_id,
               )}"
-              class="btn btn-secondary"
+              class="btn btn-secondary admin-view-button"
             >
               View
             </a>
@@ -207,38 +323,55 @@ function renderComplaints(complaints) {
     .join("");
 }
 
-function setupComplaintSearch() {
-  const searchInput = document.getElementById("complaintSearch");
-
-  if (!searchInput) {
-    return;
+function renderStaffCell(complaint) {
+  if (!complaint.staff_id || !complaint.staff_name) {
+    return `
+      <div class="staff-cell staff-cell-empty">
+        <span class="staff-status-dot"></span>
+        <span>Not assigned</span>
+      </div>
+    `;
   }
 
-  searchInput.addEventListener("input", function () {
-    const searchTerm = searchInput.value.trim().toLowerCase();
+  return `
+    <div class="staff-cell">
+      <span class="staff-status-dot assigned"></span>
 
-    if (!searchTerm) {
-      renderComplaints(allComplaints);
-      return;
-    }
+      <div>
+        <strong>
+          ${escapeHtml(complaint.staff_name)}
+        </strong>
 
-    const filteredComplaints = allComplaints.filter(function (complaint) {
-      const searchableText = [
-        complaint.complaint_code,
-        complaint.title,
-        complaint.student_name,
-        complaint.category_name,
-        complaint.priority,
-        complaint.status,
-      ]
-        .join(" ")
-        .toLowerCase();
+        <span>
+          Staff
+        </span>
+      </div>
+    </div>
+  `;
+}
 
-      return searchableText.includes(searchTerm);
-    });
+function renderAssignmentCell(complaint) {
+  if (!complaint.staff_id) {
+    return `
+      <span class="assignment-badge assignment-unassigned">
+        Unassigned
+      </span>
+    `;
+  }
 
-    renderComplaints(filteredComplaints);
-  });
+  if (complaint.assignment_type === "automatic") {
+    return `
+      <span class="assignment-badge assignment-automatic">
+        Automatic
+      </span>
+    `;
+  }
+
+  return `
+    <span class="assignment-badge assignment-existing">
+      Existing
+    </span>
+  `;
 }
 
 function getStatusClass(status) {
@@ -254,6 +387,16 @@ function getStatusClass(status) {
   };
 
   return classes[status] || "";
+}
+
+function getPriorityClass(priority) {
+  const classes = {
+    Low: "priority-low",
+    Medium: "priority-medium",
+    High: "priority-high",
+  };
+
+  return classes[priority] || "";
 }
 
 function setupNotifications() {
@@ -332,7 +475,6 @@ function updateNotificationBadge(unreadCount) {
 
   if (count > 0) {
     badge.textContent = count > 99 ? "99+" : count;
-
     badge.style.display = "flex";
   } else {
     badge.style.display = "none";
@@ -402,6 +544,7 @@ async function markNotificationRead(notificationId) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken,
       },
       body: JSON.stringify({
         notification_id: Number(notificationId),
@@ -424,6 +567,9 @@ async function markAllNotificationsRead() {
   try {
     const response = await fetch("../php/mark-all-notifications-read.php", {
       method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": csrfToken,
+      },
     });
 
     const data = await response.json();
@@ -452,13 +598,25 @@ function formatNotificationDate(dateString) {
   return date.toLocaleString();
 }
 
-async function logout() {
-  try {
-    await fetch("../php/logout.php", {
-      method: "POST",
-    });
-  } finally {
-    window.location.href = "../login.html";
+function formatDate(dateString) {
+  if (!dateString) {
+    return "—";
+  }
+
+  const date = new Date(dateString.replace(" ", "T"));
+
+  if (Number.isNaN(date.getTime())) {
+    return dateString;
+  }
+
+  return date.toLocaleDateString();
+}
+
+function setElementText(id, value) {
+  const element = document.getElementById(id);
+
+  if (element) {
+    element.textContent = value;
   }
 }
 
@@ -468,13 +626,26 @@ function showDashboardError(message) {
   if (tableBody) {
     tableBody.innerHTML = `
       <tr>
-        <td colspan="7">
+        <td colspan="9">
           <div class="empty-state">
             ${escapeHtml(message)}
           </div>
         </td>
       </tr>
     `;
+  }
+}
+
+async function logout() {
+  try {
+    await fetch("../php/logout.php", {
+      method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": csrfToken,
+      },
+    });
+  } finally {
+    window.location.href = "../login.html";
   }
 }
 

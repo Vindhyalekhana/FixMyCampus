@@ -19,7 +19,7 @@
       <!-- Sidebar -->
       <aside class="dashboard-sidebar">
         <div class="sidebar-brand">
-          <a href="dashboard.html"> FixMyCampus </a>
+          <a href="dashboard.html">FixMyCampus</a>
         </div>
 
         <nav class="sidebar-nav">
@@ -37,6 +37,21 @@
             <span class="sidebar-icon">▤</span>
             <span>My Complaints</span>
           </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
         </nav>
 
         <div class="sidebar-bottom">
@@ -44,16 +59,16 @@
             <div id="sidebarAvatar" class="profile-avatar">TS</div>
 
             <div class="sidebar-user-info">
-              <strong id="sidebarUserName"> Loading... </strong>
+              <strong id="sidebarUserName">Loading...</strong>
 
-              <span> Student </span>
+              <span>Student</span>
             </div>
           </div>
 
           <button id="logoutButton" class="sidebar-logout" type="button">
-            <span class="sidebar-icon"> ↪ </span>
+            <span class="sidebar-icon">↪</span>
 
-            <span> Logout </span>
+            <span>Logout</span>
           </button>
         </div>
       </aside>
@@ -64,7 +79,7 @@
         <header class="dashboard-header">
           <div class="dashboard-header-content">
             <div class="dashboard-search">
-              <span class="search-icon"> ⌕ </span>
+              <span class="search-icon">⌕</span>
 
               <input
                 type="text"
@@ -83,7 +98,7 @@
                   type="button"
                   aria-label="Notifications"
                 >
-                  <span class="notification-icon"> 🔔 </span>
+                  <span class="notification-icon">🔔</span>
 
                   <span
                     id="notificationBadge"
@@ -120,11 +135,15 @@
               </div>
 
               <!-- Student profile -->
-              <div class="user-profile">
+              <a
+                href="profile.html"
+                class="user-profile dashboard-profile-link"
+                aria-label="Open profile"
+              >
                 <div id="profileAvatar" class="profile-avatar">TS</div>
 
-                <span id="studentName" class="user-name"> Loading... </span>
-              </div>
+                <span id="studentName" class="user-name">Loading...</span>
+              </a>
             </div>
           </div>
         </header>
@@ -135,11 +154,11 @@
             <!-- Welcome -->
             <section class="dashboard-welcome">
               <div>
-                <span class="welcome-label"> STUDENT PORTAL </span>
+                <span class="welcome-label">STUDENT PORTAL</span>
 
                 <h1>
                   Welcome back,
-                  <span id="welcomeName"> Student! </span>
+                  <span id="welcomeName">Student!</span>
                 </h1>
 
                 <p>
@@ -154,7 +173,7 @@
             <section class="dashboard-section">
               <div class="section-header">
                 <div>
-                  <span class="section-label"> OVERVIEW </span>
+                  <span class="section-label">OVERVIEW</span>
 
                   <h2>Complaint Overview</h2>
                 </div>
@@ -219,7 +238,7 @@
             >
               <div class="section-header">
                 <div>
-                  <span class="section-label"> HISTORY </span>
+                  <span class="section-label">HISTORY</span>
 
                   <h2>My Complaint History</h2>
                 </div>
@@ -259,5 +278,6 @@
     </div>
 
     <script src="../js/dashboard.js"></script>
+    <script src="../js/dashboard-profile.js"></script>
   </body>
 </html>

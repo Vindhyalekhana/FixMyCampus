@@ -168,3 +168,118 @@
     left: -45px;
   }
 }
+
+/* Chat with Student action */
+
+.complaint-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.chat-student-button {
+  min-width: 176px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 20px;
+  border: 1px solid #4568e8;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4c70ed, #3d60dc);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 7px 18px rgba(69, 104, 232, 0.22);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.chat-student-button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #4267e4, #3456d0);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(69, 104, 232, 0.28);
+}
+
+.chat-student-button:active {
+  transform: translateY(0);
+  box-shadow: 0 5px 12px rgba(69, 104, 232, 0.2);
+}
+
+.chat-student-button:focus-visible {
+  outline: 3px solid rgba(69, 104, 232, 0.22);
+  outline-offset: 3px;
+}
+
+.chat-student-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 10px;
+}
+
+@media (max-width: 768px) {
+  .complaint-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .chat-student-button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-student-button {
+    height: 46px;
+    font-size: 12px;
+  }
+}
+
+#chatButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 22px;
+  border: 0 !important;
+  outline: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #5c70e5, #5064da);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 7px 17px rgba(69, 104, 232, 0.18);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#chatButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(69, 104, 232, 0.22);
+}
+
+#chatButton:focus,
+#chatButton:focus-visible {
+  outline: none !important;
+  border: 0 !important;
+}

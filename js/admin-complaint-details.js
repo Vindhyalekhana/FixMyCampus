@@ -1,4 +1,5 @@
 let currentComplaintId = null;
+let csrfToken = "";
 
 document.addEventListener("DOMContentLoaded", function () {
   setupNotifications();
@@ -21,6 +22,7 @@ async function initializeAdminComplaintDetails() {
     }
 
     updateAdminProfile(authData.name);
+    await loadCsrfToken();
 
     const logoutButton = document.getElementById("sidebarLogoutButton");
 
@@ -37,19 +39,26 @@ async function initializeAdminComplaintDetails() {
       return;
     }
 
-    await loadStaff();
     await loadComplaint(currentComplaintId);
-
-    document
-      .getElementById("assignButton")
-      .addEventListener("click", function () {
-        assignStaff(currentComplaintId);
-      });
   } catch (error) {
     console.error("Admin complaint details error:", error);
 
     showError("Unable to load complaint details.");
   }
+}
+
+async function loadCsrfToken() {
+  const response = await fetch("../php/csrf-token.php", {
+    cache: "no-store",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success || !data.csrf_token) {
+    throw new Error(data.message || "Unable to initialize security token.");
+  }
+
+  csrfToken = data.csrf_token;
 }
 
 function updateAdminProfile(name) {
@@ -58,11 +67,11 @@ function updateAdminProfile(name) {
   const sidebarUserName = document.getElementById("sidebarUserName");
 
   if (adminName) {
-    adminName.textContent = name;
+    adminName.textContent = name || "Admin";
   }
 
   if (sidebarUserName) {
-    sidebarUserName.textContent = name;
+    sidebarUserName.textContent = name || "Admin";
   }
 
   updateProfileAvatars(name);
@@ -96,34 +105,6 @@ function updateProfileAvatars(name) {
   }
 }
 
-async function loadStaff() {
-  const response = await fetch("../php/staff-list.php");
-
-  const data = await response.json();
-
-  if (!response.ok || !data.success) {
-    throw new Error(data.message || "Unable to load staff.");
-  }
-
-  const select = document.getElementById("staff");
-
-  select.innerHTML = `
-    <option value="">
-      Select staff member
-    </option>
-  `;
-
-  data.staff.forEach(function (staff) {
-    const option = document.createElement("option");
-
-    option.value = staff.user_id;
-
-    option.textContent = staff.name + " (" + staff.email + ")";
-
-    select.appendChild(option);
-  });
-}
-
 async function loadComplaint(complaintId) {
   const response = await fetch(
     "../php/admin-complaint-details.php?id=" + encodeURIComponent(complaintId),
@@ -133,7 +114,6 @@ async function loadComplaint(complaintId) {
 
   if (!response.ok || !data.success) {
     showError(data.message || "Complaint not found.");
-
     return;
   }
 
@@ -197,22 +177,56 @@ function renderComplaint(complaint) {
 }
 
 function renderAssignment(assignment) {
-  const select = document.getElementById("staff");
-
   const currentAssignment = document.getElementById("currentAssignment");
 
-  if (!assignment) {
-    select.value = "";
+  if (!currentAssignment) {
+    return;
+  }
 
-    currentAssignment.textContent = "No staff member is currently assigned.";
+  if (!assignment) {
+    currentAssignment.innerHTML = `
+      <div class="assignment-empty">
+        <strong>Awaiting automatic assignment</strong>
+        <p>
+          No eligible staff member is currently assigned to this complaint.
+        </p>
+      </div>
+    `;
 
     return;
   }
 
-  select.value = assignment.staff_id;
+  const staffName = getAssignmentName(assignment);
 
-  currentAssignment.textContent =
-    "Currently assigned to: " + getAssignmentName(assignment);
+  const assignmentType =
+    assignment.assignment_type === "automatic"
+      ? "Automatically assigned by the system"
+      : "Existing assignment";
+
+  currentAssignment.innerHTML = `
+    <div class="assignment-information">
+      <p>
+        <strong>Assigned Staff</strong>
+        <span>${escapeHtml(staffName)}</span>
+      </p>
+
+      <p>
+        <strong>Assignment Type</strong>
+        <span>${escapeHtml(assignmentType)}</span>
+      </p>
+
+      ${
+        assignment.assigned_at
+          ? `
+            <p>
+              <strong>Assigned On</strong>
+              <span>${escapeHtml(formatDate(assignment.assigned_at))}</span>
+            </p>
+          `
+          : ""
+      }
+    </div>
+  `;
 }
 
 function getAssignmentName(assignment) {
@@ -224,11 +238,15 @@ function getAssignmentName(assignment) {
     return assignment.name;
   }
 
-  return "Selected staff member";
+  return "Staff member";
 }
 
 function renderTimeline(updates) {
   const timeline = document.getElementById("timeline");
+
+  if (!timeline) {
+    return;
+  }
 
   timeline.innerHTML = "";
 
@@ -286,86 +304,15 @@ function renderTimeline(updates) {
   });
 }
 
-async function assignStaff(complaintId) {
-  const staffId = document.getElementById("staff").value;
-
-  const messageBox = document.getElementById("assignmentMessage");
-
-  const assignButton = document.getElementById("assignButton");
-
-  messageBox.style.display = "none";
-  messageBox.textContent = "";
-
-  if (!staffId) {
-    showAssignmentMessage("Please select a staff member.", "error");
-
-    return;
-  }
-
-  assignButton.disabled = true;
-  assignButton.textContent = "Assigning...";
-
-  try {
-    const response = await fetch("../php/assign-staff.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        complaint_id: complaintId,
-        staff_id: staffId,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.success) {
-      throw new Error(data.message || "Unable to assign staff.");
-    }
-
-    showAssignmentMessage(
-      data.message || "Complaint assigned successfully.",
-      "success",
-    );
-
-    await loadComplaint(complaintId);
-  } catch (error) {
-    console.error("Staff assignment error:", error);
-
-    showAssignmentMessage(error.message || "Unable to assign staff.", "error");
-  } finally {
-    assignButton.disabled = false;
-    assignButton.textContent = "Assign Complaint";
-  }
-}
-
-function showAssignmentMessage(message, type) {
-  const messageBox = document.getElementById("assignmentMessage");
-
-  messageBox.textContent = message;
-
-  messageBox.style.display = "block";
-
-  messageBox.className =
-    type === "success" ? "success-message" : "error-message";
-}
-
 function getStatusClass(status) {
   const classes = {
     Submitted: "status-submitted",
-
     "Under Review": "status-review",
-
     Assigned: "status-assigned",
-
     "In Progress": "status-progress",
-
     Resolved: "status-resolved",
-
     Closed: "status-closed",
-
     Rejected: "status-rejected",
-
     Duplicate: "status-duplicate",
   };
 
@@ -449,7 +396,6 @@ function updateNotificationBadge(unreadCount) {
 
   if (count > 0) {
     badge.textContent = count > 99 ? "99+" : count;
-
     badge.style.display = "flex";
   } else {
     badge.style.display = "none";
@@ -479,21 +425,21 @@ function renderNotifications(notifications) {
         Number(notification.is_read) === 0 ? "notification-unread" : "";
 
       return `
-          <button
-            type="button"
-            class="notification-item ${unreadClass}"
-            data-notification-id="${notification.notification_id}"
-            data-complaint-id="${notification.complaint_id || ""}"
-          >
-            <div class="notification-message">
-              ${escapeHtml(notification.message)}
-            </div>
+        <button
+          type="button"
+          class="notification-item ${unreadClass}"
+          data-notification-id="${notification.notification_id}"
+          data-complaint-id="${notification.complaint_id || ""}"
+        >
+          <div class="notification-message">
+            ${escapeHtml(notification.message)}
+          </div>
 
-            <div class="notification-time">
-              ${formatNotificationDate(notification.created_at)}
-            </div>
-          </button>
-        `;
+          <div class="notification-time">
+            ${formatNotificationDate(notification.created_at)}
+          </div>
+        </button>
+      `;
     })
     .join("");
 
@@ -519,6 +465,7 @@ async function markNotificationRead(notificationId) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken,
       },
       body: JSON.stringify({
         notification_id: Number(notificationId),
@@ -541,6 +488,9 @@ async function markAllNotificationsRead() {
   try {
     const response = await fetch("../php/mark-all-notifications-read.php", {
       method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": csrfToken,
+      },
     });
 
     const data = await response.json();
@@ -593,6 +543,9 @@ async function logout() {
   try {
     await fetch("../php/logout.php", {
       method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": csrfToken,
+      },
     });
   } finally {
     window.location.href = "../login.html";
@@ -610,7 +563,6 @@ function showError(message) {
 
   if (errorBox) {
     errorBox.textContent = message;
-
     errorBox.style.display = "block";
   }
 }

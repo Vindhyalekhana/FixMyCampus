@@ -1,6 +1,7 @@
 let complaintId = null;
 let currentUserId = null;
 let chatClosed = false;
+let csrfToken = "";
 
 document.addEventListener("DOMContentLoaded", function () {
   setupNotifications();
@@ -27,19 +28,18 @@ async function initializeChat() {
 
     currentUserId = Number(authData.user_id);
 
-    updateStudentProfile(authData.name);
+    updateStaffProfile(authData.name);
+
+    await loadCsrfToken();
 
     const params = new URLSearchParams(window.location.search);
 
     complaintId = params.get("complaint_id");
 
-    if (!complaintId) {
-      showError("No complaint was specified.");
+    if (!complaintId || !/^\d+$/.test(complaintId)) {
+      showError("Invalid complaint ID.");
       return;
     }
-
-    document.getElementById("backButton").href =
-      "complaint-details.html?complaint_id=" + encodeURIComponent(complaintId);
 
     await loadChat();
     await loadNotifications();
@@ -50,26 +50,40 @@ async function initializeChat() {
   }
 }
 
-function updateStudentProfile(name) {
-  const studentName = name || "Student";
+async function loadCsrfToken() {
+  const response = await fetch("../php/csrf-token.php", {
+    cache: "no-store",
+  });
 
-  const studentNameElement = document.getElementById("studentName");
+  const data = await response.json();
+
+  if (!response.ok || !data.success || !data.csrf_token) {
+    throw new Error(data.message || "Unable to initialize security token.");
+  }
+
+  csrfToken = data.csrf_token;
+}
+
+function updateStaffProfile(name) {
+  const staffName = name || "Staff";
+
+  const staffNameElement = document.getElementById("staffName");
 
   const sidebarUserName = document.getElementById("sidebarUserName");
 
-  if (studentNameElement) {
-    studentNameElement.textContent = studentName;
+  if (staffNameElement) {
+    staffNameElement.textContent = staffName;
   }
 
   if (sidebarUserName) {
-    sidebarUserName.textContent = studentName;
+    sidebarUserName.textContent = staffName;
   }
 
-  updateProfileAvatars(studentName);
+  updateStaffAvatars(staffName);
 }
 
-function updateProfileAvatars(name) {
-  const initials = getInitials(name);
+function updateStaffAvatars(name) {
+  const initials = getInitials(name || "Staff");
 
   const profileAvatar = document.getElementById("profileAvatar");
 
@@ -98,7 +112,6 @@ async function loadChat() {
 
     if (!response.ok || !data.success) {
       showError(data.message || "Unable to load chat.");
-
       return;
     }
 
@@ -113,7 +126,8 @@ async function loadChat() {
     }
 
     if (chatContent) {
-      chatContent.style.display = "block";
+      chatContent.classList.remove("hidden");
+      chatContent.style.display = "flex";
     }
   } catch (error) {
     console.error("Chat loading error:", error);
@@ -127,39 +141,23 @@ function renderChat(data) {
 
   chatClosed = Boolean(data.chat_closed);
 
-  const complaintCode = document.getElementById("complaintCode");
+  const studentName = document.getElementById("studentName");
 
-  const complaintInfo = document.getElementById("complaintInfo");
-
-  const staffName = document.getElementById("staffName");
-
-  const staffPhone = document.getElementById("staffPhone");
-
-  const staffAvatar = document.getElementById("staffAvatar");
+  const studentAvatar = document.getElementById("studentAvatar");
 
   const chatStatus = document.getElementById("chatStatus");
 
-  if (complaintCode) {
-    complaintCode.textContent = getComplaintCode(complaint);
+  const backButton = document.getElementById("backButton");
+
+  if (studentName) {
+    studentName.textContent = complaint.student_name || "Student";
   }
 
-  if (complaintInfo) {
-    complaintInfo.textContent = complaint.title || "Complaint conversation";
-  }
-
-  if (staffName) {
-    staffName.textContent = complaint.staff_name || "Assigned Staff";
-  }
-
-  if (staffPhone) {
-    staffPhone.textContent = complaint.staff_phone
-      ? "Phone: " + complaint.staff_phone
-      : "Staff contact unavailable";
-  }
-
-  if (staffAvatar) {
-    staffAvatar.textContent = getInitials(complaint.staff_name || "Staff");
-  }
+  renderStudentAvatar(
+    studentAvatar,
+    complaint.student_name || "Student",
+    complaint.student_profile_picture || "",
+  );
 
   if (chatStatus) {
     chatStatus.textContent = chatClosed ? "Chat Closed" : "Chat Open";
@@ -167,9 +165,41 @@ function renderChat(data) {
     chatStatus.classList.toggle("chat-status-closed", chatClosed);
   }
 
+  if (backButton) {
+    backButton.href =
+      "complaint-details.html?id=" + encodeURIComponent(complaint.complaint_id);
+  }
+
   renderMessages(data.messages || []);
 
   updateChatControls();
+}
+
+function renderStudentAvatar(element, name, profilePicture) {
+  if (!element) {
+    return;
+  }
+
+  element.innerHTML = "";
+
+  const initials = getInitials(name);
+
+  if (profilePicture) {
+    const image = document.createElement("img");
+
+    image.src = "../" + profilePicture + "?v=" + Date.now();
+
+    image.alt = name + " profile picture";
+
+    image.onerror = function () {
+      element.textContent = initials;
+    };
+
+    element.appendChild(image);
+    return;
+  }
+
+  element.textContent = initials;
 }
 
 function renderMessages(messages) {
@@ -194,11 +224,11 @@ function renderMessages(messages) {
   }
 
   messages.forEach(function (message) {
-    const isSent = Number(message.sender_id) === currentUserId;
-
     const wrapper = document.createElement("div");
 
-    wrapper.className = "message " + (isSent ? "sent" : "received");
+    wrapper.className =
+      "message " +
+      (Number(message.sender_id) === currentUserId ? "sent" : "received");
 
     const bubble = document.createElement("div");
 
@@ -207,19 +237,16 @@ function renderMessages(messages) {
     const sender = document.createElement("div");
 
     sender.className = "message-sender";
-
     sender.textContent = message.sender_name || "User";
 
     const text = document.createElement("p");
 
     text.className = "message-text";
-
     text.textContent = message.message || "";
 
     const time = document.createElement("div");
 
     time.className = "message-time";
-
     time.textContent = formatDate(message.created_at);
 
     bubble.appendChild(sender);
@@ -249,19 +276,15 @@ function updateChatControls() {
 
   if (chatClosed) {
     messageInput.disabled = true;
-
     sendButton.disabled = true;
-
     messageForm.style.display = "none";
-
-    closedMessage.style.display = "block";
+    closedMessage.classList.remove("hidden");
+    closedMessage.style.display = "flex";
   } else {
     messageInput.disabled = false;
-
     sendButton.disabled = false;
-
     messageForm.style.display = "flex";
-
+    closedMessage.classList.add("hidden");
     closedMessage.style.display = "none";
   }
 }
@@ -293,8 +316,12 @@ async function sendMessage(event) {
     return;
   }
 
-  sendButton.disabled = true;
+  if (!csrfToken) {
+    alert("Security token is not available.");
+    return;
+  }
 
+  sendButton.disabled = true;
   sendButton.textContent = "Sending...";
 
   try {
@@ -302,6 +329,7 @@ async function sendMessage(event) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken,
       },
       body: JSON.stringify({
         complaint_id: Number(complaintId),
@@ -325,7 +353,6 @@ async function sendMessage(event) {
   } finally {
     if (!chatClosed) {
       sendButton.disabled = false;
-
       sendButton.textContent = "Send Message";
     }
   }
@@ -338,17 +365,15 @@ function setupNotifications() {
 
   const notificationPanel = document.getElementById("notificationPanel");
 
-  if (!notificationButton || !notificationPanel) {
-    return;
+  if (notificationButton && notificationPanel) {
+    notificationButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+
+      const visible = notificationPanel.style.display !== "none";
+
+      notificationPanel.style.display = visible ? "none" : "block";
+    });
   }
-
-  notificationButton.addEventListener("click", function (event) {
-    event.stopPropagation();
-
-    const visible = notificationPanel.style.display !== "none";
-
-    notificationPanel.style.display = visible ? "none" : "block";
-  });
 
   if (markAllReadButton) {
     markAllReadButton.addEventListener("click", async function () {
@@ -359,7 +384,7 @@ function setupNotifications() {
   document.addEventListener("click", function (event) {
     const wrapper = document.querySelector(".notification-wrapper");
 
-    if (wrapper && !wrapper.contains(event.target)) {
+    if (wrapper && !wrapper.contains(event.target) && notificationPanel) {
       notificationPanel.style.display = "none";
     }
   });
@@ -411,11 +436,8 @@ function renderNotifications(notifications) {
   }
 
   if (!notifications || notifications.length === 0) {
-    notificationList.innerHTML = `
-            <div class="notification-empty">
-                No notifications.
-            </div>
-        `;
+    notificationList.innerHTML =
+      '<div class="notification-empty">No notifications.</div>';
 
     return;
   }
@@ -426,34 +448,35 @@ function renderNotifications(notifications) {
         Number(notification.is_read) === 0 ? "notification-unread" : "";
 
       return `
-                    <button
-                        type="button"
-                        class="notification-item ${unreadClass}"
-                        data-notification-id="${notification.notification_id}"
-                        data-complaint-id="${notification.complaint_id || ""}"
-                    >
-                        <div class="notification-message">
-                            ${escapeHtml(notification.message)}
-                        </div>
+          <button
+            type="button"
+            class="notification-item ${unreadClass}"
+            data-notification-id="${notification.notification_id}"
+            data-complaint-id="${notification.complaint_id || ""}"
+          >
+            <div class="notification-message">
+              ${escapeHtml(notification.message)}
+            </div>
 
-                        <div class="notification-time">
-                            ${formatNotificationDate(notification.created_at)}
-                        </div>
-                    </button>
-                `;
+            <div class="notification-time">
+              ${formatNotificationDate(notification.created_at)}
+            </div>
+          </button>
+        `;
     })
     .join("");
 
   document.querySelectorAll(".notification-item").forEach(function (item) {
     item.addEventListener("click", async function () {
-      await markNotificationRead(item.dataset.notificationId);
+      const notificationId = item.dataset.notificationId;
 
-      const notificationComplaintId = item.dataset.complaintId;
+      const relatedComplaintId = item.dataset.complaintId;
 
-      if (notificationComplaintId) {
+      await markNotificationRead(notificationId);
+
+      if (relatedComplaintId) {
         window.location.href =
-          "complaint-details.html?complaint_id=" +
-          encodeURIComponent(notificationComplaintId);
+          "complaint-details.html?id=" + encodeURIComponent(relatedComplaintId);
       }
     });
   });
@@ -461,27 +484,51 @@ function renderNotifications(notifications) {
 
 async function markNotificationRead(notificationId) {
   try {
-    await fetch("../php/mark-notification-read.php", {
+    if (!csrfToken) {
+      throw new Error("Security token is not available.");
+    }
+
+    const response = await fetch("../php/mark-notification-read.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken,
       },
       body: JSON.stringify({
         notification_id: Number(notificationId),
       }),
     });
 
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Unable to mark notification as read.");
+    }
+
     await loadNotifications();
   } catch (error) {
-    console.error("Notification read error:", error);
+    console.error("Mark notification read error:", error);
   }
 }
 
 async function markAllNotificationsRead() {
   try {
-    await fetch("../php/mark-all-notifications-read.php", {
+    if (!csrfToken) {
+      throw new Error("Security token is not available.");
+    }
+
+    const response = await fetch("../php/mark-all-notifications-read.php", {
       method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": csrfToken,
+      },
     });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Unable to mark notifications as read.");
+    }
 
     await loadNotifications();
   } catch (error) {
@@ -490,7 +537,7 @@ async function markAllNotificationsRead() {
 }
 
 function setupLogout() {
-  const logoutButton = document.getElementById("logoutButton");
+  const logoutButton = document.getElementById("sidebarLogoutButton");
 
   if (!logoutButton) {
     return;
@@ -507,14 +554,6 @@ async function logout() {
   } finally {
     window.location.href = "../login.html";
   }
-}
-
-function getComplaintCode(complaint) {
-  if (complaint && complaint.complaint_code) {
-    return complaint.complaint_code;
-  }
-
-  return "FMC-" + String(complaint.complaint_id).padStart(6, "0");
 }
 
 function getInitials(name) {
@@ -576,7 +615,6 @@ function showError(message) {
 
   if (errorMessage) {
     errorMessage.textContent = message;
-
     errorMessage.style.display = "block";
   }
 }

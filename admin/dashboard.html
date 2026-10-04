@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/dashboard.css" />
     <link rel="stylesheet" href="../css/notifications.css" />
-  </head>
+      <link rel="stylesheet" href="../css/admin-fixes.css" />`r`n  </head>
 
   <body>
     <div class="dashboard-layout">
@@ -20,13 +20,38 @@
 
         <nav class="sidebar-nav">
           <a href="dashboard.html" class="sidebar-link active">
-            <span class="sidebar-icon">⌂</span>
+            <span class="sidebar-icon">âŒ‚</span>
             <span>Dashboard</span>
           </a>
 
+          <a href="staff.html" class="sidebar-link">
+            <span class="sidebar-icon">â™Ÿ</span>
+            <span>Staff Monitoring</span>
+          </a>
+
+          <a href="reports.html" class="sidebar-link">
+            <span class="sidebar-icon">â–¥</span>
+            <span>Reports &amp; Analytics</span>
+          </a>
+
           <a href="#complaintManagement" class="sidebar-link">
-            <span class="sidebar-icon">▤</span>
+            <span class="sidebar-icon">â–¤</span>
             <span>Complaint Management</span>
+          </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">â™§</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">â—‰</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">âš™</span>
+            <span>Settings</span>
           </a>
         </nav>
 
@@ -41,7 +66,7 @@
           </div>
 
           <button id="sidebarLogoutButton" class="sidebar-logout" type="button">
-            <span class="sidebar-icon">↪</span>
+            <span class="sidebar-icon">â†ª</span>
             <span>Logout</span>
           </button>
         </div>
@@ -51,12 +76,12 @@
         <header class="dashboard-header">
           <div class="dashboard-header-content">
             <div class="dashboard-search">
-              <span class="search-icon">⌕</span>
+              <span class="search-icon">âŒ•</span>
 
               <input
                 id="complaintSearch"
                 type="search"
-                placeholder="Search complaints..."
+                placeholder="Search complaints, students or staff..."
                 autocomplete="off"
               />
             </div>
@@ -69,7 +94,7 @@
                   type="button"
                   aria-label="Notifications"
                 >
-                  <span class="notification-icon">🔔</span>
+                  <span class="notification-icon">ðŸ””</span>
 
                   <span
                     id="notificationBadge"
@@ -105,11 +130,15 @@
                 </div>
               </div>
 
-              <div class="user-profile">
+              <a
+                href="profile.html"
+                class="user-profile dashboard-profile-link"
+                aria-label="Open admin profile"
+              >
                 <div id="profileAvatar" class="profile-avatar">AD</div>
 
-                <span id="adminName" class="user-name"> Loading... </span>
-              </div>
+                <span id="adminName" class="user-name">Loading...</span>
+              </a>
             </div>
           </div>
         </header>
@@ -123,8 +152,8 @@
                 <h1 id="welcomeMessage">Welcome back!</h1>
 
                 <p>
-                  Manage campus complaints, staff assignments and infrastructure
-                  issues.
+                  Monitor campus complaints, complaint status and automatic
+                  staff assignments.
                 </p>
               </div>
 
@@ -140,7 +169,7 @@
                 </div>
               </div>
 
-              <div class="stats-grid">
+              <div class="stats-grid admin-stats-grid">
                 <div class="stat-card">
                   <div class="stat-card-content">
                     <h3>Total Complaints</h3>
@@ -157,16 +186,28 @@
 
                 <div class="stat-card">
                   <div class="stat-card-content">
-                    <h3>Pending Review</h3>
+                    <h3>Pending</h3>
 
                     <div id="pendingComplaints" class="stat-number">0</div>
 
                     <span class="stat-description">
-                      Awaiting administrative action
+                      Submitted or under review
                     </span>
                   </div>
 
-                  <div class="stat-icon">◷</div>
+                  <div class="stat-icon">â—·</div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <h3>Assigned</h3>
+
+                    <div id="assignedComplaints" class="stat-number">0</div>
+
+                    <span class="stat-description"> Assigned to staff </span>
+                  </div>
+
+                  <div class="stat-icon">â†’</div>
                 </div>
 
                 <div class="stat-card">
@@ -180,7 +221,7 @@
                     </span>
                   </div>
 
-                  <div class="stat-icon">↻</div>
+                  <div class="stat-icon">â† </div>
                 </div>
 
                 <div class="stat-card">
@@ -190,11 +231,25 @@
                     <div id="resolvedComplaints" class="stat-number">0</div>
 
                     <span class="stat-description">
-                      Resolved or closed complaints
+                      Awaiting or completed closure
                     </span>
                   </div>
 
-                  <div class="stat-icon">✓</div>
+                  <div class="stat-icon">âœ“</div>
+                </div>
+
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <h3>Closed</h3>
+
+                    <div id="closedComplaints" class="stat-number">0</div>
+
+                    <span class="stat-description">
+                      Confirmed closed by students
+                    </span>
+                  </div>
+
+                  <div class="stat-icon">â—</div>
                 </div>
               </div>
             </section>
@@ -203,16 +258,57 @@
               id="complaintManagement"
               class="dashboard-section complaints-section"
             >
-              <div class="section-header">
+              <div class="section-header admin-management-header">
                 <div>
-                  <span class="section-label">MANAGEMENT</span>
+                  <span class="section-label">MONITORING</span>
 
                   <h2>Complaint Management</h2>
+
+                  <p class="section-description">
+                    Monitor complaint progress and automatic staff assignment.
+                  </p>
+                </div>
+
+                <div class="complaint-filter">
+                  <label for="statusFilter">Status</label>
+
+                  <select id="statusFilter">
+                    <option value="all">All Complaints</option>
+                    <option value="Submitted">Submitted</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Assigned">Assigned</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Duplicate">Duplicate</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="complaint-summary-bar">
+                <div>
+                  <strong id="visibleComplaintCount">0</strong>
+                  <span>complaints shown</span>
+                </div>
+
+                <div class="assignment-summary">
+                  <span class="assignment-summary-item">
+                    <span class="assignment-dot automatic"></span>
+                    Automatically assigned
+                    <strong id="automaticAssignmentCount">0</strong>
+                  </span>
+
+                  <span class="assignment-summary-item">
+                    <span class="assignment-dot unassigned"></span>
+                    Unassigned
+                    <strong id="unassignedComplaintCount">0</strong>
+                  </span>
                 </div>
               </div>
 
               <div class="complaint-table-wrapper">
-                <table class="complaint-table">
+                <table class="complaint-table admin-complaint-table">
                   <thead>
                     <tr>
                       <th>Complaint</th>
@@ -220,6 +316,8 @@
                       <th>Category</th>
                       <th>Priority</th>
                       <th>Status</th>
+                      <th>Assigned Staff</th>
+                      <th>Assignment</th>
                       <th>Submitted</th>
                       <th>Action</th>
                     </tr>
@@ -227,7 +325,7 @@
 
                   <tbody id="complaintsTableBody">
                     <tr>
-                      <td colspan="7">
+                      <td colspan="9">
                         <div class="empty-state">Loading complaints...</div>
                       </td>
                     </tr>
@@ -241,5 +339,7 @@
     </div>
 
     <script src="../js/admin-dashboard.js"></script>
-  </body>
+      <script src="../js/admin-ui.js"></script>`r`n  </body>
 </html>
+
+

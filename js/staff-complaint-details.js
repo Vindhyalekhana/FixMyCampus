@@ -1,4 +1,5 @@
 let complaintId = null;
+let csrfToken = "";
 
 document.addEventListener("DOMContentLoaded", function () {
   initializeComplaintDetails();
@@ -8,7 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function initializeComplaintDetails() {
   try {
-    const authResponse = await fetch("../php/auth.php");
+    const authResponse = await fetch("../php/auth.php", {
+      cache: "no-store",
+    });
 
     if (!authResponse.ok) {
       throw new Error("Authentication request failed.");
@@ -20,6 +23,8 @@ async function initializeComplaintDetails() {
       window.location.href = "../login.html";
       return;
     }
+
+    await loadCsrfToken();
 
     complaintId = new URLSearchParams(window.location.search).get("id");
 
@@ -39,6 +44,20 @@ async function initializeComplaintDetails() {
 
     showError("Unable to load complaint details. Please refresh the page.");
   }
+}
+
+async function loadCsrfToken() {
+  const response = await fetch("../php/csrf-token.php", {
+    cache: "no-store",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success || !data.csrf_token) {
+    throw new Error(data.message || "Unable to initialize security token.");
+  }
+
+  csrfToken = data.csrf_token;
 }
 
 function updateStaffProfile(name) {
@@ -72,7 +91,6 @@ function updateProfileAvatars(name) {
     .toUpperCase();
 
   const profileAvatar = document.getElementById("profileAvatar");
-
   const sidebarAvatar = document.getElementById("sidebarAvatar");
 
   if (profileAvatar) {
@@ -106,6 +124,9 @@ async function loadComplaint(id) {
   try {
     const response = await fetch(
       "../php/staff-complaint-details.php?id=" + encodeURIComponent(id),
+      {
+        cache: "no-store",
+      },
     );
 
     const data = await response.json();
@@ -131,7 +152,6 @@ async function loadComplaint(id) {
     setupChatButton(data.complaint);
 
     const loadingMessage = document.getElementById("loadingMessage");
-
     const complaintContent = document.getElementById("complaintContent");
 
     if (loadingMessage) {
@@ -287,6 +307,13 @@ async function updateComplaintStatus(event) {
     return;
   }
 
+  if (!csrfToken) {
+    updateMessage.textContent =
+      "Security token is unavailable. Please refresh the page.";
+
+    return;
+  }
+
   updateButton.disabled = true;
 
   updateMessage.textContent = "Updating complaint...";
@@ -296,6 +323,7 @@ async function updateComplaintStatus(event) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken,
       },
       body: JSON.stringify({
         complaint_id: complaintId,
@@ -600,19 +628,12 @@ function setText(elementId, value) {
 function getStatusClass(status) {
   const classes = {
     Submitted: "status-submitted",
-
     "Under Review": "status-review",
-
     Assigned: "status-assigned",
-
     "In Progress": "status-progress",
-
     Resolved: "status-resolved",
-
     Closed: "status-closed",
-
     Rejected: "status-rejected",
-
     Duplicate: "status-duplicate",
   };
 

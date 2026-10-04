@@ -7,8 +7,6 @@
 
     <title>File a Complaint | FixMyCampus</title>
 
-    <link rel="stylesheet" href="../css/style.css" />
-
     <link rel="stylesheet" href="../css/dashboard.css" />
 
     <link rel="stylesheet" href="../css/notifications.css" />
@@ -24,34 +22,46 @@
 
         <nav class="sidebar-nav">
           <a href="dashboard.html" class="sidebar-link">
-            <span class="sidebar-icon"> ⌂ </span>
-
-            <span> Dashboard </span>
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
           </a>
 
           <a href="report.html" class="sidebar-link active">
-            <span class="sidebar-icon"> ＋ </span>
-
-            <span> File Complaint </span>
+            <span class="sidebar-icon">＋</span>
+            <span>File Complaint</span>
           </a>
 
           <a href="dashboard.html#complaints" class="sidebar-link">
-            <span class="sidebar-icon"> ▤ </span>
+            <span class="sidebar-icon">▤</span>
+            <span>My Complaints</span>
+          </a>
 
-            <span> My Complaints </span>
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
           </a>
         </nav>
 
         <div class="sidebar-bottom">
-          <div class="sidebar-user">
-            <div id="sidebarAvatar" class="profile-avatar">TS</div>
+          <a href="profile.html" class="sidebar-user dashboard-profile-link">
+            <div id="sidebarAvatar" class="profile-avatar">ST</div>
 
             <div class="sidebar-user-info">
-              <strong id="sidebarUserName"> Loading... </strong>
+              <strong id="sidebarUserName"> Student </strong>
 
               <span> Student </span>
             </div>
-          </div>
+          </a>
 
           <button id="logoutButton" class="sidebar-logout" type="button">
             <span class="sidebar-icon"> ↪ </span>
@@ -61,9 +71,9 @@
         </div>
       </aside>
 
-      <!-- Main application area -->
+      <!-- Main content -->
       <div class="dashboard-content">
-        <!-- Top header -->
+        <!-- Header -->
         <header class="dashboard-header">
           <div class="dashboard-header-content">
             <div class="dashboard-search">
@@ -71,6 +81,7 @@
 
               <input
                 type="text"
+                id="complaintSearch"
                 placeholder="Search complaints..."
                 aria-label="Search complaints"
               />
@@ -79,59 +90,29 @@
             <div class="user-area">
               <!-- Notifications -->
               <div class="notification-wrapper">
-                <button
-                  id="notificationButton"
-                  class="notification-button"
-                  type="button"
+                <a
+                  href="notifications.html"
+                  class="notification-button dashboard-profile-link"
                   aria-label="Notifications"
                 >
                   <span class="notification-icon"> 🔔 </span>
-
-                  <span
-                    id="notificationBadge"
-                    class="notification-badge"
-                    style="display: none"
-                  >
-                    0
-                  </span>
-                </button>
-
-                <div
-                  id="notificationPanel"
-                  class="notification-panel"
-                  style="display: none"
-                >
-                  <div class="notification-header">
-                    <h3>Notifications</h3>
-
-                    <button
-                      id="markAllReadButton"
-                      class="mark-all-read"
-                      type="button"
-                    >
-                      Mark all read
-                    </button>
-                  </div>
-
-                  <div id="notificationList">
-                    <div class="notification-empty">
-                      Loading notifications...
-                    </div>
-                  </div>
-                </div>
+                </a>
               </div>
 
-              <!-- Student profile -->
-              <div class="user-profile">
-                <div id="profileAvatar" class="profile-avatar">TS</div>
+              <!-- User profile -->
+              <a
+                href="profile.html"
+                class="user-profile dashboard-profile-link"
+              >
+                <div id="profileAvatar" class="profile-avatar">ST</div>
 
-                <span id="studentName" class="user-name"> Loading... </span>
-              </div>
+                <span id="studentName" class="user-name"> Student </span>
+              </a>
             </div>
           </div>
         </header>
 
-        <!-- Main content -->
+        <!-- Main -->
         <main class="dashboard-main">
           <div class="dashboard-container">
             <!-- Page introduction -->
@@ -152,9 +133,8 @@
 
             <!-- Complaint form -->
             <section class="complaint-form-section">
-              <div class="card complaint-form-card">
+              <div class="complaint-form-card">
                 <form id="complaintForm">
-                  <!-- Category -->
                   <div class="form-group">
                     <label for="category"> Category </label>
 
@@ -168,7 +148,6 @@
                     </select>
                   </div>
 
-                  <!-- Location -->
                   <div class="form-group">
                     <label for="location"> Location </label>
 
@@ -182,7 +161,6 @@
                     </select>
                   </div>
 
-                  <!-- Title -->
                   <div class="form-group">
                     <label for="title"> Complaint Title </label>
 
@@ -191,13 +169,12 @@
                       id="title"
                       name="title"
                       class="form-control"
-                      maxlength="200"
                       placeholder="Example: Broken classroom fan"
+                      maxlength="200"
                       required
                     />
                   </div>
 
-                  <!-- Description -->
                   <div class="form-group">
                     <label for="description"> Description </label>
 
@@ -205,13 +182,11 @@
                       id="description"
                       name="description"
                       class="form-control"
-                      rows="6"
                       placeholder="Describe the problem clearly..."
                       required
                     ></textarea>
                   </div>
 
-                  <!-- Priority -->
                   <div class="form-group">
                     <label for="priority"> Priority </label>
 
@@ -221,25 +196,35 @@
                       class="form-control"
                       required
                     >
+                      <option value="">Select priority</option>
+
                       <option value="Low">Low</option>
 
-                      <option value="Medium" selected>Medium</option>
+                      <option value="Medium">Medium</option>
 
                       <option value="High">High</option>
                     </select>
                   </div>
 
-                  <div id="complaintMessage"></div>
+                  <div
+                    id="complaintMessage"
+                    class="form-message"
+                    role="alert"
+                    aria-live="polite"
+                  ></div>
 
-                  <!-- Form actions -->
                   <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">
-                      Submit Complaint
+                    <button type="reset" class="btn btn-secondary">
+                      Clear
                     </button>
 
-                    <a href="dashboard.html" class="btn btn-secondary">
-                      Cancel
-                    </a>
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      id="submitComplaintButton"
+                    >
+                      Submit Complaint
+                    </button>
                   </div>
                 </form>
               </div>
@@ -250,7 +235,5 @@
     </div>
 
     <script src="../js/report.js"></script>
-
-    <script src="../js/report-notifications.js"></script>
   </body>
 </html>

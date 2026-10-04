@@ -1,10 +1,30 @@
 <?php
 
-$host = "localhost";
-$port = "3306";
-$dbname = "fixmycampus";
-$username = "root";
-$password = "vindhyalekhana";
+$envFile = dirname(__DIR__) . DIRECTORY_SEPARATOR . ".env";
+
+if (!file_exists($envFile)) {
+    die("Environment configuration file not found.");
+}
+
+$env = parse_ini_file($envFile);
+
+if ($env === false) {
+    die("Unable to load environment configuration.");
+}
+
+$host = $env["DB_HOST"] ?? "";
+$port = $env["DB_PORT"] ?? "3306";
+$dbname = $env["DB_NAME"] ?? "";
+$username = $env["DB_USER"] ?? "";
+$password = $env["DB_PASSWORD"] ?? "";
+
+if (
+    $host === "" ||
+    $dbname === "" ||
+    $username === ""
+) {
+    die("Incomplete database configuration.");
+}
 
 try {
     $pdo = new PDO(

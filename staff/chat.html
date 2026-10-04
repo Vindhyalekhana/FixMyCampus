@@ -5,12 +5,363 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Chat with Student | FixMyCampus</title>
+    <title>Staff Chat | FixMyCampus</title>
 
-    <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/dashboard.css" />
     <link rel="stylesheet" href="../css/notifications.css" />
-    <link rel="stylesheet" href="../css/chat.css" />
+    <link rel="stylesheet" href="../css/complaint-details.css" />
+
+    <style>
+      .staff-chat-page {
+        min-height: 100vh;
+      }
+
+      .chat-page-container {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .chat-page-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+
+      .chat-page-header-left {
+        min-width: 0;
+      }
+
+      .chat-back-link {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #5267df;
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .chat-back-link:hover {
+        text-decoration: underline;
+      }
+
+      .chat-page-header h1 {
+        margin: 5px 0 0;
+        color: var(--text-dark);
+        font-size: 30px;
+        line-height: 1.2;
+        font-weight: 800;
+        letter-spacing: -0.7px;
+      }
+
+      .chat-status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 0 13px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #5267df;
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .chat-status-closed {
+        background: #f1f2f5;
+        color: #737b8c;
+      }
+
+      .chat-card {
+        display: flex;
+        flex-direction: column;
+        min-height: 600px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: var(--shadow);
+      }
+
+      .chat-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 20px 24px;
+        border-bottom: 1px solid #edf0f5;
+        background: #ffffff;
+      }
+
+      .chat-person {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-width: 0;
+      }
+
+      .chat-person-avatar {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #657df0, #7663dc);
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .chat-person-avatar img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .chat-person-details {
+        min-width: 0;
+      }
+
+      .chat-person-details strong {
+        display: block;
+        overflow: hidden;
+        color: var(--text-dark);
+        font-size: 14px;
+        line-height: 1.35;
+        font-weight: 800;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .chat-person-details span {
+        display: block;
+        margin-top: 3px;
+        overflow: hidden;
+        color: #8491a8;
+        font-size: 11px;
+        line-height: 1.4;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .chat-messages {
+        flex: 1;
+        min-height: 390px;
+        max-height: 540px;
+        overflow-y: auto;
+        padding: 25px;
+        background: #f8f9fc;
+      }
+
+      .message {
+        display: flex;
+        width: 100%;
+        margin-bottom: 14px;
+      }
+
+      .message.sent {
+        justify-content: flex-end;
+      }
+
+      .message.received {
+        justify-content: flex-start;
+      }
+
+      .message-bubble {
+        max-width: min(72%, 620px);
+        padding: 12px 15px;
+        border: 1px solid #e5e8ef;
+        border-radius: 14px;
+        background: #ffffff;
+        box-shadow: 0 3px 10px rgba(45, 65, 110, 0.04);
+      }
+
+      .message.sent .message-bubble {
+        border-color: #dce3ff;
+        background: #eef2ff;
+      }
+
+      .message-sender {
+        margin-bottom: 5px;
+        color: #596783;
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      .message-text {
+        margin: 0;
+        color: #27334c;
+        font-size: 13px;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      .message-time {
+        margin-top: 7px;
+        color: #8b96a9;
+        font-size: 9px;
+        line-height: 1.3;
+      }
+
+      .empty-chat {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 330px;
+        color: #8792a7;
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .chat-composer {
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        padding: 17px 20px;
+        border-top: 1px solid #edf0f5;
+        background: #ffffff;
+      }
+
+      .chat-input {
+        flex: 1;
+        min-width: 0;
+        min-height: 48px;
+        max-height: 130px;
+        box-sizing: border-box;
+        padding: 13px 14px;
+        border: 1px solid #dce2ec;
+        border-radius: 11px;
+        outline: none;
+        background: #fbfcfe;
+        color: var(--text-dark);
+        font-family: inherit;
+        font-size: 13px;
+        line-height: 1.5;
+        resize: vertical;
+      }
+
+      .chat-input:focus {
+        border-color: var(--primary);
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(69, 104, 232, 0.09);
+      }
+
+      .chat-input:disabled {
+        cursor: not-allowed;
+        background: #f3f4f7;
+      }
+
+      .chat-send-button {
+        min-height: 48px;
+        padding: 0 18px;
+        border: none;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #5c70e5, #5064da);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        white-space: nowrap;
+        box-shadow: 0 7px 17px rgba(69, 104, 232, 0.18);
+      }
+
+      .chat-send-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .chat-send-button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+        transform: none;
+      }
+
+      .chat-closed-message {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        min-height: 70px;
+        padding: 15px 20px;
+        color: #7b8495;
+        background: #f6f7f9;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .chat-loading {
+        padding: 40px;
+        color: #7f8ba1;
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .chat-error {
+        display: none;
+        padding: 15px 18px;
+        border: 1px solid #f0cccc;
+        border-radius: 10px;
+        background: #fff3f3;
+        color: #bd3434;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      @media (max-width: 900px) {
+        .chat-page-header {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .chat-card {
+          min-height: 520px;
+        }
+
+        .message-bubble {
+          max-width: 82%;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .chat-page-header h1 {
+          font-size: 25px;
+        }
+
+        .chat-card-header {
+          padding: 17px;
+        }
+
+        .chat-messages {
+          min-height: 350px;
+          padding: 17px;
+        }
+
+        .chat-composer {
+          padding: 13px;
+        }
+
+        .chat-send-button {
+          padding: 0 13px;
+        }
+
+        .message-bubble {
+          max-width: 90%;
+        }
+      }
+    </style>
   </head>
 
   <body class="staff-chat-page">
@@ -33,11 +384,26 @@
             <span class="sidebar-icon">▤</span>
             <span>Assigned Complaints</span>
           </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
         </nav>
 
         <div class="sidebar-bottom">
           <div class="sidebar-user">
-            <div id="sidebarAvatar" class="profile-avatar">MS</div>
+            <div id="sidebarAvatar" class="profile-avatar">ST</div>
 
             <div class="sidebar-user-info">
               <strong id="sidebarUserName">Loading...</strong>
@@ -54,14 +420,15 @@
 
       <div class="dashboard-content">
         <header class="dashboard-header">
-          <div class="container dashboard-header-content">
+          <div class="dashboard-header-content">
             <div class="dashboard-search">
               <span class="search-icon">⌕</span>
 
               <input
                 type="search"
                 placeholder="Search assigned complaints..."
-                disabled
+                aria-label="Search assigned complaints"
+                autocomplete="off"
               />
             </div>
 
@@ -109,74 +476,74 @@
                 </div>
               </div>
 
-              <div class="user-profile">
-                <div id="profileAvatar" class="profile-avatar">MS</div>
+              <a
+                href="profile.html"
+                class="user-profile staff-user-profile"
+                aria-label="Open staff profile"
+              >
+                <div id="profileAvatar" class="profile-avatar">ST</div>
 
                 <span id="staffName" class="user-name">Loading...</span>
-              </div>
+              </a>
             </div>
           </div>
         </header>
 
         <main class="dashboard-main">
-          <div class="dashboard-container">
-            <div class="chat-page-heading">
-              <a id="backButton" href="dashboard.html" class="chat-back-link">
-                ← Back to Complaint
-              </a>
+          <div class="dashboard-container chat-page-container">
+            <section class="chat-page-header">
+              <div class="chat-page-header-left">
+                <a
+                  id="backButton"
+                  href="dashboard.html#assignedComplaints"
+                  class="chat-back-link"
+                >
+                  ← Back to Assigned Complaints
+                </a>
 
-              <span id="complaintInfo" class="chat-page-code">
-                Loading complaint...
-              </span>
+                <h1>Chat with Student</h1>
+              </div>
 
-              <h1>Complaint Chat</h1>
-
-              <p>Communicate with the student regarding this complaint.</p>
-            </div>
+              <span id="chatStatus" class="chat-status">Chat Open</span>
+            </section>
 
             <div id="loadingMessage" class="chat-loading">Loading chat...</div>
 
-            <div id="errorMessage" class="chat-error hidden"></div>
+            <div id="errorMessage" class="chat-error"></div>
 
-            <section id="chatContent" class="chat-container hidden">
-              <div class="chat-card">
-                <div class="chat-card-header">
-                  <div class="chat-participant">
-                    <div id="studentAvatar" class="chat-avatar">ST</div>
+            <section id="chatContent" class="chat-card hidden">
+              <div class="chat-card-header">
+                <div class="chat-person">
+                  <div id="studentAvatar" class="chat-person-avatar">ST</div>
 
-                    <div class="chat-participant-info">
-                      <span class="chat-section-label">STUDENT</span>
+                  <div class="chat-person-details">
+                    <strong id="studentName">Student</strong>
 
-                      <h2 id="studentName">Student</h2>
-
-                      <p>Complaint conversation</p>
-                    </div>
+                    <span id="complaintInfo"> Complaint conversation </span>
                   </div>
-
-                  <div id="chatStatus" class="chat-status">Chat Open</div>
                 </div>
-
-                <div id="messagesContainer" class="messages-container"></div>
-
-                <div id="closedMessage" class="chat-closed-message hidden">
-                  This complaint is closed. Chat history is available, but new
-                  messages cannot be sent.
-                </div>
-
-                <form id="messageForm" class="message-form">
-                  <textarea
-                    id="messageInput"
-                    rows="3"
-                    placeholder="Type your message..."
-                    maxlength="2000"
-                    required
-                  ></textarea>
-
-                  <button id="sendButton" type="submit" class="btn btn-primary">
-                    Send Message
-                  </button>
-                </form>
               </div>
+
+              <div id="messagesContainer" class="chat-messages"></div>
+
+              <div id="closedMessage" class="chat-closed-message hidden">
+                This chat is closed because the complaint has been closed.
+              </div>
+
+              <form id="messageForm" class="chat-composer">
+                <textarea
+                  id="messageInput"
+                  class="chat-input"
+                  rows="2"
+                  maxlength="2000"
+                  placeholder="Type your message..."
+                  required
+                ></textarea>
+
+                <button id="sendButton" class="chat-send-button" type="submit">
+                  Send Message
+                </button>
+              </form>
             </section>
           </div>
         </main>
@@ -184,5 +551,6 @@
     </div>
 
     <script src="../js/staff-chat.js"></script>
+    <script src="../js/staff-profile-loader.js"></script>
   </body>
 </html>

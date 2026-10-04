@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Settings | FixMyCampus</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
+    <link rel="stylesheet" href="../css/profile.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+          <a href="dashboard.html">FixMyCampus</a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="dashboard.html" class="sidebar-link">
+            <span class="sidebar-icon">⌂</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="report.html" class="sidebar-link">
+            <span class="sidebar-icon">＋</span>
+            <span>File Complaint</span>
+          </a>
+
+          <a href="dashboard.html#complaints" class="sidebar-link">
+            <span class="sidebar-icon">▤</span>
+            <span>My Complaints</span>
+          </a>
+
+          <a href="notifications.html" class="sidebar-link">
+            <span class="sidebar-icon">♧</span>
+            <span>Notifications</span>
+          </a>
+
+          <a href="profile.html" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            <span>Profile</span>
+          </a>
+
+          <a href="settings.html" class="sidebar-link active">
+            <span class="sidebar-icon">⚙</span>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-user">
+            <div id="sidebarAvatar" class="profile-avatar">ST</div>
+
+            <div class="sidebar-user-info">
+              <strong id="sidebarUserName">Loading...</strong>
+              <span>Student</span>
+            </div>
+          </div>
+
+          <button id="logoutButton" class="sidebar-logout" type="button">
+            <span class="sidebar-icon">↪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="dashboard-content">
+        <header class="dashboard-header">
+          <div class="dashboard-header-content">
+            <div class="dashboard-search">
+              <span class="search-icon">⌕</span>
+
+              <input type="text" placeholder="Search..." aria-label="Search" />
+            </div>
+
+            <div class="user-area">
+              <a href="profile.html" class="user-profile profile-link" style="margin-left: auto;">
+                <div id="profileAvatar" class="profile-avatar">ST</div>
+
+                <span id="studentName" class="user-name">Loading...</span>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        <main class="dashboard-main">
+          <div class="dashboard-container profile-container">
+            <section class="profile-page-header">
+              <div>
+                <span class="profile-eyebrow">ACCOUNT</span>
+
+                <h1>Settings</h1>
+
+                <p>Manage your password, notifications and account security.</p>
+              </div>
+            </section>
+
+            <div id="settingsMessage" class="profile-message" style="display: none;"></div>
+
+            <div class="profile-grid">
+              <section class="profile-card">
+                <div class="card-heading">
+                  <div>
+                    <span class="section-label">SECURITY</span>
+                    <h2>Password</h2>
+                  </div>
+                </div>
+
+                <p class="settings-description">
+                  Change your FixMyCampus account password.
+                </p>
+
+                <div id="passwordFormContainer" style="display: none; margin-top: 20px;">
+                    <form id="passwordForm">
+                        <div class="profile-field">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword" name="current_password" required />
+                        </div>
+                        <div class="profile-field">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" name="new_password" required />
+                        </div>
+                        <div class="profile-field">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" name="confirm_password" required />
+                        </div>
+                        <div class="profile-form-actions" style="margin-top: 15px;">
+                            <button type="submit" class="profile-save-button">Save Password</button>
+                            <button type="button" id="cancelPasswordBtn" class="settings-button" style="margin-left: 10px; border: 1px solid #ddd; background: transparent;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <button type="button" id="showPasswordFormBtn" class="settings-button"> Change Password </button>
+              </section>
+
+              <section class="profile-card">
+                <div class="card-heading">
+                  <div>
+                    <span class="section-label">NOTIFICATIONS</span>
+                    <h2>Notification Preferences</h2>
+                  </div>
+                </div>
+
+                <p class="settings-description">
+                  Choose how you want to receive complaint updates and
+                  assignment notifications.
+                </p>
+
+                <div id="notificationPrefsContainer" style="display: none; margin-top: 20px;">
+                    <form id="notificationPrefsForm">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="checkbox" id="emailNotif" checked>
+                                <span>Email Notifications</span>
+                            </label>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="checkbox" id="pushNotif" checked>
+                                <span>In-App Notifications</span>
+                            </label>
+                        </div>
+                        <div class="profile-form-actions" style="margin-top: 15px;">
+                            <button type="submit" class="profile-save-button">Save Preferences</button>
+                            <button type="button" id="cancelPrefsBtn" class="settings-button" style="margin-left: 10px; border: 1px solid #ddd; background: transparent;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <button type="button" id="showPrefsFormBtn" class="settings-button">
+                  Manage Notifications
+                </button>
+              </section>
+
+              <section class="profile-card account-information-card">
+                <div class="card-heading">
+                  <div>
+                    <span class="section-label">ACCOUNT SECURITY</span>
+                    <h2>Security Information</h2>
+                  </div>
+                </div>
+
+                <div class="account-information-grid">
+                  <div class="account-info-item">
+                    <span>Login Method</span>
+                    <strong>Email & Password</strong>
+                  </div>
+
+                  <div class="account-info-item">
+                    <span>Session</span>
+                    <strong>Secure Session</strong>
+                  </div>
+
+                  <div class="account-info-item">
+                    <span>Role</span>
+                    <strong>Student</strong>
+                  </div>
+
+                  <div class="account-info-item">
+                    <span>Account Access</span>
+                    <strong>Active</strong>
+                  </div>
+                </div>
+              </section>
+
+              <section class="profile-card settings-shortcut-card">
+                <div>
+                  <span class="section-label">PROFILE</span>
+
+                  <h2>Want to update your personal details?</h2>
+
+                  <p>
+                    Change your name, email, phone number or profile picture
+                    from your profile page.
+                  </p>
+                </div>
+
+                <a href="profile.html" class="settings-button">
+                  Open Profile
+                </a>
+              </section>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/settings.js"></script>
+  </body>
+</html>
