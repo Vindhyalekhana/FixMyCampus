@@ -1,4 +1,3 @@
-````markdown
 # FixMyCampus
 
 **Campus Issue Reporting & Resolution Platform**
@@ -692,4 +691,3 @@ FixMyCampus is developed as an academic web application demonstrating a complete
 * Role-based access control
 * Server-side security
 
-```
