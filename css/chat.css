@@ -343,3 +343,55 @@
     width: 100%;
   }
 }
+
+/* Chat page width and layout fix */
+
+.chat-page-heading {
+  width: 100%;
+}
+
+.dashboard-container:has(.chat-page-heading) {
+  width: 100%;
+  max-width: none;
+}
+
+.chat-page {
+  width: 100%;
+  max-width: none;
+}
+
+.chat-container {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+.chat-card {
+  width: 100%;
+  max-width: none;
+}
+
+.chat-layout {
+  width: 100%;
+  max-width: none;
+}
+
+.chat-window {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+.chat-content {
+  width: 100%;
+  min-width: 0;
+}
+
+.messages-container {
+  width: 100%;
+  min-width: 0;
+}
+
+.message-form {
+  width: 100%;
+}
